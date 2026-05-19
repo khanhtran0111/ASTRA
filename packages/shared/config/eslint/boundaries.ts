@@ -12,14 +12,17 @@ export const boundariesConfig: Linter.Config[] = [
       ],
     },
     rules: {
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'warn',
         {
           default: 'disallow',
           rules: [
-            { from: 'app', allow: ['module', 'shared'] },
-            { from: 'module', allow: ['shared'] },
-            { from: 'shared', allow: ['shared'] },
+            {
+              from: { type: 'app' },
+              allow: [{ to: { type: 'module' } }, { to: { type: 'shared' } }],
+            },
+            { from: { type: 'module' }, allow: [{ to: { type: 'shared' } }] },
+            { from: { type: 'shared' }, allow: [{ to: { type: 'shared' } }] },
           ],
         },
       ],

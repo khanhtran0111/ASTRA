@@ -37,14 +37,17 @@ export default defineConfig([
       ],
     },
     rules: {
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
           rules: [
-            { from: 'shell', allow: ['@seta/shared-ui'] },
-            { from: 'routes', allow: ['shell', '@seta/shared-ui'] },
-            { from: 'module', allow: ['@seta/shared-ui'] },
+            { from: { type: 'shell' }, allow: [{ to: { type: '@seta/shared-ui' } }] },
+            {
+              from: { type: 'routes' },
+              allow: [{ to: { type: 'shell' } }, { to: { type: '@seta/shared-ui' } }],
+            },
+            { from: { type: 'module' }, allow: [{ to: { type: '@seta/shared-ui' } }] },
           ],
         },
       ],

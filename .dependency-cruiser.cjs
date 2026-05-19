@@ -81,7 +81,8 @@ module.exports = {
       comment: 'Surfaces packages with no callers; useful while the tree is mostly placeholders.',
       from: {
         orphan: true,
-        pathNot: '(^|/)(\\.|index\\.ts|.+\\.config\\.[cm]?[jt]s)$|^packages/shared/config/eslint/',
+        pathNot:
+          '(^|/)(\\.|index\\.ts|.+\\.config\\.[cm]?[jt]s)$|^packages/shared/config/eslint/|(^|/)(__tests__|test)/|\\.(spec|test)\\.[jt]sx?$',
       },
       to: {},
     },
