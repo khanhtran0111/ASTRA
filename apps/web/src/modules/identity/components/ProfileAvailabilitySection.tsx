@@ -4,13 +4,25 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-  DatePicker,
+  Input,
   Label,
   RadioGroup,
   RadioGroupItem,
 } from '@seta/shared-ui';
 import { useState } from 'react';
 import type { ProfileDto, SaveProfile } from '../api/client.ts';
+
+function toDateInputValue(d: Date | null): string {
+  if (!d) return '';
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function todayInputValue(): string {
+  return toDateInputValue(new Date());
+}
 
 export function ProfileAvailabilitySection({
   profile,
@@ -72,13 +84,17 @@ export function ProfileAvailabilitySection({
         </RadioGroup>
         {status === 'ooo' && (
           <div className="space-y-2">
-            <Label>Until</Label>
-            <DatePicker
-              value={oooUntil}
-              onChange={setOooUntil}
-              minDate={new Date()}
-              placeholder="Pick a return date"
-              clearable
+            <Label htmlFor="ooo-until">Until</Label>
+            <Input
+              id="ooo-until"
+              type="date"
+              min={todayInputValue()}
+              value={toDateInputValue(oooUntil)}
+              onChange={(e) => {
+                const v = e.target.value;
+                setOooUntil(v ? new Date(`${v}T00:00:00`) : null);
+              }}
+              className="w-56"
             />
           </div>
         )}
