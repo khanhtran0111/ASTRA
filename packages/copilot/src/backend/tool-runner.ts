@@ -7,10 +7,10 @@ import { updateMyDisplayNameTool } from './tools/identity.update-my-display-name
 import { whoAmITool } from './tools/identity.who-am-i.ts';
 
 const TOOLS: Record<string, CopilotTool<ZodTypeAny>> = {
-  'core.serverTime': serverTimeTool,
-  'identity.whoAmI': whoAmITool,
-  'identity.listMyRoles': listMyRolesTool,
-  'identity.updateMyDisplayName': updateMyDisplayNameTool,
+  core_serverTime: serverTimeTool,
+  identity_whoAmI: whoAmITool,
+  identity_listMyRoles: listMyRolesTool,
+  identity_updateMyDisplayName: updateMyDisplayNameTool,
 };
 
 export async function runWrappedTool(

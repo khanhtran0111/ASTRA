@@ -13,10 +13,18 @@ export function ThreadListRefresher({ threadId }: Props) {
 
   useEffect(() => {
     if (wasRunning.current && !isRunning) {
-      void queryClient.invalidateQueries({ queryKey: ['copilot', 'threads'] });
+      const refetchThreads = () =>
+        queryClient.invalidateQueries({ queryKey: ['copilot', 'threads'] });
+      void refetchThreads();
       if (threadId) {
         void queryClient.invalidateQueries({ queryKey: ['copilot', 'thread', threadId] });
       }
+      // Mastra's generateTitle runs after the stream ends — re-poll so it lands in the rail.
+      const timers = [setTimeout(refetchThreads, 1500), setTimeout(refetchThreads, 4000)];
+      wasRunning.current = isRunning;
+      return () => {
+        for (const t of timers) clearTimeout(t);
+      };
     }
     wasRunning.current = isRunning;
   }, [isRunning, queryClient, threadId]);

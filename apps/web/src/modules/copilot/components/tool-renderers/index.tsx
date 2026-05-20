@@ -26,7 +26,7 @@ function toWriteState(
 // Using `any` for TResult avoids addResult contravariance issues — we only read result, never write.
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const SERVER_TIME_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
-  toolName: 'core.serverTime',
+  toolName: 'core_serverTime',
   render: (props) => (
     <ServerTimeRenderer
       args={props.args}
@@ -37,7 +37,7 @@ const SERVER_TIME_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
 });
 
 const WHO_AM_I_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
-  toolName: 'identity.whoAmI',
+  toolName: 'identity_whoAmI',
   render: (props) => (
     <WhoAmIRenderer
       args={props.args}
@@ -48,7 +48,7 @@ const WHO_AM_I_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
 });
 
 const LIST_MY_ROLES_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
-  toolName: 'identity.listMyRoles',
+  toolName: 'identity_listMyRoles',
   render: (props) => (
     <ListMyRolesRenderer
       args={props.args}
@@ -59,7 +59,7 @@ const LIST_MY_ROLES_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
 });
 
 const LIST_MY_THREADS_TOOL = makeAssistantToolUI<Record<string, unknown>, any>({
-  toolName: 'copilot.listMyThreads',
+  toolName: 'copilot_listMyThreads',
   render: (props) => (
     <ListMyThreadsRenderer
       args={props.args}
@@ -73,7 +73,7 @@ const UPDATE_MY_DISPLAY_NAME_TOOL = makeAssistantToolUI<
   { displayName: string; expiresAt?: string },
   any
 >({
-  toolName: 'identity.updateMyDisplayName',
+  toolName: 'identity_updateMyDisplayName',
   render: (props) => (
     <UpdateMyDisplayNameRenderer
       args={props.args}

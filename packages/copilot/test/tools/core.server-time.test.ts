@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { serverTimeTool } from '../../src/backend/tools/core.server-time.ts';
 
-describe('core.serverTime tool', () => {
+describe('core_serverTime tool', () => {
   it('returns an ISO timestamp', async () => {
     const out = (await serverTimeTool.execute({ user_id: 'u1', type: 'user' }, {})) as {
       iso: string;

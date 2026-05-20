@@ -5,7 +5,7 @@ import type { CopilotTool } from './_types.ts';
 const Input = z.object({});
 
 export const listMyRolesTool: CopilotTool<typeof Input> = {
-  name: 'identity.listMyRoles',
+  name: 'identity_listMyRoles',
   description: 'Returns the sorted union of permissions the current user effectively holds.',
   inputSchema: Input,
   requiredPermission: 'identity.user.read.self',

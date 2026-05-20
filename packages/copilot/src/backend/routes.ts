@@ -1,4 +1,5 @@
 import { toAISdkStream } from '@mastra/ai-sdk';
+import { RequestContext } from '@mastra/core/request-context';
 import { createUIMessageStream, createUIMessageStreamResponse, type UIMessage } from 'ai';
 import { and, eq } from 'drizzle-orm';
 import type { Hono } from 'hono';
@@ -11,6 +12,7 @@ import { approveHitl, HitlError, rejectHitl } from './hitl.ts';
 import { listModels, ModelNotFoundError, resolveModel } from './model-registry.ts';
 import { RateLimitError, reserveTurn } from './rate-limit.ts';
 import { runWrappedTool } from './tool-runner.ts';
+import { ACTOR_REQUEST_CONTEXT_KEY } from './tools/_types.ts';
 
 const ChatBody = z.object({
   id: z.string().optional(),
@@ -30,7 +32,10 @@ export type SessionLike = {
 type AgentLike = {
   stream: (
     messages: UIMessage[],
-    options?: { memory?: { thread?: string; resource?: string } },
+    options?: {
+      memory?: { thread?: string; resource?: string };
+      requestContext?: RequestContext;
+    },
   ) => Promise<unknown>;
 };
 
@@ -115,8 +120,15 @@ export function registerCopilotRoutes(app: Hono<CopilotRouteEnv>, deps: CopilotR
       throw e;
     }
 
+    const requestContext = new RequestContext();
+    requestContext.set(ACTOR_REQUEST_CONTEXT_KEY, {
+      type: 'user' as const,
+      user_id: session.user_id,
+    });
+
     const result = await agent.stream(messages, {
       memory: { thread: parsed.data.id, resource: resourceId },
+      requestContext,
       ...(modelOverride ? { model: modelOverride as never } : {}),
     });
 
@@ -174,27 +186,78 @@ export function registerCopilotRoutes(app: Hono<CopilotRouteEnv>, deps: CopilotR
     }): Promise<{ messages: MastraStoredMessage[]; total?: number; hasMore?: boolean }>;
   };
 
-  type UIMessagePart = { type: 'text'; text: string };
+  type TextUIPart = { type: 'text'; text: string };
+  type ReasoningUIPart = { type: 'reasoning'; text: string };
+  type ToolUIPart = {
+    type: `tool-${string}`;
+    toolCallId: string;
+    state: 'output-available' | 'output-error' | 'input-available';
+    input: unknown;
+    output?: unknown;
+    errorText?: string;
+  };
+  type UIMessagePart = TextUIPart | ReasoningUIPart | ToolUIPart;
   type UIMessageLike = { id: string; role: 'user' | 'assistant'; parts: UIMessagePart[] };
+
+  // Mastra stores tool calls as `{ type:'tool-invocation', toolInvocation }`; ai@6 wants
+  // `{ type:'tool-<name>', state, input, output }`. Translate at the read boundary.
+  type MastraToolInvocation = {
+    toolCallId?: unknown;
+    toolName?: unknown;
+    state?: unknown;
+    args?: unknown;
+    result?: unknown;
+    errorText?: unknown;
+  };
+
+  function mastraPartToUIPart(raw: unknown): UIMessagePart | null {
+    if (!raw || typeof raw !== 'object') return null;
+    const type = (raw as { type?: unknown }).type;
+    if (type === 'text') {
+      const text = (raw as { text?: unknown }).text;
+      return typeof text === 'string' && text.length > 0 ? { type: 'text', text } : null;
+    }
+    if (type === 'reasoning') {
+      const text = (raw as { text?: unknown }).text;
+      return typeof text === 'string' && text.length > 0 ? { type: 'reasoning', text } : null;
+    }
+    if (type === 'tool-invocation') {
+      const i = (raw as { toolInvocation?: MastraToolInvocation }).toolInvocation;
+      if (!i || typeof i.toolCallId !== 'string' || typeof i.toolName !== 'string') return null;
+      const hasError = typeof i.errorText === 'string';
+      const hasResult = i.result !== undefined;
+      const state: ToolUIPart['state'] = hasError
+        ? 'output-error'
+        : hasResult
+          ? 'output-available'
+          : 'input-available';
+      const part: ToolUIPart = {
+        type: `tool-${i.toolName}`,
+        toolCallId: i.toolCallId,
+        state,
+        input: i.args,
+      };
+      if (state === 'output-available') part.output = i.result;
+      if (state === 'output-error') part.errorText = (i.errorText as string) ?? 'tool failed';
+      return part;
+    }
+    return null;
+  }
 
   function toUIMessage(m: MastraStoredMessage, idx: number): UIMessageLike | null {
     const role = m.role === 'user' || m.role === 'assistant' ? m.role : null;
     if (!role) return null;
-    const id = m.id ?? `msg-${idx}`;
     const content = m.content;
+    if (!content || typeof content !== 'object' || Array.isArray(content)) return null;
+    const stored = content as { parts?: unknown };
+    if (!Array.isArray(stored.parts)) return null;
     const parts: UIMessagePart[] = [];
-    if (typeof content === 'string') {
-      parts.push({ type: 'text', text: content });
-    } else if (Array.isArray(content)) {
-      for (const c of content) {
-        if (c && typeof c === 'object' && (c as { type?: unknown }).type === 'text') {
-          const text = (c as { text?: unknown }).text;
-          if (typeof text === 'string') parts.push({ type: 'text', text });
-        }
-      }
+    for (const raw of stored.parts) {
+      const p = mastraPartToUIPart(raw);
+      if (p) parts.push(p);
     }
     if (parts.length === 0) return null;
-    return { id, role, parts };
+    return { id: m.id ?? `msg-${idx}`, role, parts };
   }
 
   const getMemoryStore = (): MemoryStore | null => {

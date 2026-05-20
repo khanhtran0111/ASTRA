@@ -14,7 +14,7 @@ const baseRow = {
   threadId: 'thread-1',
   tenantId: '11111111-1111-1111-1111-111111111111',
   userId: '22222222-2222-2222-2222-222222222222',
-  toolName: 'identity.updateMyDisplayName',
+  toolName: 'identity_updateMyDisplayName',
   input: { displayName: 'New' },
   requiredPermission: 'identity.user.write.self',
   expiresAt: new Date(Date.now() + 60_000),

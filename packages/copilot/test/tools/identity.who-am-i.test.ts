@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { whoAmITool } from '../../src/backend/tools/identity.who-am-i.ts';
 import { withCopilotTestDb } from '../test-helpers.ts';
 
-describe('identity.whoAmI tool', () => {
+describe('identity_whoAmI tool', () => {
   it("returns the caller's profile", async () => {
     await withCopilotTestDb(async ({ pool }) => {
       const { admin_user_id } = await createTestTenantWithAdmin({ pool });

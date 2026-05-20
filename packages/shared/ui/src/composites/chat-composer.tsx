@@ -46,17 +46,17 @@ export function ChatComposer({
     }
   };
   return (
-    <div className={cn('border-t border-hairline bg-canvas px-6 py-5', className)}>
+    <div className={cn('border-t border-hairline bg-canvas px-4 py-4 md:px-6 md:py-5', className)}>
       <div className="mx-auto max-w-conversation">
-        <div className="rounded-xl border border-hairline bg-canvas p-3 shadow-sm focus-within:border-primary-border">
+        <div className="rounded-xl border border-hairline bg-canvas p-3 shadow-sm transition-[background-color,border-color] duration-150 focus-within:border-hairline-strong focus-within:bg-surface-1">
           <textarea
             ref={textareaRef}
-            className="block w-full resize-none overflow-y-auto bg-transparent text-body-sm leading-[1.4] placeholder:text-ink-subtle focus:outline-none"
+            className="block w-full resize-none overflow-y-auto bg-transparent text-body-sm leading-[1.4] placeholder:text-ink-subtle focus:outline-none focus-visible:outline-none"
             rows={1}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder={placeholder ?? 'Ask Supervisor anything…'}
+            placeholder={placeholder ?? 'Message your assistant…'}
             disabled={disabled || pending}
           />
           <div className="mt-2.5 flex items-center justify-between gap-3">
@@ -65,11 +65,13 @@ export function ChatComposer({
               {permissionHint && <span className="text-ink-subtle">{permissionHint}</span>}
             </div>
             <div className="flex shrink-0 items-center gap-2 text-caption text-ink-subtle">
-              <span className="inline-flex items-center gap-1">
+              <span className="hidden items-center gap-1 sm:inline-flex">
                 <KbdHint keys={['⏎']} /> send
               </span>
-              <span aria-hidden>·</span>
-              <span className="inline-flex items-center gap-1">
+              <span aria-hidden className="hidden sm:inline">
+                ·
+              </span>
+              <span className="hidden items-center gap-1 sm:inline-flex">
                 <KbdHint keys={['⇧⏎']} /> new line
               </span>
               <button

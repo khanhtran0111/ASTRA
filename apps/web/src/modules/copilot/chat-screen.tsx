@@ -8,10 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   EmptyState,
+  Sheet,
+  SheetContent,
 } from '@seta/shared-ui';
 import { useNavigate } from '@tanstack/react-router';
 import type { UIMessage } from 'ai';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { Menu, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { type AgentName, agentLabel } from './components/agents';
 import { ChatComposerContainer } from './components/chat-composer-container';
@@ -125,9 +127,10 @@ function useThreadTitle(threadId: string | undefined): string | undefined {
 interface ConversationHeaderProps {
   title: string;
   threadId: string | undefined;
+  onOpenMobileNav: () => void;
 }
 
-function ConversationHeader({ title, threadId }: ConversationHeaderProps) {
+function ConversationHeader({ title, threadId, onOpenMobileNav }: ConversationHeaderProps) {
   const [draft, setDraft] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const rename = useRenameThread();
@@ -159,8 +162,16 @@ function ConversationHeader({ title, threadId }: ConversationHeaderProps) {
   };
 
   return (
-    <div className="flex h-14 flex-none items-center justify-between border-b border-hairline px-6">
+    <div className="flex h-14 flex-none items-center justify-between gap-2 border-b border-hairline px-4 md:px-6">
       <div className="flex min-w-0 items-center gap-2.5">
+        <button
+          type="button"
+          onClick={onOpenMobileNav}
+          aria-label="Open threads"
+          className="-ml-1 inline-flex size-8 items-center justify-center rounded-md text-ink-muted hover:bg-surface-2 hover:text-ink md:hidden"
+        >
+          <Menu className="size-4" aria-hidden />
+        </button>
         {editing ? (
           <input
             ref={inputRef}
@@ -176,11 +187,11 @@ function ConversationHeader({ title, threadId }: ConversationHeaderProps) {
                 cancelEdit();
               }
             }}
-            className="min-w-0 flex-1 bg-transparent text-card-title font-semibold text-ink focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent text-section-title text-ink focus:outline-none"
           />
         ) : (
           <>
-            <span className="truncate text-card-title font-semibold text-ink">{title}</span>
+            <span className="truncate text-section-title text-ink">{title}</span>
             <button
               type="button"
               onClick={() => canEdit && startEdit()}
@@ -233,6 +244,7 @@ interface ChatPaneProps {
   modelKey: string;
   onModelChange: (next: string) => void;
   headerTitle: string;
+  onOpenMobileNav: () => void;
 }
 
 function ChatPane({
@@ -243,13 +255,18 @@ function ChatPane({
   modelKey,
   onModelChange,
   headerTitle,
+  onOpenMobileNav,
 }: ChatPaneProps) {
   const runtime = useCopilotRuntime({ agentName, threadId, modelKey, initialMessages });
   const AssistantMessage = makeAssistantMessage(agentLabel(agentName));
   return (
     <AssistantRuntimeProvider runtime={runtime}>
       <div className="flex min-w-0 flex-1 flex-col">
-        <ConversationHeader title={headerTitle} threadId={threadId} />
+        <ConversationHeader
+          title={headerTitle}
+          threadId={threadId}
+          onOpenMobileNav={onOpenMobileNav}
+        />
         <ChatTranscript>
           <ThreadPrimitive.Empty>
             <div className="flex flex-1 items-center justify-center py-12">
@@ -283,10 +300,24 @@ export function ChatScreen({ threadId }: ChatScreenProps) {
   const { data: history, isLoading: historyLoading } = useThreadMessages(threadId);
   const initialMessages = threadId ? (history?.messages ?? []) : [];
   const waiting = Boolean(threadId) && historyLoading && !history;
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   return (
     <div className="flex h-full min-h-0 flex-1">
-      <ChatThreadRailContainer activeThreadId={threadId} />
+      <div className="hidden md:flex">
+        <ChatThreadRailContainer activeThreadId={threadId} />
+      </div>
+      <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
+        <SheetContent
+          side="left"
+          className="w-[280px] border-r border-hairline bg-surface-1 p-0 sm:max-w-none md:hidden"
+        >
+          <ChatThreadRailContainer
+            activeThreadId={threadId}
+            onAfterNavigate={() => setMobileNavOpen(false)}
+          />
+        </SheetContent>
+      </Sheet>
       {waiting ? (
         <div className="flex min-w-0 flex-1 items-center justify-center text-caption text-ink-subtle">
           Loading conversation…
@@ -301,6 +332,7 @@ export function ChatScreen({ threadId }: ChatScreenProps) {
           modelKey={modelKey}
           onModelChange={setModelKey}
           headerTitle={headerTitle}
+          onOpenMobileNav={() => setMobileNavOpen(true)}
         />
       )}
     </div>

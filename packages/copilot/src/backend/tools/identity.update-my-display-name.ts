@@ -7,7 +7,7 @@ const Input = z.object({
 });
 
 export const updateMyDisplayNameTool: CopilotTool<typeof Input> = {
-  name: 'identity.updateMyDisplayName',
+  name: 'identity_updateMyDisplayName',
   description: 'Renames the current user. Requires explicit user approval before applying.',
   inputSchema: Input,
   requiredPermission: 'identity.user.write.self',

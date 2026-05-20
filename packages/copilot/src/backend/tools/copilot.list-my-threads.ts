@@ -16,7 +16,7 @@ export function makeListMyThreadsTool(deps: {
   listThreads: (q: { resourceId: string; limit: number }) => Promise<ListThreadsRow[]>;
 }): CopilotTool<typeof Input> {
   return {
-    name: 'copilot.listMyThreads',
+    name: 'copilot_listMyThreads',
     description: "Lists the current user's own chat threads (most recent first).",
     inputSchema: Input,
     requiredPermission: 'copilot.thread.read.self',
