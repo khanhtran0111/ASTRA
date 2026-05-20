@@ -1,14 +1,14 @@
 import type * as React from 'react';
 import { cn } from '../lib/cn';
 
-export type ChatMessageProps = {
+export interface ChatMessageProps {
   variant: 'user' | 'agent';
   author?: string;
   timestamp?: Date;
   dim?: boolean;
   className?: string;
   children?: React.ReactNode;
-};
+}
 
 export function ChatMessage({
   variant,
