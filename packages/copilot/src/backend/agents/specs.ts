@@ -1,4 +1,3 @@
-import type { ZodTypeAny } from 'zod';
 import type { ModelTier } from '../model-registry.ts';
 import type { CopilotTool } from '../tools/_types.ts';
 
@@ -7,7 +6,7 @@ export interface AgentSpec {
   label: string;
   description: string;
   instructions: string;
-  tools: ReadonlyArray<CopilotTool<ZodTypeAny>>;
+  tools: ReadonlyArray<CopilotTool>;
   delegates?: ReadonlyArray<string>;
   defaultTier?: ModelTier;
 }

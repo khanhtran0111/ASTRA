@@ -7,7 +7,7 @@ import { buildAgentCatalog } from './agents/catalog.ts';
 import { type AgentSpec, type AgentSpecs, findSpec, listAgentNames } from './agents/specs.ts';
 import { resolveModel } from './model-registry.ts';
 import { filterToolsByRbac } from './rbac-filter.ts';
-import { toToolBag } from './tools/_types.ts';
+import { type CopilotTool, RequestContextSchema } from './tools/_types.ts';
 
 export type AgentFactoryDeps = { mastra: Mastra };
 
@@ -28,6 +28,16 @@ export interface AgentFactory {
   names: string[];
 }
 
+function toolsRecord(tools: ReadonlyArray<CopilotTool>): Record<string, CopilotTool> {
+  const bag: Record<string, CopilotTool> = {};
+  for (const t of tools) {
+    const id = (t as { id?: string }).id;
+    if (!id) throw new Error('Copilot tool is missing its required id field');
+    bag[id] = t;
+  }
+  return bag;
+}
+
 export function createAgentFactory(deps: AgentFactoryDeps): AgentFactory {
   const specs = buildAgentCatalog({ mastra: deps.mastra });
   const cache = new LRUCache<string, Map<string, Agent>>({ max: 256 });
@@ -46,7 +56,6 @@ export function createAgentFactory(deps: AgentFactoryDeps): AgentFactory {
       const cached = byName.get(spec.name);
       if (cached) return cached;
       const allowed = filterToolsByRbac(spec.tools, session);
-      const tools = toToolBag(allowed);
       const subAgents: Record<string, Agent> = {};
       for (const target of spec.delegates ?? []) {
         const targetSpec = findSpec(specs, target);
@@ -59,7 +68,9 @@ export function createAgentFactory(deps: AgentFactoryDeps): AgentFactory {
         description: spec.description,
         instructions: spec.instructions,
         model: resolveModel(undefined, { tierHint: spec.defaultTier }).model,
-        tools: tools as never,
+        tools: toolsRecord(allowed) as never,
+        requestContextSchema: RequestContextSchema as never,
+        mastra: deps.mastra,
         ...(Object.keys(subAgents).length > 0 ? { agents: subAgents as never } : {}),
         ...(memory ? { memory } : {}),
       });

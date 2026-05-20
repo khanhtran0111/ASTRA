@@ -43,7 +43,7 @@ export function ChatToolCall({
           className={cn('inline-block size-1.5 shrink-0 rounded-full', STATUS_DOT[status])}
           aria-hidden
         />
-        <span className="truncate font-mono text-caption text-ink">{name}</span>
+        <span className="shrink-0 font-mono text-caption text-ink">{name}</span>
         {summary && (
           <>
             <span className="text-ink-subtle" aria-hidden>

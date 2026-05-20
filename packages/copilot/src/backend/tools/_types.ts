@@ -1,42 +1,48 @@
+import type { ToolsInput } from '@mastra/core/agent';
+import type { RequestContext } from '@mastra/core/request-context';
+import type { ToolExecutionContext } from '@mastra/core/tools';
 import type { Actor } from '@seta/identity';
-import type { ZodTypeAny, z } from 'zod';
+import { z } from 'zod';
 
-export const ACTOR_REQUEST_CONTEXT_KEY = 'actor';
+export const RequestContextSchema = z.object({
+  actor: z.object({
+    type: z.literal('user'),
+    user_id: z.string().min(1),
+  }),
+});
 
-export type CopilotTool<I extends ZodTypeAny> = {
-  name: string;
-  description: string;
-  inputSchema: I;
-  requiredPermission: string;
-  needsApproval?: boolean;
-  execute: (actor: Actor, input: z.infer<I>) => Promise<unknown>;
-};
+export type CopilotRequestContext = z.infer<typeof RequestContextSchema>;
 
-type RequestContextLike = { get: (key: string) => unknown };
-type MastraExecuteOpts = { requestContext?: RequestContextLike };
+// Element type of Mastra's ToolsInput record — the bound it uses for any heterogeneous
+// agent tool collection. Keeps us compatible with Agent's `tools` field without leaking
+// internal Tool<…> generic params throughout our code.
+export type CopilotTool = ToolsInput[string];
 
-type ToolBagEntry = {
-  description: string;
-  inputSchema: ZodTypeAny;
-  needsApproval?: boolean;
-  execute: (input: unknown, opts: MastraExecuteOpts) => Promise<unknown>;
-};
+const PERMISSIONS = new WeakMap<CopilotTool, string>();
 
-export function toToolBag(tools: readonly CopilotTool<ZodTypeAny>[]): Record<string, ToolBagEntry> {
-  const bag: Record<string, ToolBagEntry> = {};
-  for (const t of tools) {
-    bag[t.name] = {
-      description: t.description,
-      inputSchema: t.inputSchema,
-      needsApproval: t.needsApproval,
-      execute: async (input, opts) => {
-        const actor = opts?.requestContext?.get(ACTOR_REQUEST_CONTEXT_KEY) as Actor | undefined;
-        if (!actor || actor.type !== 'user' || !actor.user_id) {
-          throw new Error('unauthenticated');
-        }
-        return t.execute(actor, input as never);
-      },
-    };
+export function registerToolPermission<T extends CopilotTool>(tool: T, permission: string): T {
+  PERMISSIONS.set(tool, permission);
+  return tool;
+}
+
+export function requiredPermissionFor(tool: CopilotTool): string | undefined {
+  return PERMISSIONS.get(tool);
+}
+
+export type CopilotToolContext = ToolExecutionContext<unknown, unknown, CopilotRequestContext>;
+
+export type AuthenticatedUserActor = Actor & { type: 'user'; user_id: string };
+
+export function actorFromContext(ctx: {
+  requestContext?: RequestContext<CopilotRequestContext>;
+}): AuthenticatedUserActor {
+  const raw = ctx?.requestContext?.get('actor');
+  if (!raw || typeof raw !== 'object') {
+    throw new Error('unauthenticated');
   }
-  return bag;
+  const a = raw as Partial<Actor>;
+  if (a.type !== 'user' || !a.user_id) {
+    throw new Error('unauthenticated');
+  }
+  return { type: 'user', user_id: a.user_id };
 }

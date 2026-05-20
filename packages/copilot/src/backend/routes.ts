@@ -1,18 +1,12 @@
 import { toAISdkStream } from '@mastra/ai-sdk';
 import { RequestContext } from '@mastra/core/request-context';
 import { createUIMessageStream, createUIMessageStreamResponse, type UIMessage } from 'ai';
-import { and, eq } from 'drizzle-orm';
 import type { Hono } from 'hono';
 import { z } from 'zod';
-import { copilotDb } from '../db/index.ts';
-import { hitlCalls } from '../db/schema.ts';
 import type { AgentFactory } from './agent-factory.ts';
 import { copilotEnv } from './env.ts';
-import { approveHitl, HitlError, rejectHitl } from './hitl.ts';
 import { listModels, ModelNotFoundError, resolveModel } from './model-registry.ts';
 import { RateLimitError, reserveTurn } from './rate-limit.ts';
-import { runWrappedTool } from './tool-runner.ts';
-import { ACTOR_REQUEST_CONTEXT_KEY } from './tools/_types.ts';
 
 const ChatBody = z.object({
   id: z.string().optional(),
@@ -113,7 +107,7 @@ export function registerCopilotRoutes(app: Hono<CopilotRouteEnv>, deps: CopilotR
     }
 
     const requestContext = new RequestContext();
-    requestContext.set(ACTOR_REQUEST_CONTEXT_KEY, {
+    requestContext.set('actor', {
       type: 'user' as const,
       user_id: session.user_id,
     });
@@ -428,51 +422,85 @@ export function registerCopilotRoutes(app: Hono<CopilotRouteEnv>, deps: CopilotR
     });
   });
 
-  app.post('/api/copilot/v1/hitl/:callId/approve', async (c) => {
-    const session = c.get('session') as SessionLike | undefined;
-    if (!session) return c.json({ error: 'unauthorized', message: 'session required' }, 401);
-    const callId = c.req.param('callId');
-    const db = copilotDb();
-    const [row] = await db
-      .select()
-      .from(hitlCalls)
-      .where(and(eq(hitlCalls.callId, callId), eq(hitlCalls.userId, session.user_id)));
-    if (!row) return c.json({ error: 'not_found', message: 'call not found' }, 404);
-    if (!session.effective_permissions.has(row.requiredPermission)) {
-      return c.json({ error: 'forbidden', message: `${row.requiredPermission} required` }, 403);
-    }
-    try {
-      const outcome = await runWrappedTool(
-        row.toolName,
-        session,
-        row.input as Record<string, unknown>,
-      );
-      const result = await approveHitl({ callId, userId: session.user_id, outcome });
-      return c.json(result);
-    } catch (e) {
-      if (e instanceof HitlError && e.code === 'hitl_expired') {
-        return c.json({ error: 'hitl_expired', message: e.message }, 409);
-      }
-      throw e;
-    }
+  const ApproveBody = z.object({
+    runId: z.string().min(1),
+    toolCallId: z.string().min(1),
+    approved: z.boolean(),
+    threadId: z.string().optional(),
   });
 
-  app.post('/api/copilot/v1/hitl/:callId/reject', async (c) => {
+  app.post('/api/copilot/v1/chat/:agentName/approve', async (c) => {
     const session = c.get('session') as SessionLike | undefined;
-    if (!session) return c.json({ error: 'unauthorized', message: 'session required' }, 401);
-    const callId = c.req.param('callId');
-    const body = (await c.req.json().catch(() => ({}))) as { note?: string };
-    try {
-      const result = await rejectHitl({ callId, userId: session.user_id, note: body.note });
-      return c.json(result);
-    } catch (e) {
-      if (e instanceof HitlError && e.code === 'not_found') {
-        return c.json({ error: 'not_found', message: e.message }, 404);
-      }
-      if (e instanceof HitlError && e.code === 'hitl_expired') {
-        return c.json({ error: 'hitl_expired', message: e.message }, 409);
-      }
-      throw e;
+    if (!session) {
+      return c.json({ error: 'unauthorized', message: 'session required' }, 401);
     }
+    if (!session.effective_permissions.has('copilot.chat.use')) {
+      return c.json({ error: 'forbidden', message: 'copilot.chat.use required' }, 403);
+    }
+
+    const agentName = c.req.param('agentName');
+    const sessionAgents = deps.factory(session);
+    const agent = sessionAgents.get(agentName);
+    if (!agent) {
+      return c.json({ error: 'not_found', message: 'unknown agent' }, 404);
+    }
+
+    const parsed = ApproveBody.safeParse(await c.req.json().catch(() => ({})));
+    if (!parsed.success) {
+      return c.json(
+        { error: 'validation_failed', message: 'bad body', details: parsed.error.format() },
+        400,
+      );
+    }
+
+    const requestContext = new RequestContext();
+    requestContext.set('actor', {
+      type: 'user' as const,
+      user_id: session.user_id,
+    });
+
+    const resourceId = session.user_id;
+    const resumeOpts = {
+      runId: parsed.data.runId,
+      toolCallId: parsed.data.toolCallId,
+      ...(parsed.data.threadId
+        ? { memory: { thread: parsed.data.threadId, resource: resourceId } }
+        : { memory: { resource: resourceId } }),
+      requestContext,
+    } as never;
+
+    let result: unknown;
+    try {
+      result = parsed.data.approved
+        ? await (agent as { approveToolCall: (o: never) => Promise<unknown> }).approveToolCall(
+            resumeOpts,
+          )
+        : await (agent as { declineToolCall: (o: never) => Promise<unknown> }).declineToolCall(
+            resumeOpts,
+          );
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      return c.json({ error: 'resume_failed', message: msg }, 500);
+    }
+
+    const uiStream = createUIMessageStream({
+      execute: async ({ writer }) => {
+        const stream = toAISdkStream(result as never, {
+          from: 'agent',
+          version: 'v6',
+        }) as ReadableStream<unknown>;
+        const reader = stream.getReader();
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            writer.write(value as never);
+          }
+        } finally {
+          reader.releaseLock();
+        }
+      },
+    });
+    return createUIMessageStreamResponse({ stream: uiStream });
   });
 }

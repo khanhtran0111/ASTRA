@@ -1,5 +1,6 @@
 import { AssistantRuntimeProvider, MessagePrimitive, ThreadPrimitive } from '@assistant-ui/react';
 import {
+  ChatMarkdown,
   ChatMessage,
   ChatTranscript,
   DropdownMenu,
@@ -54,15 +55,15 @@ interface PartProps {
 
 function TextPart({ text, status }: PartProps) {
   return (
-    <span className="whitespace-pre-wrap">
-      {text}
+    <div className="relative">
+      <ChatMarkdown text={text} />
       {status.type === 'running' && (
         <span
           aria-hidden
           className="ml-0.5 inline-block h-3.5 w-1.5 translate-y-[2px] animate-pulse bg-ink"
         />
       )}
-    </span>
+    </div>
   );
 }
 
@@ -95,10 +96,14 @@ function ThinkingIndicator() {
   );
 }
 
+function PlainTextPart({ text }: PartProps) {
+  return <span className="whitespace-pre-wrap">{text}</span>;
+}
+
 function UserMessage() {
   return (
     <ChatMessage variant="user">
-      <MessagePrimitive.Parts components={{ Text: TextPart }} />
+      <MessagePrimitive.Parts components={{ Text: PlainTextPart }} />
     </ChatMessage>
   );
 }

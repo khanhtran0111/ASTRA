@@ -1,7 +1,9 @@
 import type { ToolCallMessagePartProps } from '@assistant-ui/react';
-import { makeAssistantToolUI } from '@assistant-ui/react';
+import { makeAssistantToolUI, useAssistantToolUI } from '@assistant-ui/react';
+import { useAgentCatalog } from '../../hooks/use-agent-catalog';
 import { ListMyThreadsRenderer } from './copilot.list-my-threads';
 import { ServerTimeRenderer } from './core.server-time';
+import { DelegateRenderer } from './delegate';
 import { ListMyRolesRenderer } from './identity.list-my-roles';
 import { UpdateMyDisplayNameRenderer } from './identity.update-my-display-name';
 import { WhoAmIRenderer } from './identity.who-am-i';
@@ -74,17 +76,42 @@ const UPDATE_MY_DISPLAY_NAME_TOOL = makeAssistantToolUI<
   any
 >({
   toolName: 'identity_updateMyDisplayName',
-  render: (props) => (
-    <UpdateMyDisplayNameRenderer
-      args={props.args}
-      state={toWriteState(props)}
-      callId={props.toolCallId}
-    />
-  ),
+  render: (props) => {
+    // The v6 approval payload sits on the tool part's `interrupt` field:
+    // `{ type: 'human', payload: { id: '<runId>::<toolCallId>' } }`.
+    const interrupt = (props as { interrupt?: { payload?: { id?: string } } }).interrupt;
+    return (
+      <UpdateMyDisplayNameRenderer
+        args={props.args}
+        state={toWriteState(props)}
+        callId={props.toolCallId}
+        approval={interrupt?.payload}
+      />
+    );
+  },
 });
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+// Mastra auto-generates a delegation tool per sub-agent, named `agent-${id}`. We register a
+// renderer per known agent so any specialist call surfaces inline like a regular tool.
+function DelegateRegistration({ name, label }: { name: string; label: string }) {
+  useAssistantToolUI({
+    toolName: `agent-${name}`,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    render: (props: ToolCallMessagePartProps<Record<string, unknown>, any>) => (
+      <DelegateRenderer
+        targetLabel={label}
+        args={props.args}
+        state={toReadState(props)}
+        output={props.result ?? undefined}
+      />
+    ),
+  });
+  return null;
+}
+
 export function ToolUIRegistry() {
+  const { agents } = useAgentCatalog();
   return (
     <>
       <SERVER_TIME_TOOL />
@@ -92,6 +119,9 @@ export function ToolUIRegistry() {
       <LIST_MY_ROLES_TOOL />
       <LIST_MY_THREADS_TOOL />
       <UPDATE_MY_DISPLAY_NAME_TOOL />
+      {agents.map((a) => (
+        <DelegateRegistration key={a.name} name={a.name} label={a.label} />
+      ))}
     </>
   );
 }
