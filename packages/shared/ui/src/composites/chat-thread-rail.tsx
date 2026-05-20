@@ -90,7 +90,7 @@ export function ChatThreadRail({
                   </div>
                   {t.hint && (
                     <span className="inline-flex h-4 items-center rounded-sm bg-semantic-warning-tint px-1.5 text-[10px] font-semibold uppercase text-semantic-warning">
-                      Awaiting your approval
+                      {t.hint}
                     </span>
                   )}
                 </button>
