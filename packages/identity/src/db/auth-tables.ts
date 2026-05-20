@@ -1,4 +1,4 @@
-import { boolean, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigint, boolean, integer, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { identity } from './pg-schema.ts';
 
 export const user = identity.table('user', {
@@ -38,6 +38,15 @@ export const account = identity.table('account', {
   id_token: text('id_token'),
   created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+});
+
+// Column names are camelCase to match better-auth's drizzle adapter defaults —
+// the rateLimit model has no `fields` mapping in betterAuth() config.
+export const rateLimit = identity.table('rate_limit', {
+  id: text('id').primaryKey(),
+  key: text('key').notNull().unique(),
+  count: integer('count').notNull(),
+  lastRequest: bigint('lastRequest', { mode: 'number' }).notNull(),
 });
 
 export const verification = identity.table('verification', {
