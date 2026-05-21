@@ -3,31 +3,17 @@ import { withEmit } from '@seta/core/events';
 import { and, eq, isNull } from 'drizzle-orm';
 import { groups } from '../../db/schema.ts';
 import { emitPlannerGroupUpdated } from '../../events/emit-helpers.ts';
-import type { GroupFieldKey } from '../../events/types.ts';
-import type { GroupRow } from '../dto.ts';
-import type { UpdateGroupPatch } from '../inputs.ts';
+import type { GroupExternalSource, GroupRow } from '../dto.ts';
 import { PlannerError, requirePermission } from '../rbac.ts';
 import { groupRowToDto } from './_group-dto.ts';
 
 type GroupDbRow = typeof groups.$inferSelect;
 
-const UPDATABLE_FIELDS = [
-  'name',
-  'description',
-  'theme',
-  'visibility',
-  'default_role',
-] as const satisfies readonly GroupFieldKey[];
-
-type UpdatableField = (typeof UPDATABLE_FIELDS)[number];
-
-export async function updateGroup(input: {
+export async function unlinkGroupFromM365(input: {
   group_id: string;
-  expected_version: number;
-  patch: UpdateGroupPatch;
   session: SessionScope;
 }): Promise<GroupRow> {
-  requirePermission(input.session, 'planner.group.update', input.group_id);
+  requirePermission(input.session, 'planner.group.unlink', input.group_id);
 
   let resultRow!: GroupDbRow;
   await withEmit(
@@ -50,48 +36,20 @@ export async function updateGroup(input: {
           group_id: input.group_id,
         });
       }
-      if (existing.version !== input.expected_version) {
-        throw new PlannerError('CONFLICT', 'Version mismatch', {
-          current_version: existing.version,
+      if (existing.external_source === 'native') {
+        throw new PlannerError('CONFLICT', 'Group is not linked to any external source', {
+          group_id: input.group_id,
         });
       }
 
-      const before: Partial<Record<UpdatableField, unknown>> = {};
-      const after: Partial<Record<UpdatableField, unknown>> = {};
-      const changed_fields: GroupFieldKey[] = [];
-      const setFields: {
-        name?: string;
-        description?: string | null;
-        theme?: string;
-        visibility?: string;
-        default_role?: string;
-      } = {};
-
-      for (const field of UPDATABLE_FIELDS) {
-        if (!(field in input.patch)) continue;
-        const next = input.patch[field];
-        if (next === undefined) continue;
-        const current = existing[field];
-        if (next === current) continue;
-        before[field] = current;
-        after[field] = next;
-        changed_fields.push(field);
-        if (field === 'description') {
-          setFields.description = next;
-        } else if (next !== null) {
-          setFields[field] = next;
-        }
-      }
-
-      if (changed_fields.length === 0) {
-        resultRow = existing;
-        return;
-      }
+      const beforeSource = existing.external_source as GroupExternalSource;
+      const beforeId = existing.external_id;
 
       const [row] = await tx
         .update(groups)
         .set({
-          ...setFields,
+          external_source: 'native',
+          external_id: null,
           updated_at: new Date(),
           version: existing.version + 1,
         })
@@ -104,9 +62,9 @@ export async function updateGroup(input: {
         actor: { type: 'user', user_id: input.session.user_id },
         tenant_id: existing.tenant_id,
         group_id: existing.id,
-        before,
-        after,
-        changed_fields,
+        before: { external_source: beforeSource, external_id: beforeId },
+        after: { external_source: 'native', external_id: null },
+        changed_fields: ['external_source', 'external_id'],
         version_before: existing.version,
         version_after: existing.version + 1,
       });
