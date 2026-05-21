@@ -3,6 +3,7 @@ import type {
   ChecklistItemRow,
   GroupMemberRow,
   GroupRow,
+  GroupSyncStatus,
   GroupWithCountsRow,
   LabelRow,
   ListTasksFilters,
@@ -11,6 +12,12 @@ import type {
   TaskRow,
   TaskWithAssigneesRow,
 } from '@seta/planner';
+
+type M365GroupSearchResult = { external_id: string; display_name: string; mail_nickname: string };
+
+export type GroupSyncStatusResponse =
+  | { sync_status: null }
+  | { sync_status: GroupSyncStatus; synced_at: string | null; last_error: string | null };
 
 export class PlannerClientError extends Error {
   readonly status: number;
@@ -452,6 +459,47 @@ async function removeChecklistItem(input: { item_id: string }): Promise<void> {
   await request<void>(`/api/planner/v1/checklist-items/${input.item_id}`, { method: 'DELETE' });
 }
 
+async function searchM365Groups(q: string): Promise<{ groups: M365GroupSearchResult[] }> {
+  return (await request<{ groups: M365GroupSearchResult[] }>(
+    `/api/integrations/m365/groups/search?q=${encodeURIComponent(q)}`,
+  )) as { groups: M365GroupSearchResult[] };
+}
+
+async function linkGroupToM365(input: { groupId: string; externalId: string }): Promise<GroupRow> {
+  return (await request<GroupRow>(`/api/integrations/m365/groups/${input.groupId}/link`, {
+    method: 'POST',
+    body: JSON.stringify({ external_id: input.externalId }),
+  })) as GroupRow;
+}
+
+async function unlinkGroupFromM365(input: { groupId: string }): Promise<GroupRow> {
+  return (await request<GroupRow>(`/api/integrations/m365/groups/${input.groupId}/unlink`, {
+    method: 'POST',
+  })) as GroupRow;
+}
+
+async function refreshGroupSync(input: { groupId: string }): Promise<{ ok: true }> {
+  return (await request<{ ok: true }>(`/api/integrations/m365/groups/${input.groupId}/refresh`, {
+    method: 'POST',
+  })) as { ok: true };
+}
+
+async function resolveGroupConflict(input: {
+  groupId: string;
+  decisions: Array<{ field: string; choice: 'local' | 'remote' }>;
+}): Promise<{ ok: true }> {
+  return (await request<{ ok: true }>(`/api/integrations/m365/groups/${input.groupId}/resolve`, {
+    method: 'POST',
+    body: JSON.stringify({ decisions: input.decisions }),
+  })) as { ok: true };
+}
+
+async function getGroupSyncStatus(input: { groupId: string }): Promise<GroupSyncStatusResponse> {
+  return (await request<GroupSyncStatusResponse>(
+    `/api/integrations/m365/groups/${input.groupId}/sync-status`,
+  )) as GroupSyncStatusResponse;
+}
+
 async function listTaskEvents(input: {
   task_id: string;
   limit?: number;
@@ -512,4 +560,10 @@ export const plannerClient = {
   updateChecklistItem,
   removeChecklistItem,
   listTaskEvents,
+  searchM365Groups,
+  linkGroupToM365,
+  unlinkGroupFromM365,
+  refreshGroupSync,
+  resolveGroupConflict,
+  getGroupSyncStatus,
 } as const;
