@@ -1,8 +1,7 @@
 name: Release
 
 on:
-  push:
-    tags: ['v*']
+  workflow_dispatch:
 
 concurrency:
   group: release-${{ github.ref }}
@@ -27,6 +26,7 @@ jobs:
       major: ${{ steps.parse.outputs.major }}
       minor: ${{ steps.parse.outputs.minor }}
       semver_ok: ${{ steps.parse.outputs.semver_ok }}
+      org_lc: ${{ steps.org.outputs.org_lc }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
@@ -44,6 +44,11 @@ jobs:
           echo "major=v${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
           echo "minor=v${BASH_REMATCH[1]}.${BASH_REMATCH[2]}" >> "$GITHUB_OUTPUT"
           echo "semver_ok=true" >> "$GITHUB_OUTPUT"
+
+      - id: org
+        name: Lowercase org for registry
+        shell: bash
+        run: echo "org_lc=${ORG,,}" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build & push ${{ matrix.image.name }}
@@ -68,17 +73,17 @@ jobs:
           image: ${{ matrix.image.name }}
           dockerfile: ${{ matrix.image.dockerfile }}
           tags: |
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.version }}
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.minor }}
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.major }}
-            ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}:latest
+            ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.version }}
+            ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.minor }}
+            ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}:${{ needs.metadata.outputs.major }}
+            ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}:latest
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ needs.metadata.outputs.version }}
             org.opencontainers.image.title=${{ matrix.image.name }}
           push: true
-          cache-ref: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}:buildcache
+          cache-ref: ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}:buildcache
 
       - name: Collect digest per image
         id: collect
@@ -99,7 +104,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          IMG="${{ env.REGISTRY }}/${{ env.ORG }}/seta-server@${{ needs.build.outputs.server_digest }}"
+          IMG="${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/seta-server@${{ needs.build.outputs.server_digest }}"
           echo "smoke target: $IMG"
           docker pull "$IMG"
           docker run --rm "$IMG" health
@@ -112,7 +117,7 @@ jobs:
       - name: Scan seta-server (gating)
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.ORG }}/seta-server@${{ needs.build.outputs.server_digest }}
+          image-ref: ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/seta-server@${{ needs.build.outputs.server_digest }}
           format: table
           severity: CRITICAL,HIGH
           exit-code: '1'
@@ -123,7 +128,7 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         continue-on-error: true
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.ORG }}/seta-web@${{ needs.build.outputs.web_digest }}
+          image-ref: ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/seta-web@${{ needs.build.outputs.web_digest }}
           format: table
           severity: CRITICAL,HIGH
           exit-code: '1'
@@ -172,13 +177,13 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: '1'
         run: |
-          IMG="${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}"
+          IMG="${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}"
           cosign sign --yes "$IMG"
 
       - name: Generate SPDX SBOM and attest
         uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}
+          image: ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}
           format: spdx-json
           output-file: sbom-${{ matrix.image.name }}.spdx.json
           upload-artifact: true
@@ -190,7 +195,7 @@ jobs:
         env:
           COSIGN_EXPERIMENTAL: '1'
         run: |
-          IMG="${{ env.REGISTRY }}/${{ env.ORG }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}"
+          IMG="${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/${{ matrix.image.name }}@${{ steps.digest.outputs.value }}"
           cosign attest --yes \
             --predicate "sbom-${{ matrix.image.name }}.spdx.json" \
             --type spdxjson \
@@ -233,7 +238,7 @@ jobs:
       - name: Copy manifest list from GHCR to ECR
         shell: bash
         env:
-          SRC: ${{ env.REGISTRY }}/${{ env.ORG }}/seta-server@${{ needs.build.outputs.server_digest }}
+          SRC: ${{ env.REGISTRY }}/${{ needs.metadata.outputs.org_lc }}/seta-server@${{ needs.build.outputs.server_digest }}
           DST_BASE: ${{ vars.SETA_ECR_SERVER_URI }}
           V: ${{ needs.metadata.outputs.version }}
           MINOR: ${{ needs.metadata.outputs.minor }}
@@ -325,13 +330,13 @@ jobs:
           cat > release-notes.md <<EOF
           ## Images
 
-          - \`ghcr.io/${{ env.ORG }}/seta-server:${VERSION}\` (digest: \`${SERVER_DIGEST}\`)
-          - \`ghcr.io/${{ env.ORG }}/seta-web:${VERSION}\` (digest: \`${WEB_DIGEST}\`)
+          - \`ghcr.io/${{ needs.metadata.outputs.org_lc }}/seta-server:${VERSION}\` (digest: \`${SERVER_DIGEST}\`)
+          - \`ghcr.io/${{ needs.metadata.outputs.org_lc }}/seta-web:${VERSION}\` (digest: \`${WEB_DIGEST}\`)
 
           ## Verification
 
           \`\`\`
-          cosign verify ghcr.io/${{ env.ORG }}/seta-server:${VERSION} \\
+          cosign verify ghcr.io/${{ needs.metadata.outputs.org_lc }}/seta-server:${VERSION} \\
             --certificate-identity-regexp='^https://github.com/${{ github.repository }}/\\.github/workflows/release\\.yml@refs/tags/v.*\$' \\
             --certificate-oidc-issuer='https://token.actions.githubusercontent.com'
           \`\`\`
