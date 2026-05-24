@@ -107,7 +107,6 @@ export type {
   LabelRow,
   MyTasksResult,
   PlanRow,
-  PlanStatus,
   PlanWithRollupsRow,
   TaskDetailRow,
   TaskExternalSource,

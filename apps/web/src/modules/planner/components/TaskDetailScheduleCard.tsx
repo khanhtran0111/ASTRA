@@ -1,7 +1,7 @@
 import type { TaskWithAssigneesRow } from '@seta/planner';
-import { MiniGantt } from '@seta/shared-ui';
-import { differenceInCalendarDays, getISOWeek, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { CalendarDays, X } from 'lucide-react';
+import { useId } from 'react';
 import { useUpdateTaskSchedule } from '../hooks/mutations/update-task-schedule';
 
 interface Props {
@@ -39,8 +39,6 @@ export function TaskDetailScheduleCard({ task, planId, today }: Props) {
     parseISO(task.due_at) < parseISO(todayDate) &&
     !task.is_deferred;
 
-  const summary = buildSummary(task.start_at, task.due_at);
-
   return (
     <section className="card" aria-label="Schedule">
       <header className="mb-1.5">
@@ -65,12 +63,6 @@ export function TaskDetailScheduleCard({ task, planId, today }: Props) {
           }
         />
       </div>
-      {summary && <div className="t-xs subtle mt-2">{summary}</div>}
-      {task.start_at && task.due_at && (
-        <div className="mt-2">
-          <MiniGantt start={task.start_at} due={task.due_at} today={todayDate} title={task.title} />
-        </div>
-      )}
     </section>
   );
 }
@@ -85,8 +77,9 @@ interface DateFieldProps {
 
 function DateField({ label, value, ariaLabel, danger, onChange }: DateFieldProps) {
   const dateValue = toDateInputValue(value);
+  const inputId = useId();
   return (
-    <label
+    <div
       className={`flex items-center gap-2 rounded-md border px-3 py-2 text-body-sm ${
         danger
           ? 'border-semantic-danger bg-semantic-danger-tint text-semantic-danger'
@@ -97,12 +90,14 @@ function DateField({ label, value, ariaLabel, danger, onChange }: DateFieldProps
         className={`size-3.5 ${danger ? 'text-semantic-danger' : 'text-ink-subtle'}`}
         aria-hidden
       />
-      <span
+      <label
+        htmlFor={inputId}
         className={`text-caption font-medium ${danger ? 'text-semantic-danger' : 'text-ink-subtle'}`}
       >
         {label}
-      </span>
+      </label>
       <input
+        id={inputId}
         type="date"
         aria-label={ariaLabel}
         value={dateValue}
@@ -112,23 +107,13 @@ function DateField({ label, value, ariaLabel, danger, onChange }: DateFieldProps
       {dateValue && (
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            onChange(null);
-          }}
-          aria-label={`Clear ${label}`}
+          onClick={() => onChange(null)}
+          aria-label={`Reset ${ariaLabel.toLowerCase()} date`}
           className="text-ink-subtle hover:text-ink"
         >
           <X className="size-3.5" />
         </button>
       )}
-    </label>
+    </div>
   );
-}
-
-function buildSummary(start: string | null, due: string | null): string | null {
-  if (!start || !due) return null;
-  const days = differenceInCalendarDays(parseISO(due), parseISO(start)) + 1;
-  const week = getISOWeek(parseISO(start));
-  return `${days}-day range · spans week ${week}`;
 }

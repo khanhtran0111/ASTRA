@@ -24,12 +24,13 @@ select:focus-visible,
 ::-webkit-scrollbar-thumb { background: var(--color-surface-3); border-radius: var(--radius-md); }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-surface-4); }
 
-/* PriorityIcon */
+/* PriorityIcon — colors sourced from the shared priority palette in tokens.css.
+   Keep changes here in sync with packages/shared-ui/src/lib/priority.ts. */
 .priority-icon { display: inline-block; width: 12px; height: 12px; border-radius: 2px; }
-.priority-icon--urgent    { background: var(--color-danger); }
-.priority-icon--important { background: var(--color-warning); }
-.priority-icon--medium    { background: var(--color-info); }
-.priority-icon--low       { background: var(--color-ink-subtle); }
+.priority-icon--urgent    { background: var(--color-priority-urgent); }
+.priority-icon--important { background: var(--color-priority-important); }
+.priority-icon--medium    { background: var(--color-priority-medium); }
+.priority-icon--low       { background: var(--color-priority-low); }
 
 /* LabelChip */
 .label-chip { display: inline-flex; align-items: center; padding: 1px 6px; border-radius: var(--radius-sm); font-size: var(--font-size-xs); font-weight: 500; }
