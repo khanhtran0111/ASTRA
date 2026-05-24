@@ -2,6 +2,7 @@ export type { PlannerSessionScope } from './backend/domain/_actor.ts';
 export { isM365SystemActor } from './backend/domain/_actor.ts';
 export { addChecklistItem } from './backend/domain/add-checklist-item.ts';
 export { addGroupMember } from './backend/domain/add-group-member.ts';
+export { addGroupMembers } from './backend/domain/add-group-members.ts';
 export { addTaskReference } from './backend/domain/add-task-reference.ts';
 export { applyLabel } from './backend/domain/apply-label.ts';
 export { assignTask } from './backend/domain/assign-task.ts';
@@ -32,6 +33,8 @@ export { linkGroupToM365 } from './backend/domain/link-group-to-m365.ts';
 export { linkPlanToM365 } from './backend/domain/link-plan-to-m365.ts';
 export { listBuckets } from './backend/domain/list-buckets.ts';
 export { listChecklistItems } from './backend/domain/list-checklist-items.ts';
+export type { GroupMemberCandidate } from './backend/domain/list-group-member-candidates.ts';
+export { listGroupMemberCandidates } from './backend/domain/list-group-member-candidates.ts';
 export { listGroupMembers } from './backend/domain/list-group-members.ts';
 export { listGroupPlansWithRollups } from './backend/domain/list-group-plans-with-rollups.ts';
 export { listGroups } from './backend/domain/list-groups.ts';
@@ -151,6 +154,7 @@ export type {
   UpdatePlanPatch,
   UpdateTaskPatch,
 } from './backend/inputs.ts';
+export { plannerMembershipJobs } from './backend/jobs/bulk-add-group-members.ts';
 export type { PlannerErrorCode } from './backend/rbac.ts';
 export { PlannerError, requirePermission } from './backend/rbac.ts';
 export type {

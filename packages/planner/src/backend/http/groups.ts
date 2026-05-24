@@ -1,13 +1,15 @@
-import type { SessionEnv } from '@seta/core';
+import type { SessionEnv, WorkerHandle } from '@seta/core';
 import type { Hono } from 'hono';
 import { z } from 'zod';
 import {
   addGroupMember,
+  addGroupMembers,
   createGroup,
   deleteGroup,
   getGroup,
   getGroupActivity,
   linkGroupToM365,
+  listGroupMemberCandidates,
   listGroupMembers,
   listGroups,
   listGroupsWithCounts,
@@ -18,6 +20,10 @@ import {
   unlinkGroupFromM365,
   updateGroup,
 } from '../../index.ts';
+
+interface PlannerGroupsDeps {
+  workers: WorkerHandle;
+}
 
 const createSchema = z.object({
   name: z.string().min(1).max(120),
@@ -38,10 +44,17 @@ const updateSchema = z.object({
 });
 const versionSchema = z.object({ expected_version: z.number().int().positive() });
 const memberSchema = z.object({ user_id: z.string().uuid() });
+const bulkMembersSchema = z.object({
+  members: z
+    .array(z.object({ user_id: z.string().uuid() }))
+    .min(1)
+    .max(500),
+});
 const setMemberRoleSchema = z.object({ role: z.enum(['owner', 'member']) });
 const linkM365Schema = z.object({ external_id: z.string().min(1) });
 
-export function registerPlannerGroupsRoutes(app: Hono<SessionEnv>): void {
+export function registerPlannerGroupsRoutes(app: Hono<SessionEnv>, deps: PlannerGroupsDeps): void {
+  const { workers } = deps;
   app.get('/api/planner/v1/groups', async (c) => {
     const session = c.get('user');
     const include_deleted = c.req.query('include_deleted') === 'true';
@@ -114,6 +127,21 @@ export function registerPlannerGroupsRoutes(app: Hono<SessionEnv>): void {
     return c.json(await restoreGroup({ group_id: c.req.param('id'), session }));
   });
 
+  app.get('/api/planner/v1/groups/:id/members/candidates', async (c) => {
+    const session = c.get('user');
+    const search = c.req.query('search');
+    const limitStr = c.req.query('limit');
+    const limit = limitStr ? Math.min(Math.max(Number.parseInt(limitStr, 10), 1), 50) : 20;
+    return c.json({
+      candidates: await listGroupMemberCandidates({
+        group_id: c.req.param('id'),
+        search: search || undefined,
+        limit,
+        session,
+      }),
+    });
+  });
+
   app.get('/api/planner/v1/groups/:id/members', async (c) => {
     const session = c.get('user');
     return c.json({ members: await listGroupMembers({ group_id: c.req.param('id'), session }) });
@@ -138,6 +166,30 @@ export function registerPlannerGroupsRoutes(app: Hono<SessionEnv>): void {
       console.error('[group-activity] failed', err);
       throw err;
     }
+  });
+
+  app.post('/api/planner/v1/groups/:id/members/bulk', async (c) => {
+    const session = c.get('user');
+    const parsed = bulkMembersSchema.safeParse(await c.req.json().catch(() => ({})));
+    if (!parsed.success)
+      return c.json({ error: 'VALIDATION', details: parsed.error.flatten() }, 400);
+
+    const groupId = c.req.param('id');
+    const { members } = parsed.data;
+
+    if (members.length <= 25) {
+      await addGroupMembers({ group_id: groupId, members, session });
+      const updated = await listGroupMembers({ group_id: groupId, session });
+      return c.json({ members: updated }, 201);
+    }
+
+    await workers.addJob('planner.bulk_add_group_members', {
+      group_id: groupId,
+      user_ids: members.map((m) => m.user_id),
+      actor_user_id: session.user_id,
+      actor_tenant_id: session.tenant_id,
+    });
+    return c.json({ job_id: crypto.randomUUID() }, 202);
   });
 
   app.post('/api/planner/v1/groups/:id/members', async (c) => {
