@@ -60,6 +60,20 @@ function taskNumberFromId(id: string): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+const ABSOLUTE_DATE_FMT = new Intl.DateTimeFormat(undefined, {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+function formatAbsoluteDate(iso: string | null | undefined): string {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? '—' : ABSOLUTE_DATE_FMT.format(d);
+}
+
 export function TaskDetailPage({
   planId,
   taskId,
@@ -313,23 +327,20 @@ export function TaskDetailPage({
             <TaskDetailReferencesCard task={task} planId={planId} />
             <TaskDetailChecklistCard task={task} planId={planId} />
           </main>
-          <aside
-            className="sticky top-0 flex max-h-[80vh] flex-col gap-3.5 self-start overflow-y-auto pr-1"
-            aria-label="Task properties"
-          >
+          <aside className="flex flex-col gap-3.5 self-start pr-1" aria-label="Task properties">
+            <TaskDetailProgressCard task={task} planId={planId} />
             <TaskDetailAssigneesCard
               task={task}
               planId={planId}
               isLinkedToM365={plan?.external_source === 'm365'}
             />
+            <TaskDetailPriorityCard task={task} planId={planId} />
+            <TaskDetailScheduleCard task={task} planId={planId} />
             <TaskDetailLabelsCard
               task={task}
               planId={planId}
               isLinkedToM365={plan?.external_source === 'm365'}
             />
-            <TaskDetailScheduleCard task={task} planId={planId} />
-            <TaskDetailPriorityCard task={task} planId={planId} />
-            <TaskDetailProgressCard task={task} planId={planId} />
             <TaskDetailPreviewTypeCard task={task} planId={planId} />
             <TaskDetailExternalCard
               task={task}
@@ -343,10 +354,29 @@ export function TaskDetailPage({
                   : undefined
               }
             />
-            <p className="mt-1 text-caption text-ink-subtle">
-              Created {formatRelative(task.created_at)} by {creatorName} · Last updated{' '}
-              {formatRelative(task.updated_at)}
-            </p>
+            <dl
+              className="mt-1 grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 text-caption text-ink-subtle"
+              aria-label="Task metadata"
+            >
+              <dt className="text-ink-tertiary">Created</dt>
+              <dd>
+                <time dateTime={task.created_at} title={task.created_at}>
+                  {formatAbsoluteDate(task.created_at)}
+                </time>
+                {' · '}
+                <span className="text-ink-tertiary">{formatRelative(task.created_at)}</span>
+                <br />
+                by <span className="text-ink-muted">{creatorName}</span>
+              </dd>
+              <dt className="text-ink-tertiary">Updated</dt>
+              <dd>
+                <time dateTime={task.updated_at} title={task.updated_at}>
+                  {formatAbsoluteDate(task.updated_at)}
+                </time>
+                {' · '}
+                <span className="text-ink-tertiary">{formatRelative(task.updated_at)}</span>
+              </dd>
+            </dl>
           </aside>
         </div>
       </div>
