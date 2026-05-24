@@ -16,6 +16,7 @@ export const userProfile = identity.table('user_profile', {
   ooo_until: timestamp('ooo_until', { withTimezone: true }),
   timezone: text('timezone').default('UTC').notNull(),
   working_hours: jsonb('working_hours').$type<{ start: string; end: string } | null>(),
+  bio: text('bio'),
   updated_at: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
 });
 
