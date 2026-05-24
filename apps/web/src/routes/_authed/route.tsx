@@ -77,7 +77,7 @@ function ShellWithPanel({ children }: { children: React.ReactNode }) {
         hideCopilot={pathname.startsWith('/copilot/')}
         notificationCount={notificationCount}
         onBellClick={() => setDrawerOpen(true)}
-        copilotPanel={<CopilotSidePanel />}
+        copilotPanel={<CopilotSidePanel onClose={() => setPanelOpen(false)} />}
         copilotOpen={panelOpen}
         onCopilotOpenChange={setPanelOpen}
         copilotMobileSlot={<CopilotMobileSheet />}

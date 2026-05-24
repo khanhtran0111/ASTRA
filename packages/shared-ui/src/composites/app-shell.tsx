@@ -138,9 +138,7 @@ export function AppShell({
         <main className="flex min-h-0 min-w-0 flex-1 flex-col overflow-auto bg-canvas">
           {children}
         </main>
-        {!hideCopilot && copilotOpen && (
-          <CopilotPanel onClose={() => setCopilotOpen(false)}>{copilotPanel}</CopilotPanel>
-        )}
+        {!hideCopilot && copilotOpen && <CopilotPanel>{copilotPanel}</CopilotPanel>}
       </div>
       {copilotMobileSlot}
     </div>

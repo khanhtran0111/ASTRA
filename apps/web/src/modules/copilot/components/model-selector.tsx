@@ -5,10 +5,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
 } from '@seta/shared-ui';
 import { Check, ChevronDown, Cpu, Sparkles, Wand2, Zap } from 'lucide-react';
 import { type ModelOption, type ModelTier, useModelCatalog } from '../hooks/use-model-catalog';
@@ -47,7 +43,7 @@ export function ModelSelector({
   const current = models.find((m) => m.key === value);
 
   const triggerClass = compact
-    ? 'inline-flex size-6 items-center justify-center rounded text-ink-muted hover:bg-surface-2 hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-focus disabled:opacity-50'
+    ? 'inline-flex h-6 items-center gap-1.5 rounded-md px-1.5 text-[11px] text-ink hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-focus disabled:opacity-50 max-w-[12ch]'
     : variant === 'bordered'
       ? 'inline-flex h-7 items-center gap-1.5 rounded-md border border-hairline px-2.5 text-body-sm text-ink hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-focus'
       : 'inline-flex h-6 items-center gap-1.5 rounded-md px-1.5 text-caption text-ink hover:bg-surface-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-focus';
@@ -95,31 +91,6 @@ export function ModelSelector({
     </DropdownMenuContent>
   );
 
-  if (compact) {
-    return (
-      <TooltipProvider delayDuration={200}>
-        <DropdownMenu>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={triggerClass}
-                  aria-label={ariaLabel}
-                  disabled={isLoading || models.length === 0}
-                >
-                  <CurrentIcon className="size-3.5" aria-hidden />
-                </button>
-              </DropdownMenuTrigger>
-            </TooltipTrigger>
-            <TooltipContent side="top">{current?.label ?? 'Model'}</TooltipContent>
-          </Tooltip>
-          {menuBody}
-        </DropdownMenu>
-      </TooltipProvider>
-    );
-  }
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -131,7 +102,7 @@ export function ModelSelector({
         >
           <CurrentIcon className="size-3 text-ink-subtle" aria-hidden />
           <span className="truncate">{current?.label ?? 'Model'}</span>
-          <ChevronDown className="size-3 text-ink-subtle" aria-hidden />
+          <ChevronDown className="size-3 text-ink-tertiary" aria-hidden />
         </button>
       </DropdownMenuTrigger>
       {menuBody}

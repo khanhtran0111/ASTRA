@@ -1,5 +1,6 @@
-import { MessagePrimitive, ThreadPrimitive, useAuiState } from '@assistant-ui/react';
-import { ChatMarkdown, ChatMessage, ChatTranscript, EmptyState } from '@seta/shared-ui';
+import { MessagePrimitive, ThreadPrimitive, useAui, useAuiState } from '@assistant-ui/react';
+import { ChatMarkdown, ChatMessage, ChatTranscript } from '@seta/shared-ui';
+import { Sparkles } from 'lucide-react';
 import type { AgentName } from '../components/agents';
 import { agentLabel } from '../components/agents';
 import { ThreadListRefresher } from '../components/thread-list-refresher';
@@ -60,6 +61,40 @@ function ThinkingIndicator() {
 
 function PlainTextPart({ text }: PartProps) {
   return <span className="whitespace-pre-wrap">{text}</span>;
+}
+
+function CopilotEmpty({ title, body }: { title: string; body: string }) {
+  const aui = useAui();
+  const send = (text: string) => {
+    aui.composer().setText(text);
+    aui.composer().send();
+  };
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-5 px-6 py-12 text-center">
+      <span
+        aria-hidden
+        className="inline-flex size-9 items-center justify-center rounded-full bg-primary-tint text-primary"
+      >
+        <Sparkles className="size-4" />
+      </span>
+      <div className="max-w-xs">
+        <h3 className="text-card-title font-semibold text-ink">{title}</h3>
+        <p className="mt-1.5 text-body-sm leading-[1.5] text-ink-subtle">{body}</p>
+      </div>
+      <div className="flex flex-wrap items-center justify-center gap-1.5">
+        {COPILOT_COPY.emptySuggestions.map((s) => (
+          <button
+            key={s}
+            type="button"
+            onClick={() => send(s)}
+            className="inline-flex h-7 items-center rounded-full border border-hairline bg-canvas px-3 text-caption text-ink-muted transition-colors hover:border-primary-border hover:bg-primary-tint hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-focus"
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function extractPageContext(content: ReadonlyArray<unknown>): PageContext | undefined {
@@ -131,9 +166,7 @@ export function CopilotTranscript() {
     <>
       <ChatTranscript>
         <ThreadPrimitive.Empty>
-          <div className="flex flex-1 items-center justify-center py-12">
-            <EmptyState title={emptyTitle} description={emptyBody} />
-          </div>
+          <CopilotEmpty title={emptyTitle} body={emptyBody} />
         </ThreadPrimitive.Empty>
         <ThreadPrimitive.Messages components={{ UserMessage, AssistantMessage }} />
         <div className="px-4 pb-4">
