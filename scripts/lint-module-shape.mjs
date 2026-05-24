@@ -18,17 +18,18 @@ import { join } from 'node:path';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 
-const MODULES_CHECKED = ['identity', 'planner', 'copilot', 'notifications', 'staffing'];
+const MODULES_CHECKED = [
+  'identity',
+  'planner',
+  'copilot',
+  'notifications',
+  'staffing',
+  'core',
+  'integrations',
+  'knowledge',
+];
 
-// TODO: promote to MODULES_CHECKED as each module is normalized.
-//  - core: foundation tier; carries `composition/`, `middleware/`, `outbox/`,
-//    `rpc/`, `runtime/`, `session/`, `test-support.ts`, `db/` at src/ root.
-//    Pending its own canonicalization PR.
-//  - integrations: feature tier; carries `db/` and `m365/` at src/ root.
-//    Pending its own canonicalization PR.
-//  - knowledge: carries `backend/embed/` (should be `embeddings/`) and
-//    `backend/agent-tools.ts` (file at backend root). Pending normalization.
-const MODULES_DEFERRED = ['core', 'integrations', 'knowledge'];
+const MODULES_DEFERRED = []; // all feature modules normalized.
 
 const SRC_ALLOWLIST = new Set([
   'index.ts',
@@ -45,6 +46,20 @@ const SRC_ALLOWLIST = new Set([
   'backend',
 ]);
 
+// core is foundation-tier and owns infrastructure surfaces consumed by EVERY app +
+// every other module. Putting them under backend/ would imply "backend-only" semantics
+// they don't have. Keep them at src/ root and extend the allowlist accordingly.
+const CORE_EXTRA_SRC_ALLOWLIST = new Set([
+  'composition',
+  'middleware',
+  'outbox',
+  'rpc',
+  'runtime',
+  'session',
+  'db',
+  'test-support.ts',
+]);
+
 const BACKEND_DIR_ALLOWLIST = new Set([
   'domain',
   'subscribers',
@@ -59,6 +74,8 @@ const BACKEND_DIR_ALLOWLIST = new Set([
   'sso',
   'agents',
   'agent-tools',
+  'm365', // integrations-owned external connector
+  'scan', // knowledge-owned upload AV scanner
 ]);
 
 const errors = [];
@@ -69,8 +86,10 @@ function checkModule(modName) {
     errors.push(`[${modName}] src/ directory missing`);
     return;
   }
+  const effectiveSrcAllowlist =
+    modName === 'core' ? new Set([...SRC_ALLOWLIST, ...CORE_EXTRA_SRC_ALLOWLIST]) : SRC_ALLOWLIST;
   for (const entry of readdirSync(srcDir)) {
-    if (!SRC_ALLOWLIST.has(entry)) {
+    if (!effectiveSrcAllowlist.has(entry)) {
       errors.push(`[${modName}] src/${entry} not in canonical src/ allowlist`);
     }
   }

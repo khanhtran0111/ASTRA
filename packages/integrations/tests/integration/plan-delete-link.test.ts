@@ -11,10 +11,10 @@ import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { makeWorkerUtils } from 'graphile-worker';
 import type { Pool } from 'pg';
 import { describe, expect, it } from 'vitest';
-import { resetIntegrationsDb } from '../../src/db/client.ts';
-import { runPlanDeleteLink } from '../../src/m365/jobs/plan-delete-link.ts';
-import { createM365PlanLinkRepo } from '../../src/m365/plans/repo.ts';
-import { buildM365Subscribers } from '../../src/m365/subscribers.ts';
+import { resetIntegrationsDb } from '../../src/backend/db/client.ts';
+import { runPlanDeleteLink } from '../../src/backend/m365/jobs/plan-delete-link.ts';
+import { createM365PlanLinkRepo } from '../../src/backend/m365/plans/repo.ts';
+import { buildM365Subscribers } from '../../src/backend/m365/subscribers.ts';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
