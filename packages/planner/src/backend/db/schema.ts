@@ -282,6 +282,27 @@ export const taskReferences = planner.table(
   ],
 );
 
+export const taskComments = planner.table(
+  'task_comments',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenant_id: uuid('tenant_id').notNull(),
+    task_id: uuid('task_id').notNull(),
+    author_id: uuid('author_id').notNull(),
+    body: text('body').notNull(),
+    created_at: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    edited_at: timestamp('edited_at', { withTimezone: true }),
+    deleted_at: timestamp('deleted_at', { withTimezone: true }),
+  },
+  (t) => [
+    index('task_comments_by_task_recent')
+      .on(t.task_id, t.created_at.desc())
+      .where(sql`deleted_at IS NULL`),
+    check('task_comments_body_not_empty', sql`length(btrim(body)) > 0`),
+    check('task_comments_body_max_len', sql`length(body) <= 4000`),
+  ],
+);
+
 export const assigneeProjection = planner.table(
   'assignee_projection',
   {
