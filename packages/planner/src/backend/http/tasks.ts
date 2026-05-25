@@ -9,11 +9,14 @@ import {
   applyLabel,
   assignTask,
   completeTask,
+  createComment,
   createTask,
+  deleteComment,
   deleteTask,
   duplicateTask,
   getTask,
   listChecklistItems,
+  listComments,
   listMyAssignedTasks,
   listMyTasks,
   listTaskEvents,
@@ -28,6 +31,7 @@ import {
   unapplyLabel,
   unassignTask,
   updateChecklistItem,
+  updateComment,
   updateTask,
 } from '../../index.ts';
 
@@ -123,6 +127,10 @@ const applyLabelSchema = z.object({ label_id: z.string().uuid() });
 const addChecklistItemSchema = z.object({
   label: z.string().min(1).max(500),
   after_item_id: z.string().uuid().optional(),
+});
+
+const commentBodySchema = z.object({
+  body: z.string().min(1).max(4000),
 });
 
 const MY_TASKS_PRIORITY_MAP: Record<string, 'urgent' | 'important' | 'medium' | 'low'> = {
@@ -371,6 +379,48 @@ export function registerPlannerTasksRoutes(app: Hono<SessionEnv>): void {
       url: parsed.data.url,
       session,
     });
+    return c.body(null, 204);
+  });
+
+  app.get('/api/planner/v1/tasks/:id/comments', async (c) => {
+    const session = c.get('user');
+    const q = c.req.query();
+    const rawLimit = Number.parseInt(q.limit ?? '20', 10);
+    const limit = Number.isNaN(rawLimit) ? 20 : Math.min(Math.max(rawLimit, 1), 100);
+    return c.json(
+      await listComments({
+        task_id: c.req.param('id'),
+        limit,
+        cursor: q.cursor ?? undefined,
+        session,
+      }),
+    );
+  });
+
+  app.post('/api/planner/v1/tasks/:id/comments', async (c) => {
+    const session = c.get('user');
+    const parsed = commentBodySchema.safeParse(await c.req.json().catch(() => ({})));
+    if (!parsed.success)
+      return c.json({ error: 'VALIDATION', details: parsed.error.flatten() }, 400);
+    return c.json(
+      await createComment({ task_id: c.req.param('id'), body: parsed.data.body, session }),
+      201,
+    );
+  });
+
+  app.patch('/api/planner/v1/comments/:id', async (c) => {
+    const session = c.get('user');
+    const parsed = commentBodySchema.safeParse(await c.req.json().catch(() => ({})));
+    if (!parsed.success)
+      return c.json({ error: 'VALIDATION', details: parsed.error.flatten() }, 400);
+    return c.json(
+      await updateComment({ comment_id: c.req.param('id'), body: parsed.data.body, session }),
+    );
+  });
+
+  app.delete('/api/planner/v1/comments/:id', async (c) => {
+    const session = c.get('user');
+    await deleteComment({ comment_id: c.req.param('id'), session });
     return c.body(null, 204);
   });
 
