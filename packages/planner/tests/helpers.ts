@@ -1,6 +1,8 @@
 import { hashRoleSummary, type SessionScope } from '@seta/core';
 import { createUser } from '@seta/identity';
 import type { Pool } from 'pg';
+import { createGroup, createPlan, createTask } from '../src/index.ts';
+import type { PlannerRoleSlug } from '../src/rbac.ts';
 
 export interface SeedUser {
   name: string;
@@ -125,6 +127,121 @@ export function buildSession(opts: {
     built_at: new Date(),
     invalidated_at: null,
   };
+}
+
+export interface SeededWithTask {
+  tenant_id: string;
+  group_id: string;
+  plan_id: string;
+  task_id: string;
+  /** Session for the member with the requested planner role. */
+  session: SessionScope;
+  /** Admin session for additional setup. */
+  admin_session: SessionScope;
+  /** The non-admin user added to the group as a regular member. */
+  member: SeededUser;
+}
+
+/**
+ * Seed `tenant + admin + member + group + plan + task` and return a session
+ * for the member carrying the requested planner role. Used by comment-domain
+ * tests where many cases need the same fixture under different role/permission
+ * shapes.
+ */
+export async function seedTenantAndTask(
+  pool: Pool,
+  opts: { role: PlannerRoleSlug },
+): Promise<SeededWithTask> {
+  const tag = crypto.randomUUID().slice(0, 8);
+  const memberEmail = `member-${tag}@example.test`;
+  const seeded = await seedTenant(pool, {
+    users: [{ name: `Member ${tag}`, email: memberEmail }],
+  });
+  const member = seeded.users[0];
+  if (!member) throw new Error('seedTenantAndTask: no member user');
+
+  const group = await createGroup({
+    tenant_id: seeded.tenant_id,
+    name: `Group ${tag}`,
+    session: seeded.adminSession,
+    initial_members: [{ user_id: member.user_id, role: 'member' }],
+  });
+  const plan = await createPlan({
+    group_id: group.id,
+    name: `Plan ${tag}`,
+    session: seeded.adminSession,
+  });
+  const task = await createTask({
+    plan_id: plan.id,
+    title: `Task ${tag}`,
+    session: seeded.adminSession,
+  });
+
+  const session = buildSession({
+    tenant_id: seeded.tenant_id,
+    user_id: member.user_id,
+    email: member.email,
+    display_name: member.name,
+    roles: [opts.role],
+    accessible_group_ids: [group.id],
+  });
+
+  return {
+    tenant_id: seeded.tenant_id,
+    group_id: group.id,
+    plan_id: plan.id,
+    task_id: task.id,
+    session,
+    admin_session: seeded.adminSession,
+    member,
+  };
+}
+
+/**
+ * Create an extra group member with the given group-membership role
+ * ('owner'/'member') and return a session for them. Always grants the
+ * planner.contributor role on the session so planner permission checks pass —
+ * group-role authorization happens via planner.group_members lookups inside
+ * the domain functions.
+ */
+export async function makeMemberSession(
+  pool: Pool,
+  opts: { tenant_id: string; group_id: string; role: 'owner' | 'member' },
+): Promise<SessionScope> {
+  const tag = crypto.randomUUID().slice(0, 8);
+  const email = `extra-${tag}@example.test`;
+  const r = await createUser(
+    {
+      tenant_id: opts.tenant_id,
+      email,
+      name: `User ${tag}`,
+      password: 'correct-horse-battery-staple',
+    },
+    { type: 'cli', user_id: null },
+  );
+
+  await pool.query(
+    `INSERT INTO planner.assignee_projection
+       (user_id, tenant_id, display_name, email, skills, availability_status, timezone)
+       VALUES ($1, $2, $3, $4, ARRAY[]::text[], 'available', 'UTC')
+       ON CONFLICT (user_id) DO NOTHING`,
+    [r.user_id, opts.tenant_id, `User ${tag}`, email],
+  );
+  await pool.query(
+    `INSERT INTO planner.group_members (group_id, user_id, role, added_by)
+       VALUES ($1, $2, $3, $2)
+       ON CONFLICT DO NOTHING`,
+    [opts.group_id, r.user_id, opts.role],
+  );
+
+  return buildSession({
+    tenant_id: opts.tenant_id,
+    user_id: r.user_id,
+    email,
+    display_name: `User ${tag}`,
+    roles: ['planner.contributor'],
+    accessible_group_ids: [opts.group_id],
+  });
 }
 
 export async function readEvents(
