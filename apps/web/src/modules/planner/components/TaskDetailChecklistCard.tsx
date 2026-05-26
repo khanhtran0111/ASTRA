@@ -149,13 +149,20 @@ export function TaskDetailChecklistCard({ task, planId }: Props) {
                           className="t-sm flex-1 rounded-sm border border-primary bg-surface-1 px-1 py-0.5 text-ink outline-none"
                         />
                       ) : (
-                        <span
+                        <button
+                          type="button"
                           onDoubleClick={() => beginEdit(it)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              beginEdit(it);
+                            }
+                          }}
                           title="Double-click to edit"
-                          className={`t-sm flex-1 cursor-text select-none ${it.checked ? 'text-ink-subtle line-through' : 'text-ink'}`}
+                          className={`t-sm flex-1 cursor-text select-none border-none bg-transparent p-0 text-left ${it.checked ? 'text-ink-subtle line-through' : 'text-ink'}`}
                         >
                           {it.label}
-                        </span>
+                        </button>
                       )}
                       <button
                         type="button"

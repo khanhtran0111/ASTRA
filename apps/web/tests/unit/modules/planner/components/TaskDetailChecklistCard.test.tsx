@@ -95,10 +95,7 @@ describe('TaskDetailChecklistCard', () => {
     );
 
     renderWithClient(
-      <TaskDetailChecklistCard
-        task={makeDetail([item({ id: 'c1', label: 'old' })])}
-        planId="p1"
-      />,
+      <TaskDetailChecklistCard task={makeDetail([item({ id: 'c1', label: 'old' })])} planId="p1" />,
     );
 
     await user.dblClick(screen.getByText('old'));
@@ -120,10 +117,7 @@ describe('TaskDetailChecklistCard', () => {
     );
 
     renderWithClient(
-      <TaskDetailChecklistCard
-        task={makeDetail([item({ id: 'c1', label: 'old' })])}
-        planId="p1"
-      />,
+      <TaskDetailChecklistCard task={makeDetail([item({ id: 'c1', label: 'old' })])} planId="p1" />,
     );
 
     await user.dblClick(screen.getByText('old'));
@@ -146,10 +140,7 @@ describe('TaskDetailChecklistCard', () => {
     );
 
     renderWithClient(
-      <TaskDetailChecklistCard
-        task={makeDetail([item({ id: 'c1', label: 'old' })])}
-        planId="p1"
-      />,
+      <TaskDetailChecklistCard task={makeDetail([item({ id: 'c1', label: 'old' })])} planId="p1" />,
     );
 
     await user.dblClick(screen.getByText('old'));
