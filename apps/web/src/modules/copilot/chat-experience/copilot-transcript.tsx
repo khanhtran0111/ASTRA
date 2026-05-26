@@ -1,6 +1,7 @@
 import { MessagePrimitive, ThreadPrimitive, useAui, useAuiState } from '@assistant-ui/react';
 import { ChatMarkdown, ChatMessage, ChatTranscript } from '@seta/shared-ui';
 import { Sparkles } from 'lucide-react';
+import { type ReactNode, useCallback } from 'react';
 import { ThreadListRefresher } from '../components/thread-list-refresher';
 import { ToolUIRegistry } from '../components/tool-renderers';
 import { COPILOT_COPY } from '../i18n';
@@ -36,18 +37,49 @@ function TextPart({ text, status }: PartProps) {
 function ReasoningPart({ text, status }: PartProps) {
   const running = status.type === 'running';
   return (
-    <details className="my-2 rounded-md border border-hairline bg-surface-2 px-3 py-2 text-caption">
-      <summary className="cursor-pointer select-none text-ink-subtle">
-        {running ? (
-          <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block size-1.5 animate-pulse rounded-full bg-primary" />
-            Thinking…
+    <div className="my-1 text-caption text-ink-muted">
+      {running && (
+        <span className="mr-1.5 inline-block size-1.5 animate-pulse rounded-full bg-primary" />
+      )}
+      <span className="whitespace-pre-wrap">{text}</span>
+    </div>
+  );
+}
+
+interface ChainOfThoughtProps {
+  running: boolean;
+  count: number;
+  children: ReactNode;
+}
+
+function ChainOfThought({ running, count, children }: ChainOfThoughtProps) {
+  return (
+    <details
+      className="group/cot my-2 rounded-lg border border-hairline bg-surface-2 px-3 py-2 text-caption"
+      open={running}
+    >
+      <summary className="cursor-pointer select-none list-none text-ink-subtle">
+        <span className="inline-flex items-center gap-1.5">
+          {running ? (
+            <>
+              <span className="inline-block size-1.5 animate-pulse rounded-full bg-primary" />
+              Thinking…
+            </>
+          ) : (
+            <>
+              <span className="inline-block size-1.5 rounded-full bg-semantic-success" />
+              Thought {count > 0 ? `· ${count} step${count > 1 ? 's' : ''}` : ''}
+            </>
+          )}
+          <span
+            aria-hidden
+            className="ml-1 text-ink-tertiary transition-transform group-open/cot:rotate-90"
+          >
+            ›
           </span>
-        ) : (
-          'See my thinking'
-        )}
+        </span>
       </summary>
-      <div className="mt-2 whitespace-pre-wrap text-ink-muted">{text}</div>
+      <div className="mt-2 space-y-1.5 border-l-2 border-hairline pl-3">{children}</div>
     </details>
   );
 }
@@ -140,11 +172,59 @@ function UserMessage() {
   );
 }
 
+const groupByThought = (part: { type: string }) => {
+  if (part.type === 'reasoning') return ['group-thought'] as const;
+  if (part.type === 'tool-call') return ['group-thought'] as const;
+  return null;
+};
+
 function makeAssistantMessage(authorLabel: string) {
+  const renderPart = ({
+    part,
+    children,
+  }: {
+    part: {
+      type: string;
+      status?: { type: string };
+      indices?: readonly number[];
+      toolUI?: ReactNode;
+      dataRendererUI?: ReactNode;
+      text?: string;
+    };
+    children: ReactNode;
+  }) => {
+    switch (part.type) {
+      case 'group-thought': {
+        const running = part.status?.type === 'running';
+        return (
+          <ChainOfThought running={running} count={part.indices?.length ?? 0}>
+            {children}
+          </ChainOfThought>
+        );
+      }
+      case 'text':
+        return <TextPart text={part.text ?? ''} status={part.status ?? { type: 'complete' }} />;
+      case 'reasoning':
+        return (
+          <ReasoningPart text={part.text ?? ''} status={part.status ?? { type: 'complete' }} />
+        );
+      case 'tool-call':
+        return <>{part.toolUI ?? null}</>;
+      case 'data':
+        return <>{part.dataRendererUI ?? null}</>;
+      default:
+        return null;
+    }
+  };
+
   return function AssistantMessage() {
+    // biome-ignore lint/correctness/useExhaustiveDependencies: groupByThought is module-level constant
+    const stableGroupBy = useCallback(groupByThought, []);
     return (
       <ChatMessage variant="agent" author={authorLabel}>
-        <MessagePrimitive.Parts components={{ Text: TextPart, Reasoning: ReasoningPart }} />
+        <MessagePrimitive.GroupedParts groupBy={stableGroupBy as never}>
+          {renderPart as never}
+        </MessagePrimitive.GroupedParts>
         <MessagePrimitive.If hasContent={false} last>
           <ThinkingIndicator />
         </MessagePrimitive.If>

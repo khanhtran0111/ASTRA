@@ -1,6 +1,7 @@
 import type { ToolCallMessagePartProps } from '@assistant-ui/react';
-import { useAssistantToolUI } from '@assistant-ui/react';
+import { useAssistantDataUI, useAssistantToolUI } from '@assistant-ui/react';
 import { ChatToolCall } from '@seta/shared-ui';
+import { AgentStreamPart } from '../../chat-experience/agent-stream-part';
 import { useToolCatalog } from '../../hooks/use-tool-catalog';
 import { ServerTimeRenderer } from './core.server-time';
 import { DelegateRenderer } from './delegate';
@@ -129,6 +130,11 @@ function PlannerCreateTaskRegistration({ name }: { name: string }) {
   return null;
 }
 
+function AgentStreamRegistration() {
+  useAssistantDataUI({ name: 'tool-agent', render: AgentStreamPart });
+  return null;
+}
+
 function DelegateRegistration({ name, label }: { name: string; label: string }) {
   useAssistantToolUI({
     toolName: `agent-${name}`,
@@ -170,6 +176,7 @@ export function ToolUIRegistry() {
   const { tools, nameFor } = useToolCatalog();
   return (
     <>
+      <AgentStreamRegistration />
       <ServerTimeRegistration name={nameFor('core_serverTime')} />
       <WhoAmIRegistration name={nameFor('identity_whoAmI')} />
       <ListMyRolesRegistration name={nameFor('identity_listMyRoles')} />

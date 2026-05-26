@@ -9,10 +9,6 @@ interface DelegateArgs {
   instructions?: unknown;
 }
 
-interface DelegateOutput {
-  text?: unknown;
-}
-
 interface Props {
   targetName: string;
   targetLabel: string;
@@ -28,10 +24,7 @@ function previewPrompt(args: Record<string, unknown>): string | undefined {
   return a.prompt.length > 240 ? `${a.prompt.slice(0, 240)}…` : a.prompt;
 }
 
-function summary(args: Record<string, unknown>, output: unknown): string | undefined {
-  const o = (output ?? {}) as DelegateOutput;
-  const text = typeof o.text === 'string' ? o.text : undefined;
-  if (text) return text.length > 120 ? `${text.slice(0, 120)}…` : text;
+function runningSummary(args: Record<string, unknown>): string | undefined {
   return previewPrompt(args);
 }
 
@@ -88,7 +81,7 @@ export function DelegateRenderer({
       <ChatToolCall
         name={name}
         status="ok"
-        summary={summary(args, output)}
+        summary={runningSummary(args)}
         payload={{ args, output }}
       />
     );
@@ -96,5 +89,5 @@ export function DelegateRenderer({
   if (state === 'output-error') {
     return <ChatToolCall name={name} status="error" summary="delegation failed" />;
   }
-  return <ChatToolCall name={name} status="running" summary={summary(args, undefined)} />;
+  return <ChatToolCall name={name} status="running" summary={runningSummary(args)} />;
 }
