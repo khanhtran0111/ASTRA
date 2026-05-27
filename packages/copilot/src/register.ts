@@ -19,6 +19,7 @@ import { getPendingAssignRunIdForTask } from './backend/domain/get-pending-assig
 import { initClassifier } from './backend/domain-classifier.ts';
 import { copilotEnv } from './backend/env.ts';
 import { initCopilotRegistry } from './backend/init-registry.ts';
+import { copilotJobs } from './backend/jobs/rate-limit-cleanup.ts';
 import { type ModelTier, resolveModel } from './backend/model-registry.ts';
 import { registerCopilotRoutes } from './backend/routes.ts';
 import { buildMastra } from './backend/runtime.ts';
@@ -34,6 +35,8 @@ export function registerCopilotContributions(reg: ContributionRegistry): void {
     schema,
     migrationsDir: resolve(__dirname, '../drizzle'),
     subscribers: copilotSubscribers(),
+    jobs: copilotJobs,
+    crontab: '* * * * * copilot_rate_limits_cleanup',
   });
 }
 

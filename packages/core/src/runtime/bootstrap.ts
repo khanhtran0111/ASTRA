@@ -111,7 +111,8 @@ export function buildRuntime(env: BuildRuntimeEnv, deps: BuildRuntimeDeps): Runt
       ...Object.fromEntries(deps.reg.collected.jobs),
       ...(deps.extraJobs ?? {}),
     };
-    wiring.workers = await startWorkerPool({ pool: deps.pool, jobs, log: deps.log });
+    const extraCrontab = deps.reg.collected.crontabs.map((entry) => entry.crontab).join('\n');
+    wiring.workers = await startWorkerPool({ pool: deps.pool, jobs, extraCrontab, log: deps.log });
     if (deps.onWorkerStart) await deps.onWorkerStart({ workers: wiring.workers });
     wiring.dispatcher = await startDispatcher({
       pool: deps.pool,
