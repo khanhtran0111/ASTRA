@@ -28,7 +28,7 @@
     "vitest": "^4.1.7"
   },
   "dependencies": {
-    "@mastra/core": "^1.36.0",
+    "@mastra/core": "^1.37.0",
     "@seta/agent": "workspace:^",
     "@seta/agent-sdk": "workspace:^",
     "@seta/core": "workspace:^",

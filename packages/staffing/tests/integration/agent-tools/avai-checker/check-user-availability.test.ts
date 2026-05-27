@@ -1,10 +1,10 @@
 import { requiredPermissionFor } from '@seta/agent-sdk';
+import { makeToolContext } from '@seta/agent-sdk/testing';
 import { describe, expect, it, vi } from 'vitest';
 import {
   type LeaveRecord,
   makeAvaiCheckerCheckUserAvailabilityTool,
 } from '../../../../src/backend/agent-tools/avai-checker/check-user-availability.ts';
-import { makeToolContext } from '../../../helpers.ts';
 
 const USER_ID = '11111111-1111-4111-8111-111111111111';
 const CALLER_ID = '99999999-9999-4999-8999-999999999999';

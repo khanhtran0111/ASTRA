@@ -31,13 +31,13 @@
     "@seta/shared-types": "workspace:^",
     "@seta/staffing": "workspace:^",
     "drizzle-orm": "^0.45.2",
-    "hono": "^4.12.21",
+    "hono": "^4.12.23",
     "pino": "^10.3.1",
     "tsx": "^4.22.3",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@hono/node-server": "^2.0.3",
+    "@hono/node-server": "^2.0.4",
     "@seta/shared-config": "workspace:^",
     "@seta/shared-testing": "workspace:^",
     "@types/node": "^25.9.1",

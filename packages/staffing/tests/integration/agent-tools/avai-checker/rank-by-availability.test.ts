@@ -1,7 +1,7 @@
 import { requiredPermissionFor } from '@seta/agent-sdk';
+import { makeToolContext } from '@seta/agent-sdk/testing';
 import { describe, expect, it } from 'vitest';
 import { avaiCheckerRankByAvailabilityTool } from '../../../../src/backend/agent-tools/avai-checker/rank-by-availability.ts';
-import { makeToolContext } from '../../../helpers.ts';
 
 const CTX = makeToolContext({ user_id: '00000000-0000-4000-8000-000000000099' });
 

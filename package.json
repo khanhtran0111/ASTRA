@@ -38,37 +38,19 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
     "@seta/shared-config": "workspace:^",
-    "@turbo/gen": "^2.9.14",
+    "@turbo/gen": "^2.9.15",
     "@types/eslint": "^9.6.1",
-    "dependency-cruiser": "^17.4.0",
+    "dependency-cruiser": "^17.4.2",
     "eslint": "^10.4.0",
     "eslint-plugin-boundaries": "^6.0.2",
     "jiti": "^2.7.0",
     "lefthook": "^2.1.8",
-    "turbo": "^2.9.14",
+    "turbo": "^2.9.15",
     "typescript": "^6.0.3",
     "vitest": "^4.1.7"
   },
-  "packageManager": "pnpm@9.0.0",
+  "packageManager": "pnpm@11.3.0",
   "engines": {
     "node": ">=24"
-  },
-  "pnpm": {
-    "overrides": {
-      "@prisma/client": "5.22.0",
-      "kysely": "0.28.17",
-      "better-auth@<1.6.2": ">=1.6.11",
-      "drizzle-orm@<0.45.2": ">=0.45.2",
-      "lodash@<4.18.0": ">=4.18.1",
-      "esbuild@<0.25.0": ">=0.25.0",
-      "uuid@<11.1.1": ">=11.1.1"
-    },
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "@ai-sdk/ui-utils>zod": "4",
-        "@ai-sdk/provider-utils>zod": "4",
-        "@better-auth/core>better-call": "1"
-      }
-    }
   }
 }

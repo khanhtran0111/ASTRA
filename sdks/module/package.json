@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@seta/shared-config": "workspace:^",
-    "@types/react": "^19.0.0",
+    "@types/react": "^19.2.15",
     "typescript": "^6.0.3",
     "vitest": "^4.1.7"
   },

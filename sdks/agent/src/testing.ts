@@ -1,5 +1,6 @@
 import { RequestContext } from '@mastra/core/request-context';
 import type { ToolExecutionContext } from '@mastra/core/tools';
+import { noopObserve } from '@mastra/core/tools';
 import type { AgentRequestContext } from './request-context.ts';
 
 /**
@@ -21,5 +22,6 @@ export function makeToolContext(actor: {
     requestContext: rc,
     toolCallId: 'test-call',
     messages: [],
+    observe: noopObserve,
   } as ToolExecutionContext<unknown, unknown, AgentRequestContext>;
 }

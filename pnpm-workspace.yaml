@@ -2,3 +2,21 @@ packages:
   - "apps/*"
   - "packages/*"
   - "sdks/*"
+allowBuilds:
+  '@prisma/client': true
+  better-sqlite3: true
+  cpu-features: true
+  esbuild: true
+  lefthook: true
+  msw: true
+  protobufjs: true
+  ssh2: true
+minimumReleaseAgeExclude:
+  - '@aws-sdk/*'
+  - '@mastra/*'
+  - '@assistant-ui/*'
+  - '@turbo/*'
+  - assistant-stream
+  - nodemailer
+  - react-email
+  - turbo
