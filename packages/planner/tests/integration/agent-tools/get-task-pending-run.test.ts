@@ -1,21 +1,21 @@
 import { randomUUID } from 'node:crypto';
-import { registerPendingAssignReader } from '@seta/copilot-sdk';
+import { registerPendingAssignReader } from '@seta/agent-sdk';
 import { hashRoleSummary, type SessionScope } from '@seta/core';
 import { createTestTenantWithAdmin } from '@seta/identity/testing';
 import { createGroup, createPlan, createTask } from '@seta/planner';
 import { plannerGetTaskTool } from '@seta/planner/agent-tools';
 import type { Pool } from 'pg';
 import { describe, expect, it } from 'vitest';
-import { makeToolContext, withCopilotTestDb } from '../agent-tools-helpers.ts';
+import { makeToolContext, withAgentTestDb } from '../agent-tools-helpers.ts';
 
-// In production registerCopilot() registers the reader (it lives in
-// packages/copilot/src/backend/domain). Here we register an inline reader
-// bound to the per-test pool that withCopilotTestDb hands us — same SQL
+// In production registerAgent() registers the reader (it lives in
+// packages/agent/src/backend/domain). Here we register an inline reader
+// bound to the per-test pool that withAgentTestDb hands us — same SQL
 // contract, no relative cross-package import.
 function bindReader(pool: Pool): void {
   registerPendingAssignReader(async ({ taskId, tenantId }) => {
     const { rows } = await pool.query<{ run_id: string }>(
-      `SELECT run_id FROM copilot.workflow_runs
+      `SELECT run_id FROM agent.workflow_runs
         WHERE workflow_id = 'planner.assignBySkill'
           AND status IN ('running', 'paused')
           AND tenant_id = $1::uuid
@@ -55,7 +55,7 @@ async function seedPausedAssignRun(
 ): Promise<string> {
   const runId = randomUUID();
   await pool.query(
-    `INSERT INTO copilot.workflow_runs
+    `INSERT INTO agent.workflow_runs
        (run_id, workflow_id, tenant_id, started_by, started_via,
         input_summary, status, started_at)
      VALUES ($1, 'planner.assignBySkill', $2, $3, 'event',
@@ -67,7 +67,7 @@ async function seedPausedAssignRun(
 
 describe('planner_getTask — pendingAssignWorkflowRunId', () => {
   it('is null when no Suggest run is open for the task', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       bindReader(pool);
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
@@ -88,7 +88,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as { task: { pendingAssignWorkflowRunId: string | null } };
 
       expect(result.task.pendingAssignWorkflowRunId).toBeNull();
@@ -96,7 +96,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
   });
 
   it('returns the run_id when a paused planner.assignBySkill run exists for the task', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       bindReader(pool);
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
@@ -122,7 +122,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as { task: { pendingAssignWorkflowRunId: string | null } };
 
       expect(result.task.pendingAssignWorkflowRunId).toBe(runId);
@@ -130,7 +130,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
   });
 
   it('does not leak run_ids from a different tenant', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       bindReader(pool);
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
@@ -158,7 +158,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as { task: { pendingAssignWorkflowRunId: string | null } };
 
       expect(result.task.pendingAssignWorkflowRunId).toBeNull();
@@ -166,7 +166,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
   });
 
   it('surfaces in-flight running runs (not just paused)', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       bindReader(pool);
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
@@ -187,7 +187,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const runId = randomUUID();
       await pool.query(
-        `INSERT INTO copilot.workflow_runs
+        `INSERT INTO agent.workflow_runs
            (run_id, workflow_id, tenant_id, started_by, started_via,
             input_summary, status, started_at)
          VALUES ($1, 'planner.assignBySkill', $2, $3, 'event',
@@ -197,7 +197,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as { task: { pendingAssignWorkflowRunId: string | null } };
 
       expect(result.task.pendingAssignWorkflowRunId).toBe(runId);
@@ -205,7 +205,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
   });
 
   it('ignores terminal runs (success / failed / canceled)', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       bindReader(pool);
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
@@ -226,7 +226,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       // a finished run for the same task should not surface as pending
       await pool.query(
-        `INSERT INTO copilot.workflow_runs
+        `INSERT INTO agent.workflow_runs
            (run_id, workflow_id, tenant_id, started_by, started_via,
             input_summary, status, started_at, finished_at)
          VALUES ($1, 'planner.assignBySkill', $2, $3, 'event',
@@ -236,7 +236,7 @@ describe('planner_getTask — pendingAssignWorkflowRunId', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as { task: { pendingAssignWorkflowRunId: string | null } };
 
       expect(result.task.pendingAssignWorkflowRunId).toBeNull();

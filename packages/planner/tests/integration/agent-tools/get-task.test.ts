@@ -1,10 +1,10 @@
-import { requiredPermissionFor } from '@seta/copilot-sdk';
+import { requiredPermissionFor } from '@seta/agent-sdk';
 import { hashRoleSummary, type SessionScope } from '@seta/core';
 import { createTestTenantWithAdmin } from '@seta/identity/testing';
 import { createGroup, createPlan, createTask } from '@seta/planner';
 import { plannerGetTaskTool } from '@seta/planner/agent-tools';
 import { describe, expect, it } from 'vitest';
-import { makeToolContext, withCopilotTestDb } from '../agent-tools-helpers.ts';
+import { makeToolContext, withAgentTestDb } from '../agent-tools-helpers.ts';
 
 function buildAdminSession(opts: {
   tenant_id: string;
@@ -29,7 +29,7 @@ function buildAdminSession(opts: {
 
 describe('planner_getTask tool', () => {
   it('returns the task by id', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
         tenant_id,
@@ -56,7 +56,7 @@ describe('planner_getTask tool', () => {
 
       const result = (await plannerGetTaskTool.execute!(
         { taskId: task.id },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as {
         task: {
           taskId: string;
@@ -82,12 +82,12 @@ describe('planner_getTask tool', () => {
   });
 
   it('throws when task does not exist', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
-      const { admin_user_id } = await createTestTenantWithAdmin({ pool });
+    await withAgentTestDb(async ({ pool }) => {
+      const { admin_user_id, tenant_id } = await createTestTenantWithAdmin({ pool });
       await expect(
         plannerGetTaskTool.execute!(
           { taskId: crypto.randomUUID() },
-          makeToolContext({ user_id: admin_user_id }),
+          makeToolContext({ user_id: admin_user_id, tenant_id }),
         ),
       ).rejects.toThrow();
     });

@@ -25,7 +25,7 @@ export default async function (): Promise<() => Promise<void>> {
           dir: resolve(__dirname, '../../../packages/notifications/drizzle/migrations'),
         },
         { name: 'planner', dir: resolve(__dirname, '../../../packages/planner/drizzle') },
-        { name: 'copilot', dir: resolve(__dirname, '../../../packages/copilot/drizzle') },
+        { name: 'agent', dir: resolve(__dirname, '../../../packages/agent/drizzle') },
       ],
     });
   } finally {
@@ -37,7 +37,7 @@ export default async function (): Promise<() => Promise<void>> {
   process.env.PLATFORM_TEST_PG_BASE = handle.baseUrl;
   process.env.PLATFORM_TEST_PG_TEMPLATE = TEMPLATE;
   process.env.BETTER_AUTH_SECRET ??= 'test'.padEnd(32, '_');
-  process.env.COPILOT_MODEL ??= 'mock/echo';
+  process.env.AGENT_MODEL ??= 'mock/echo';
 
   return async () => {
     await handle?.stop();

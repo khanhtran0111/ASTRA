@@ -1,11 +1,11 @@
-import { requiredPermissionFor } from '@seta/copilot-sdk';
+import { requiredPermissionFor } from '@seta/agent-sdk';
 import { hashRoleSummary, type SessionScope } from '@seta/core';
 import { createUser } from '@seta/identity';
 import { createTestTenantWithAdmin } from '@seta/identity/testing';
 import { addGroupMember, createGroup } from '@seta/planner';
 import { identitySearchUsersBySkillsTool } from '@seta/planner/agent-tools';
 import { describe, expect, it } from 'vitest';
-import { makeToolContext, withCopilotTestDb } from '../agent-tools-helpers.ts';
+import { makeToolContext, withAgentTestDb } from '../agent-tools-helpers.ts';
 
 function buildAdminSession(opts: {
   tenant_id: string;
@@ -30,7 +30,7 @@ function buildAdminSession(opts: {
 
 describe('identity_searchUsersBySkills tool', () => {
   it('returns group members ranked by skill overlap', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
         tenant_id,
@@ -98,7 +98,7 @@ describe('identity_searchUsersBySkills tool', () => {
           skills: ['TypeScript', 'React'],
           limit: 5,
         },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as {
         candidates: Array<{
           userId: string;
@@ -122,7 +122,7 @@ describe('identity_searchUsersBySkills tool', () => {
   });
 
   it('respects limit parameter', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
+    await withAgentTestDb(async ({ pool }) => {
       const { tenant_id, admin_user_id } = await createTestTenantWithAdmin({ pool });
       const session = buildAdminSession({
         tenant_id,
@@ -188,7 +188,7 @@ describe('identity_searchUsersBySkills tool', () => {
           skills: ['TypeScript'],
           limit: 2,
         },
-        makeToolContext({ user_id: admin_user_id }),
+        makeToolContext({ user_id: admin_user_id, tenant_id }),
       )) as {
         candidates: Array<{
           userId: string;
@@ -209,8 +209,8 @@ describe('identity_searchUsersBySkills tool', () => {
   });
 
   it('throws when group does not exist', async () => {
-    await withCopilotTestDb(async ({ pool }) => {
-      const { admin_user_id } = await createTestTenantWithAdmin({ pool });
+    await withAgentTestDb(async ({ pool }) => {
+      const { admin_user_id, tenant_id } = await createTestTenantWithAdmin({ pool });
       await expect(
         identitySearchUsersBySkillsTool.execute!(
           {
@@ -218,7 +218,7 @@ describe('identity_searchUsersBySkills tool', () => {
             skills: ['TypeScript'],
             limit: 5,
           },
-          makeToolContext({ user_id: admin_user_id }),
+          makeToolContext({ user_id: admin_user_id, tenant_id }),
         ),
       ).rejects.toThrow();
     });

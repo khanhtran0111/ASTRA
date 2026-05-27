@@ -21,7 +21,7 @@ export default async function (): Promise<() => Promise<void>> {
         { name: 'core', dir: resolve(__dirname, '../../core/drizzle/migrations') },
         { name: 'identity', dir: resolve(__dirname, '../../identity/drizzle') },
         { name: 'planner', dir: resolve(__dirname, '../../planner/drizzle') },
-        { name: 'copilot', dir: resolve(__dirname, '../../copilot/drizzle') },
+        { name: 'agent', dir: resolve(__dirname, '../../agent/drizzle') },
         { name: 'staffing', dir: resolve(__dirname, '../drizzle/migrations') },
       ],
     });
@@ -34,7 +34,7 @@ export default async function (): Promise<() => Promise<void>> {
   process.env.PLATFORM_TEST_PG_BASE = handle.baseUrl;
   process.env.PLATFORM_TEST_PG_TEMPLATE = TEMPLATE;
   process.env.BETTER_AUTH_SECRET ??= 'test'.padEnd(32, '_');
-  process.env.COPILOT_MODEL ??= 'mock/echo';
+  process.env.AGENT_MODEL ??= 'mock/echo';
 
   return async () => {
     await handle?.stop();

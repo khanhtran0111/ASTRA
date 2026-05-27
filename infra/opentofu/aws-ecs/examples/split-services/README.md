@@ -1,6 +1,6 @@
 # Example: split-services (per-module ECS topology)
 
-Deploys Seta as **N** ECS Fargate services — one per loaded module — wired via ECS Service Connect with mTLS issued by AWS Private CA. Best fit for: workloads where one module dominates CPU/memory/LLM cost and benefits from an independent scaling envelope (typically `copilot`).
+Deploys Seta as **N** ECS Fargate services — one per loaded module — wired via ECS Service Connect with mTLS issued by AWS Private CA. Best fit for: workloads where one module dominates CPU/memory/LLM cost and benefits from an independent scaling envelope (typically `agent`).
 
 **Status:** stub — full HCL ships in the Layer 4 follow-up PR.
 
@@ -12,7 +12,7 @@ Everything in `single-service`, plus:
 - Per-module ECS services:
   - `seta-gateway` — `PLATFORM_MODULES=identity,core` (owns the bus dispatcher).
   - `seta-planner` — `PLATFORM_MODULES=planner`.
-  - `seta-copilot` — `PLATFORM_MODULES=copilot`.
+  - `seta-agent` — `PLATFORM_MODULES=agent`.
   - `seta-integrations` — `PLATFORM_MODULES=integrations`.
 - Cloud Map namespace `seta.local` for service discovery.
 - Per-service security groups allowing only Service Connect east-west traffic.
