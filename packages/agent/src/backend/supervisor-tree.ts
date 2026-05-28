@@ -1,34 +1,36 @@
 import type { Mastra } from '@mastra/core';
 import { Agent } from '@mastra/core/agent';
 import { ModelRouterEmbeddingModel } from '@mastra/core/llm';
+import type { MemoryConfig, MemoryConfigInternal } from '@mastra/core/memory';
+import type { ToolAction } from '@mastra/core/tools';
 import { Memory } from '@mastra/memory';
 import { PgVector } from '@mastra/pg';
 import { AgentRegistry, type Domain, type SpecialistSpec } from '@seta/agent-sdk';
 import { agentEnv } from './env.ts';
 import { resolveModel } from './model-registry.ts';
 import { generateDomainPrompt, generateTopRoutingPrompt } from './prompt-templates.ts';
+import { wrapUpdateWorkingMemoryTool } from './working-memory-guard.ts';
+import { WorkingMemorySchema } from './working-memory-schema.ts';
 
 export type SupervisorTree = {
   topSupervisor: Agent;
   domainAgents: Record<string, Agent>;
+  memory?: Memory;
+  memoryConfig?: MemoryConfig;
 };
 
-// ---------------------------------------------------------------------------
-// Working memory template
-// ---------------------------------------------------------------------------
-const WORKING_MEMORY_TEMPLATE = `# User Context
-- Timezone:
-- Communication style: [e.g. Brief, Detailed]
-- Current focus: [active project or initiative]
-- Preferred task view: [e.g. board, list]
-- Notes: [anything else worth remembering]
-
-# Conversation Entities
-- Last discussed task: [taskId | title]
-- Last proposed candidate: [userId | displayName]
-- Pending decision: [taskId → userId | null]
-- Rejected candidates: [taskId → userId[] | empty]
-- Recent tasks in thread: [taskId1 | title1, taskId2 | title2, ...]`;
+// Subclassed so the LLM-write guard wraps the auto-installed updateWorkingMemory tool centrally.
+class GuardedMemory extends Memory {
+  public listTools(config?: MemoryConfigInternal): Record<string, ToolAction<any, any, any>> {
+    const tools = super.listTools(config);
+    if (tools.updateWorkingMemory) {
+      tools.updateWorkingMemory = wrapUpdateWorkingMemoryTool(
+        tools.updateWorkingMemory as never,
+      ) as never;
+    }
+    return tools;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // PgVector singleton — same lazy-init pattern as getIdentityVectorStore
@@ -55,53 +57,51 @@ function getRecallVector(databaseUrl: string): PgVector {
 function buildMemory(opts: {
   mastra: Mastra | undefined;
   databaseUrl?: string;
-}): Memory | undefined {
+}): { memory: Memory; memoryConfig: MemoryConfig } | undefined {
   const storage = opts.mastra?.getStorage();
   if (!storage) return undefined;
 
   const baseOpts = {
     lastMessages: agentEnv.AGENT_MEMORY_LAST_MESSAGES,
     generateTitle: true as const,
+    workingMemory: {
+      enabled: true as const,
+      scope: 'resource' as const,
+      schema: WorkingMemorySchema,
+    },
   };
 
   if (!opts.databaseUrl) {
-    // No vector store available — sliding window only
-    return new Memory({
+    const memoryConfig = { ...baseOpts, semanticRecall: false as const };
+    const memory = new GuardedMemory({
       storage: storage as never,
-      options: { ...baseOpts, semanticRecall: false },
+      options: memoryConfig,
     });
+    return { memory, memoryConfig: memoryConfig as MemoryConfig };
   }
 
   const vector = getRecallVector(opts.databaseUrl);
   const embedder = new ModelRouterEmbeddingModel('openai/text-embedding-3-small');
-
-  return new Memory({
+  const memoryConfig = {
+    ...baseOpts,
+    semanticRecall: {
+      topK: 5,
+      messageRange: 2,
+      scope: 'thread' as const,
+      indexConfig: {
+        type: 'hnsw' as const,
+        metric: 'dotproduct' as const,
+        hnsw: { m: 16, efConstruction: 64 },
+      },
+    },
+  };
+  const memory = new GuardedMemory({
     storage: storage as never,
     vector,
     embedder,
-    options: {
-      ...baseOpts,
-      generateTitle: true,
-      semanticRecall: {
-        topK: 5,
-        messageRange: 2,
-        scope: 'thread',
-        indexConfig: {
-          type: 'hnsw',
-          metric: 'dotproduct',
-          hnsw: {
-            m: 16,
-            efConstruction: 64,
-          },
-        },
-      },
-      workingMemory: {
-        enabled: true,
-        scope: 'resource',
-        template: WORKING_MEMORY_TEMPLATE,
-      },
-    },
+    options: memoryConfig,
   });
+  return { memory, memoryConfig: memoryConfig as MemoryConfig };
 }
 
 // ---------------------------------------------------------------------------
@@ -140,7 +140,9 @@ export function buildSupervisorTree(
   opts: { mastra?: Mastra; databaseUrl?: string } = {},
 ): SupervisorTree {
   const snapshot = AgentRegistry.snapshot();
-  const memory = buildMemory({ mastra: opts.mastra, databaseUrl: opts.databaseUrl });
+  const built = buildMemory({ mastra: opts.mastra, databaseUrl: opts.databaseUrl });
+  const memory = built?.memory;
+  const memoryConfig = built?.memoryConfig;
   const domainAgents: Record<string, Agent> = {};
   for (const d of snapshot.domains) domainAgents[d] = buildDomainSupervisor(d as Domain, memory);
   const topSupervisor = new Agent({
@@ -152,5 +154,5 @@ export function buildSupervisorTree(
     agents: domainAgents as never,
     ...(memory ? { memory } : {}),
   });
-  return { topSupervisor, domainAgents };
+  return { topSupervisor, domainAgents, memory, memoryConfig };
 }
