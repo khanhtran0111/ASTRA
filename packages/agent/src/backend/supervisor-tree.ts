@@ -2,7 +2,6 @@ import type { Mastra } from '@mastra/core';
 import { Agent } from '@mastra/core/agent';
 import { ModelRouterEmbeddingModel } from '@mastra/core/llm';
 import type { MemoryConfig, MemoryConfigInternal } from '@mastra/core/memory';
-import type { ToolAction } from '@mastra/core/tools';
 import { Memory } from '@mastra/memory';
 import { PgVector } from '@mastra/pg';
 import {
@@ -35,7 +34,7 @@ export type SupervisorTree = {
 
 // Subclassed so the LLM-write guard wraps the auto-installed updateWorkingMemory tool centrally.
 class GuardedMemory extends Memory {
-  public listTools(config?: MemoryConfigInternal): Record<string, ToolAction<any, any, any>> {
+  public listTools(config?: MemoryConfigInternal): ReturnType<Memory['listTools']> {
     const tools = super.listTools(config);
     if (tools.updateWorkingMemory) {
       tools.updateWorkingMemory = wrapUpdateWorkingMemoryTool(
@@ -95,7 +94,9 @@ function buildMemory(opts: {
   }
 
   const vector = getRecallVector(opts.databaseUrl);
-  const embedder = new ModelRouterEmbeddingModel('openai/text-embedding-3-small');
+  const embedder = new ModelRouterEmbeddingModel(
+    process.env.EMBED_MODEL ?? 'openai/text-embedding-3-small',
+  );
   const memoryConfig: MemoryConfig = {
     ...baseOpts,
     semanticRecall: {
@@ -156,7 +157,7 @@ function buildSpecialistAgent(spec: SpecialistSpec, memory: Memory | undefined):
     name: spec.id,
     description: spec.description,
     instructions: spec.instructions as never,
-    model: resolveModel('auto', { tierHint: 'fast' }).model as never,
+    model: resolveModel('auto', { tierHint: 'fast' }).model,
     tools: spec.tools as never,
     workflows: (spec.workflows ?? {}) as never,
     ...(memory ? { memory } : {}),
@@ -173,7 +174,7 @@ function buildDomainSupervisor(domain: Domain, memory: Memory | undefined): Agen
     name: `${domain}-supervisor`,
     description: `Coordinates ${domain} specialists`,
     instructions: generateDomainPrompt(domain, snapshot),
-    model: resolveModel('auto', { tierHint: 'balanced' }).model as never,
+    model: resolveModel('auto', { tierHint: 'balanced' }).model,
     agents: agents as never,
     ...(memory ? { memory } : {}),
   });
@@ -194,7 +195,7 @@ export function buildSupervisorTree(
     name: 'Supervisor',
     description: 'Top-level router. Routes every request to one domain.',
     instructions: generateTopRoutingPrompt(snapshot),
-    model: resolveModel('auto', { tierHint: 'balanced' }).model as never,
+    model: resolveModel('auto', { tierHint: 'balanced' }).model,
     agents: domainAgents as never,
     ...(memory ? { memory } : {}),
   });
