@@ -12,6 +12,7 @@ export { countTasksByCategorySlot } from './backend/domain/count-tasks-by-catego
 export { createBucket } from './backend/domain/create-bucket.ts';
 export { createComment } from './backend/domain/create-comment.ts';
 export { createGroup } from './backend/domain/create-group.ts';
+export { createJoinRequest } from './backend/domain/create-join-request.ts';
 export { createLabel } from './backend/domain/create-label.ts';
 export { createPlan } from './backend/domain/create-plan.ts';
 export { createTask } from './backend/domain/create-task.ts';
@@ -21,6 +22,7 @@ export { deleteGroup } from './backend/domain/delete-group.ts';
 export { deleteLabel } from './backend/domain/delete-label.ts';
 export { deletePlan } from './backend/domain/delete-plan.ts';
 export { deleteTask } from './backend/domain/delete-task.ts';
+export { discoverGroups } from './backend/domain/discover-groups.ts';
 export { duplicateTask } from './backend/domain/duplicate-task.ts';
 export { getGroup } from './backend/domain/get-group.ts';
 export { getGroupActivity } from './backend/domain/get-group-activity.ts';
@@ -44,6 +46,7 @@ export { listGroupMembers } from './backend/domain/list-group-members.ts';
 export { listGroupPlansWithRollups } from './backend/domain/list-group-plans-with-rollups.ts';
 export { listGroups } from './backend/domain/list-groups.ts';
 export { listGroupsWithCounts } from './backend/domain/list-groups-with-counts.ts';
+export { listJoinRequests } from './backend/domain/list-join-requests.ts';
 export { listLabels } from './backend/domain/list-labels.ts';
 export { listMyAccessibleGroups } from './backend/domain/list-my-accessible-groups.ts';
 export { listMyAssignedTasks } from './backend/domain/list-my-assigned-tasks.ts';
@@ -69,6 +72,7 @@ export { removeGroupMember } from './backend/domain/remove-group-member.ts';
 export { removeTaskReference } from './backend/domain/remove-task-reference.ts';
 export { reopenTask } from './backend/domain/reopen-task.ts';
 export { resolveGroupConflict } from './backend/domain/resolve-group-conflict.ts';
+export { resolveJoinRequest } from './backend/domain/resolve-join-request.ts';
 export {
   type ResolvePlanConflictsDeps,
   type ResolvePlanConflictsResult,
@@ -105,8 +109,11 @@ export type {
   ChecklistItemRow,
   CommentDto,
   CommentListResult,
+  DiscoverGroupsItem,
   GroupActivityItem,
   GroupActivityResult,
+  GroupJoinRequestRow,
+  GroupJoinRequestStatus,
   GroupMemberRow,
   GroupRow,
   GroupSyncStatus,
@@ -152,10 +159,12 @@ export type {
   CreateBucketInput,
   CreateCommentInput,
   CreateGroupInput,
+  CreateJoinRequestInput,
   CreateLabelInput,
   CreatePlanInput,
   CreateTaskInput,
   DeleteCommentInput,
+  DiscoverGroupsInput,
   DuplicateTaskInput,
   DuplicateTaskOptions,
   GetPlanChartDataInput,
@@ -165,6 +174,7 @@ export type {
   MoveBucketInput,
   MoveTaskInput,
   RemoveTaskReferenceInput,
+  ResolveJoinRequestInput,
   SetAssigneePriorityInput,
   SetCategoryDescriptionInput,
   SetCategoryDescriptionsInput,
