@@ -129,6 +129,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_ECR_SECRET_ACCESS_KEY }}
           APP_DOMAIN:            ${{ vars.APP_DOMAIN }}
           OPENAI_API_KEY:        ${{ secrets.OPENAI_API_KEY }}
+          EMBED_MODEL:           ${{ vars.EMBED_MODEL || 'openai/text-embedding-3-small' }}
+          AGENT_MODELS:          ${{ vars.AGENT_MODELS || 'openai/gpt-4o:balanced' }}
           # ACME_EMAIL is optional — falls back to organizer address for cert notifications.
           ACME_EMAIL:            ${{ vars.ACME_EMAIL || 'devops@seta-international.vn' }}
           # Passed to EC2 so compose.yml / Traefik configs are fetched from the fork's own
@@ -140,7 +142,7 @@ jobs:
           username:        ${{ vars.EC2_USER || 'ubuntu' }}
           key:             ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           command_timeout: 25m
-          envs:            ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG,AWS_REGION,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,APP_DOMAIN,OPENAI_API_KEY,ACME_EMAIL,GITHUB_REPO,GITHUB_REF_NAME
+          envs:            ECR_REGISTRY,ECR_REPOSITORY,IMAGE_TAG,AWS_REGION,AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,APP_DOMAIN,OPENAI_API_KEY,EMBED_MODEL,AGENT_MODELS,ACME_EMAIL,GITHUB_REPO,GITHUB_REF_NAME
           script: |
             set -euo pipefail
             echo "=== Deploying $GITHUB_REPO@$GITHUB_REF_NAME tag=$IMAGE_TAG ==="
@@ -197,6 +199,8 @@ jobs:
             SESSION_COOKIE_SAMESITE=strict
             CORS_ORIGINS=https://$APP_DOMAIN
             OPENAI_API_KEY=$OPENAI_API_KEY
+            EMBED_MODEL=${EMBED_MODEL:-openai/text-embedding-3-small}
+            AGENT_MODELS=${AGENT_MODELS:-openai/gpt-4o:balanced}
             CRYPTO_KEY_PROVIDER=env
             CRYPTO_LOCAL_MASTER_KEY=$CRYPTO_LOCAL_MASTER_KEY
             EVENTS_RETENTION_DAYS=30
