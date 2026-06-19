@@ -1,8 +1,18 @@
 import { describe, expect, it } from 'vitest';
+
 import { resetCoreDb } from '../../src/db/client.ts';
 import { emit, withEmit } from '../../src/events/index.ts';
 import { startDispatcher } from '../../src/runtime/dispatcher/index.ts';
 import { waitFor, withCoreTestDb } from '../helpers.ts';
+
+function deferred() {
+  let resolve!: () => void;
+  const promise = new Promise<void>((r) => {
+    resolve = r;
+  });
+
+  return { promise, resolve };
+}
 
 describe('dispatcher per-subscriber isolation', () => {
   it('slow subscriber does not block fast one within one wall-clock window', async () => {
@@ -12,15 +22,18 @@ describe('dispatcher per-subscriber isolation', () => {
       let slowSeen = 0;
       let fastSeen = 0;
 
+      const slowGate = deferred();
+
       const slowSub = {
         subscription: 'test.iso.slow',
         event: 'test.iso.entity.created',
         eventVersion: 1,
         handler: async () => {
           slowSeen += 1;
-          await new Promise((r) => setTimeout(r, 300));
+          await slowGate.promise;
         },
       };
+
       const fastSub = {
         subscription: 'test.iso.fast',
         event: 'test.iso.entity.created',
@@ -31,11 +44,13 @@ describe('dispatcher per-subscriber isolation', () => {
       };
 
       const EVENTS = 10;
+
       const d = await startDispatcher({
         pool,
         subscribers: [slowSub, fastSub],
         pollIntervalMs: 25,
       });
+
       try {
         await withEmit(undefined, async () => {
           for (let i = 0; i < EVENTS; i++) {
@@ -50,13 +65,16 @@ describe('dispatcher per-subscriber isolation', () => {
           }
         });
 
-        // Fast must finish all EVENTS while slow is still in its first 1-2 handlers. If the
-        // dispatcher were serializing subscribers (old Promise.all single-flight tick), fast
-        // would be gated behind slow's first handler and the count would lag.
-        await waitFor(() => fastSeen === EVENTS, 10_000);
+        // Slow subscriber must start and then stay blocked on its first event.
+        await waitFor(() => slowSeen === 1, 1_500);
+
+        // Fast subscriber must still finish all events while slow is blocked.
+        await waitFor(() => fastSeen === EVENTS, 1_500);
+
         expect(fastSeen).toBe(EVENTS);
-        expect(slowSeen).toBeLessThanOrEqual(2);
+        expect(slowSeen).toBe(1);
       } finally {
+        slowGate.resolve();
         await d.shutdown(10_000);
       }
     });
