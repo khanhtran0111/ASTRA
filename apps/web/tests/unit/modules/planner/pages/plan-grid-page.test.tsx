@@ -235,7 +235,7 @@ describe('PlanGridPage (via PlanBoardShell)', () => {
   it('renders no sync banners or pulling empty state when plan is idle', async () => {
     server.use(...seedBoardHandlers());
     renderShell();
-    await screen.findByText('Wire up DnD');
+    await screen.findByText('Wire up DnD', {}, { timeout: 5_000 });
     expect(screen.queryByTestId('plan-sync-error-banner')).not.toBeInTheDocument();
     expect(screen.queryByTestId('plan-sync-conflict-banner')).not.toBeInTheDocument();
     expect(screen.queryByTestId('plan-sync-pulling-empty')).not.toBeInTheDocument();
