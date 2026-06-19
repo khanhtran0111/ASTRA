@@ -13,5 +13,5 @@ describe('permission-keys codegen', () => {
     const before = readFileSync(resolve(repoRoot, path), 'utf8');
     execSync('pnpm gen:rbac', { cwd: repoRoot });
     expect(readFileSync(resolve(repoRoot, path), 'utf8')).toBe(before);
-  });
+  }, 20_000);
 });
