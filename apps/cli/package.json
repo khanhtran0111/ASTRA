@@ -30,6 +30,7 @@
     "@seta/shared-mailer": "workspace:^",
     "@seta/shared-rbac": "workspace:^",
     "@seta/staffing": "workspace:^",
+    "@seta/training-roadmap": "workspace:^",
     "commander": "^15.0.0",
     "csv-parse": "^6.2.1",
     "drizzle-orm": "^0.45.2",
