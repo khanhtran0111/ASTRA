@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { RequestContext } from '@mastra/core/request-context';
+import type { Pool } from 'pg';
 import { describe, expect, it } from 'vitest';
 import { buildMastra } from '../../src/backend/runtime.ts';
 import { withAgentTestDb } from '../helpers.ts';
@@ -12,6 +13,82 @@ function rcPayload(args: { tenantId: string; startedBy: string }): Record<string
   rc.set('actor', { type: 'user', user_id: args.startedBy });
   rc.set('tenant_id', args.tenantId);
   return rc.toJSON();
+}
+
+async function waitForRunStatus(
+  pool: Pool,
+  runId: string,
+  expectedStatus: string,
+  timeoutMs = 5_000,
+) {
+  const startedAt = Date.now();
+  let lastStatus: string | undefined;
+
+  while (Date.now() - startedAt < timeoutMs) {
+    const result = await pool.query<{
+      workflow_id: string;
+      tenant_id: string;
+      started_by: string;
+      started_via: string;
+      status: string;
+      suspend_reason: string | null;
+      duration_ms: number | null;
+    }>(
+      `SELECT workflow_id,
+              tenant_id,
+              started_by,
+              started_via,
+              status,
+              suspend_reason,
+              duration_ms
+       FROM agent.workflow_runs
+       WHERE run_id = $1`,
+      [runId],
+    );
+
+    const row = result.rows[0];
+    lastStatus = row?.status;
+
+    if (row?.status === expectedStatus) {
+      return row;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  throw new Error(
+    `Timed out waiting for run ${runId} to become ${expectedStatus}; last status=${lastStatus}`,
+  );
+}
+
+async function waitForApproval(pool: Pool, runId: string, timeoutMs = 5_000) {
+  const startedAt = Date.now();
+  let lastRowCount = 0;
+
+  while (Date.now() - startedAt < timeoutMs) {
+    const result = await pool.query<{
+      step_id: string;
+      status: string;
+      approver_user_id: string;
+    }>(
+      `SELECT step_id, status, approver_user_id
+       FROM agent.workflow_approvals
+       WHERE run_id = $1`,
+      [runId],
+    );
+
+    lastRowCount = result.rowCount ?? 0;
+
+    if (result.rowCount === 1) {
+      return result.rows[0]!;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  throw new Error(
+    `Timed out waiting for approval row for run ${runId}; last rowCount=${lastRowCount}`,
+  );
 }
 
 describe('lifecycle hook wiring', () => {
@@ -35,18 +112,13 @@ describe('lifecycle hook wiring', () => {
         },
       });
 
-      await new Promise((r) => setTimeout(r, 100));
+      const row = await waitForRunStatus(pool, runId, 'running');
 
-      const r = await pool.query(
-        `SELECT workflow_id, tenant_id, started_by, started_via, status FROM agent.workflow_runs WHERE run_id = $1`,
-        [runId],
-      );
-      expect(r.rowCount).toBe(1);
-      expect(r.rows[0]!.workflow_id).toBe('agent.test.noop');
-      expect(r.rows[0]!.tenant_id).toBe(tenantId);
-      expect(r.rows[0]!.started_by).toBe(startedBy);
-      expect(r.rows[0]!.started_via).toBe('event');
-      expect(r.rows[0]!.status).toBe('running');
+      expect(row.workflow_id).toBe('agent.test.noop');
+      expect(row.tenant_id).toBe(tenantId);
+      expect(row.started_by).toBe(startedBy);
+      expect(row.started_via).toBe('event');
+      expect(row.status).toBe('running');
     });
   });
 
@@ -69,7 +141,8 @@ describe('lifecycle hook wiring', () => {
           prevResult: { status: 'success', output: {} },
         },
       });
-      await new Promise((r) => setTimeout(r, 50));
+
+      await waitForRunStatus(pool, runId, 'running');
 
       await mastra.pubsub.publish('workflows-finish', {
         type: 'workflow.end',
@@ -81,14 +154,11 @@ describe('lifecycle hook wiring', () => {
           state: { result: { output: { ok: true } } },
         },
       });
-      await new Promise((r) => setTimeout(r, 100));
 
-      const r = await pool.query(
-        `SELECT status, duration_ms FROM agent.workflow_runs WHERE run_id = $1`,
-        [runId],
-      );
-      expect(r.rows[0]!.status).toBe('success');
-      expect(r.rows[0]!.duration_ms).toBe(123);
+      const row = await waitForRunStatus(pool, runId, 'success');
+
+      expect(row.status).toBe('success');
+      expect(row.duration_ms).toBe(123);
     });
   });
 
@@ -114,13 +184,15 @@ describe('lifecycle hook wiring', () => {
           prevResult: { status: 'success', output: {} },
         },
       });
-      await new Promise((r) => setTimeout(r, 50));
+
+      await waitForRunStatus(pool, runId, 'running');
 
       // Now publish workflow.suspend with the live RequestContext object — the
       // exact shape Mastra produces internally for evented suspend.
       const liveRc = new RequestContext();
       liveRc.set('actor', { type: 'user', user_id: startedBy });
       liveRc.set('tenant_id', tenantId);
+
       await mastra.pubsub.publish('workflows', {
         type: 'workflow.suspend',
         runId,
@@ -134,22 +206,17 @@ describe('lifecycle hook wiring', () => {
           expiresAt: new Date(Date.now() + 86400000).toISOString(),
         },
       });
-      await new Promise((r) => setTimeout(r, 100));
 
-      const run = await pool.query(
-        `SELECT status, suspend_reason FROM agent.workflow_runs WHERE run_id = $1`,
-        [runId],
-      );
-      expect(run.rows[0]!.status).toBe('paused');
-      expect(run.rows[0]!.suspend_reason).toBe('hitl_pending');
+      const run = await waitForRunStatus(pool, runId, 'paused');
 
-      const approval = await pool.query(
-        `SELECT step_id, status, approver_user_id FROM agent.workflow_approvals WHERE run_id = $1`,
-        [runId],
-      );
-      expect(approval.rowCount).toBe(1);
-      expect(approval.rows[0]!.status).toBe('pending');
-      expect(approval.rows[0]!.approver_user_id).toBe(startedBy);
+      expect(run.status).toBe('paused');
+      expect(run.suspend_reason).toBe('hitl_pending');
+
+      const approval = await waitForApproval(pool, runId);
+
+      expect(approval.step_id).toBe('await-approval');
+      expect(approval.status).toBe('pending');
+      expect(approval.approver_user_id).toBe(startedBy);
     });
   });
 
@@ -157,17 +224,22 @@ describe('lifecycle hook wiring', () => {
     await withAgentTestDb(async ({ pool, databaseUrl }) => {
       const mastra = buildMastra({ pool, databaseUrl });
       await mastra.getStorage()!.init();
+
       const runId = randomUUID();
+
       await mastra.pubsub.publish('workflows', {
         type: 'workflow.step.run',
         runId,
         data: { workflowId: 'agent.x' },
       });
+
       await new Promise((r) => setTimeout(r, 50));
-      const r = await pool.query(
+
+      const r = await pool.query<{ n: number }>(
         `SELECT count(*)::int AS n FROM agent.workflow_runs WHERE run_id = $1`,
         [runId],
       );
+
       expect(r.rows[0]!.n).toBe(0);
     });
   });
