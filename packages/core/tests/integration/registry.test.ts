@@ -10,7 +10,9 @@ describe('ContributionRegistry', () => {
     expect(reg.collected.schemas.has('core')).toBe(true);
     expect(reg.collected.migrationDirs).toHaveLength(1);
     expect(reg.collected.migrationDirs[0]?.module).toBe('core');
-    expect(reg.collected.migrationDirs[0]?.dir).toMatch(/packages\/core\/drizzle\/migrations$/);
+    expect(reg.collected.migrationDirs[0]?.dir).toMatch(
+      /packages[\\/]core[\\/]drizzle[\\/]migrations$/,
+    );
     expect(reg.collected.subscribers).toHaveLength(5);
   });
 });
