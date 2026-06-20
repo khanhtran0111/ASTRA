@@ -12171,7 +12171,6 @@
       "AI Agent",
       "AI Agents",
       "DevOps",
-      "LLM/GenAI",
       "LLMs",
       "System Architecture",
       "System Design",
@@ -12253,7 +12252,6 @@
     "confirmed_gap": [
       "AI Agent",
       "DevOps",
-      "LLM/GenAI",
       "System Design"
     ],
     "target_skills": [
@@ -12284,7 +12282,7 @@
         "bod_goals": [
           "GOAL-2025-11"
         ],
-        "in_declared": true,
+        "in_declared": false,
         "in_survey": true
       },
       "System Design": {
@@ -12439,8 +12437,7 @@
       "API Testing",
       "AWS",
       "DevOps",
-      "DevOps (AWS",
-      "K8s)",
+      "Kubernetes",
       "Performance Testing",
       "Terraform"
     ],
@@ -12524,11 +12521,13 @@
     "confirmed_gap": [
       "AWS",
       "DevOps",
+      "Kubernetes",
       "Terraform"
     ],
     "target_skills": [
       "AWS",
       "DevOps",
+      "Kubernetes",
       "Terraform"
     ],
     "gap_sources": {
@@ -12549,6 +12548,19 @@
         "in_declared": true,
         "in_survey": false
       },
+      "Kubernetes": {
+        "projects": [
+          "PRJ-002",
+          "PRJ-005",
+          "PRJ-007",
+          "PRJ-009"
+        ],
+        "bod_goals": [
+          "GOAL-2026-07"
+        ],
+        "in_declared": true,
+        "in_survey": false
+      },
       "Terraform": {
         "projects": [
           "PRJ-009"
@@ -12560,10 +12572,13 @@
     },
     "projects_affected": [
       "PRJ-002",
+      "PRJ-005",
+      "PRJ-007",
       "PRJ-009"
     ],
     "bod_goals_affected": [
-      "GOAL-2025-11"
+      "GOAL-2025-11",
+      "GOAL-2026-07"
     ],
     "has_target_gap": true
   },

@@ -23,8 +23,8 @@
       },
       {
         "skill": "DevOps",
-        "employee_count": 32,
-        "percent_of_workforce": 15.6
+        "employee_count": 33,
+        "percent_of_workforce": 16.1
       },
       {
         "skill": "Performance Testing",
@@ -62,9 +62,9 @@
         "percent_of_workforce": 6.8
       },
       {
-        "skill": "Version Control (Git)",
-        "employee_count": 13,
-        "percent_of_workforce": 6.3
+        "skill": "Kubernetes",
+        "employee_count": 14,
+        "percent_of_workforce": 6.8
       },
       {
         "skill": "Agile/Scrum",
@@ -72,7 +72,7 @@
         "percent_of_workforce": 6.3
       },
       {
-        "skill": "Kubernetes",
+        "skill": "Version Control (Git)",
         "employee_count": 13,
         "percent_of_workforce": 6.3
       },
@@ -97,6 +97,11 @@
         "percent_of_workforce": 3.4
       },
       {
+        "skill": "Data Engineering",
+        "employee_count": 6,
+        "percent_of_workforce": 2.9
+      },
+      {
         "skill": "Data Visualization",
         "employee_count": 6,
         "percent_of_workforce": 2.9
@@ -112,52 +117,7 @@
         "percent_of_workforce": 2.9
       },
       {
-        "skill": "Data Engineering",
-        "employee_count": 6,
-        "percent_of_workforce": 2.9
-      },
-      {
-        "skill": "gRPC",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "Microservices",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
         "skill": "Automation Testing (Playwright)",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "CI/CD Integration",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "Test Framework Design",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "Script Writing",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "Playwright",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "Cypress",
-        "employee_count": 5,
-        "percent_of_workforce": 2.4
-      },
-      {
-        "skill": "CI/CD Pipeline",
         "employee_count": 5,
         "percent_of_workforce": 2.4
       },
@@ -167,9 +127,54 @@
         "percent_of_workforce": 2.4
       },
       {
+        "skill": "CI/CD Integration",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "CI/CD Pipeline",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Cypress",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Microservices",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Playwright",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Script Writing",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Test Framework Design",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
         "skill": "Test Reporting",
         "employee_count": 5,
         "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "gRPC",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "LLM/GenAI",
+        "employee_count": 4,
+        "percent_of_workforce": 2.0
       },
       {
         "skill": "ML Integration",
@@ -182,22 +187,12 @@
         "percent_of_workforce": 2.0
       },
       {
-        "skill": "LLM/GenAI",
-        "employee_count": 4,
-        "percent_of_workforce": 2.0
-      },
-      {
-        "skill": "Model Deployment",
-        "employee_count": 3,
-        "percent_of_workforce": 1.5
-      },
-      {
         "skill": "Frontend",
         "employee_count": 3,
         "percent_of_workforce": 1.5
       },
       {
-        "skill": "User Research",
+        "skill": "Model Deployment",
         "employee_count": 3,
         "percent_of_workforce": 1.5
       },
@@ -207,7 +202,12 @@
         "percent_of_workforce": 1.5
       },
       {
-        "skill": "Cloud",
+        "skill": "User Research",
+        "employee_count": 3,
+        "percent_of_workforce": 1.5
+      },
+      {
+        "skill": "AI",
         "employee_count": 2,
         "percent_of_workforce": 1.0
       },
@@ -217,32 +217,12 @@
         "percent_of_workforce": 1.0
       },
       {
-        "skill": "Monitoring/Observability",
+        "skill": "AWS",
         "employee_count": 2,
         "percent_of_workforce": 1.0
       },
       {
-        "skill": "Manual Testing",
-        "employee_count": 2,
-        "percent_of_workforce": 1.0
-      },
-      {
-        "skill": "Data Science",
-        "employee_count": 2,
-        "percent_of_workforce": 1.0
-      },
-      {
-        "skill": "AI",
-        "employee_count": 2,
-        "percent_of_workforce": 1.0
-      },
-      {
-        "skill": "Python",
-        "employee_count": 2,
-        "percent_of_workforce": 1.0
-      },
-      {
-        "skill": "CI/CD",
+        "skill": "BA",
         "employee_count": 2,
         "percent_of_workforce": 1.0
       },
@@ -257,97 +237,42 @@
         "percent_of_workforce": 1.0
       },
       {
-        "skill": "BA",
+        "skill": "CI/CD",
         "employee_count": 2,
         "percent_of_workforce": 1.0
       },
       {
-        "skill": "Automation",
+        "skill": "Cloud",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Data Science",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Manual Testing",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Monitoring/Observability",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Python",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "2D Artist",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Technical Leadership",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Deep Learning",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Reinforcement Learning",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Figma",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Manual QA",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "SQL Testing",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "AI/ML Engineering",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "DevSecOps",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Backend (.NET)",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Automation (Cypress/JavaScript)",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Frontend Angular",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "NodeJS Backend",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "DevOps & Infrastructure",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Azure DevOps",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "AWS",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "ML/AI",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Java",
+        "skill": "AI Agent",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
@@ -357,57 +282,17 @@
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "LLMs",
+        "skill": "AI Training Model",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "DevOps (AWS",
+        "skill": "AI for Developers",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Terraform",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "K8s)",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Marketing",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Frontend HTML/CSS",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Business Management",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Documentation",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Security",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Monitoring",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Threat Hunting",
+        "skill": "AI/ML Engineering",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
@@ -422,42 +307,12 @@
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Tester",
+        "skill": "Automation",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Robot Framework",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Manager",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Planning",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Time Management",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "AI for Developers",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "IT Outsourcing & Embedded System",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Web Development",
+        "skill": "Automation (Cypress/JavaScript)",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
@@ -467,62 +322,17 @@
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "AI Agent",
+        "skill": "Azure DevOps",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Data Engineering Pipeline",
+        "skill": "Backend (.NET)",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Embedded Development",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "AI Training Model",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Computer Vision Model Training",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "2D Artist",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Team Management",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Mathematical Analysis",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Cloud Security",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "Container Security",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "GitOps",
-        "employee_count": 1,
-        "percent_of_workforce": 0.5
-      },
-      {
-        "skill": "IaC",
+        "skill": "Business Management",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
@@ -537,7 +347,127 @@
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "SRE practices",
+        "skill": "Cloud Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Computer Vision Model Training",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Container Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Data Engineering Pipeline",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Deep Learning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "DevOps & Infrastructure",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "DevSecOps",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Documentation",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Embedded Development",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Figma",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Frontend Angular",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Frontend HTML/CSS",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "GitOps",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "IT Outsourcing & Embedded System",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "IaC",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Java",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "LLMs",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "ML/AI",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Manager",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Manual QA",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Marketing",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Mathematical Analysis",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Monitoring",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "NodeJS Backend",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Observability Stack",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       },
@@ -547,7 +477,67 @@
         "percent_of_workforce": 0.5
       },
       {
-        "skill": "Observability Stack",
+        "skill": "Planning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Reinforcement Learning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Robot Framework",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "SQL Testing",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "SRE practices",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Team Management",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Technical Leadership",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Terraform",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Tester",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Threat Hunting",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Time Management",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Web Development",
         "employee_count": 1,
         "percent_of_workforce": 0.5
       }

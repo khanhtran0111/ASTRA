@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-18T14:32:43",
+  "generated_at": "2026-06-20T10:58:16",
   "run_date": "2026-06-18",
   "pipeline_version": "2.0-realdata",
   "summary": {
@@ -102,6 +102,7 @@
         "bod_strategic_weight_bonus": 8
       },
       "target_employees": [
+        "EMP-100",
         "EMP-117",
         "EMP-164",
         "EMP-165",
@@ -115,7 +116,7 @@
         "EMP-177",
         "EMP-178"
       ],
-      "target_employee_count": 12,
+      "target_employee_count": 13,
       "supporting_projects": [
         "PRJ-002",
         "PRJ-005",
@@ -131,7 +132,7 @@
         "TRN-009"
       ],
       "current_holder_count": 6,
-      "evidence_summary": "GOAL-2026-07 (weight=8); projects PRJ-002, PRJ-005, PRJ-007; survey signal (score 10); 12 trainee(s)."
+      "evidence_summary": "GOAL-2026-07 (weight=8); projects PRJ-002, PRJ-005, PRJ-007; survey signal (score 10); 13 trainee(s)."
     },
     {
       "skill": "CI/CD",

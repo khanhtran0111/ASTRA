@@ -72,3 +72,11 @@ docs/design/
 
 # App NDJSON logs (dev log persistence)
 logs/
+
+# Python data pipeline (Person 1 / data layer)
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Judge feedback (internal, not for the shared repo)
+KADA_LnD6_Feedback*.csv
