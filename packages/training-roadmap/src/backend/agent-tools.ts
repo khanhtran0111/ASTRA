@@ -7,8 +7,8 @@ import {
 } from './agent-tools/roadmap-tools.ts';
 
 export const trainingRoadmapAgentTools: AgentTool[] = [
-  lndGetPendingSkills as any,
-  lndFindAndAssignTrainer as any,
-  lndAssignLearningFormats as any,
-  lndCompileQuarterlyRoadmap as any,
+  lndGetPendingSkills as unknown as AgentTool,
+  lndFindAndAssignTrainer as unknown as AgentTool,
+  lndAssignLearningFormats as unknown as AgentTool,
+  lndCompileQuarterlyRoadmap as unknown as AgentTool,
 ];

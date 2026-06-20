@@ -53,25 +53,75 @@ function parseCSVLines(raw: string): string[][] {
   });
 }
 
+function getCSVHeader(rows: string[][], source: string): string[] {
+  const header = rows[0];
+  if (!header) {
+    throw new Error(`${source}: CSV header is missing`);
+  }
+  return header;
+}
+
+function getColumnIndex(header: string[], column: string, source: string): number {
+  const index = header.indexOf(column);
+  if (index === -1) {
+    throw new Error(`${source}: required column "${column}" is missing`);
+  }
+  return index;
+}
+
+function getRequiredCell(
+  row: string[],
+  columnIndex: number,
+  column: string,
+  source: string,
+  rowNumber: number,
+): string {
+  const value = row[columnIndex];
+  if (!value) {
+    throw new Error(`${source}: row ${rowNumber} has no value for "${column}"`);
+  }
+  return value;
+}
+
 // ---------------------------------------------------------------------------
 // DS04: Internal Trainer List
 // ---------------------------------------------------------------------------
 
 export function loadTrainersFromCSV(): InternalTrainer[] {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS04_Internal_Trainer_List.csv'), 'utf-8');
+  const source = 'DS04_Internal_Trainer_List.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const idIdx = header.indexOf('Trainer_ID');
-  const expertiseIdx = header.indexOf('Expertise');
-  const hoursIdx = header.indexOf('Availability_Hours_Per_Month');
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Trainer_ID', source);
+  const expertiseIdx = getColumnIndex(header, 'Expertise', source);
+  const hoursIdx = getColumnIndex(header, 'Availability_Hours_Per_Month', source);
 
-  return rows.slice(1).map((row) => ({
-    trainerId: row[idIdx]!,
-    expertise: row[expertiseIdx]!.split(/[;,]/)
-      .map((s) => s.trim())
-      .filter(Boolean),
-    availabilityHoursPerMonth: Number.parseInt(row[hoursIdx]!, 10),
-  }));
+  return rows.slice(1).map((row, index) => {
+    const rowNumber = index + 2;
+    const trainerId = getRequiredCell(row, idIdx, 'Trainer_ID', source, rowNumber);
+    const expertiseRaw = getRequiredCell(row, expertiseIdx, 'Expertise', source, rowNumber);
+    const hoursRaw = getRequiredCell(
+      row,
+      hoursIdx,
+      'Availability_Hours_Per_Month',
+      source,
+      rowNumber,
+    );
+    const availabilityHoursPerMonth = Number.parseInt(hoursRaw, 10);
+
+    if (Number.isNaN(availabilityHoursPerMonth)) {
+      throw new Error(`${source}: row ${rowNumber} has invalid availability hours`);
+    }
+
+    return {
+      trainerId,
+      expertise: expertiseRaw
+        .split(/[;,]/)
+        .map((expertise) => expertise.trim())
+        .filter(Boolean),
+      availabilityHoursPerMonth,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -79,16 +129,19 @@ export function loadTrainersFromCSV(): InternalTrainer[] {
 // ---------------------------------------------------------------------------
 
 export function loadEmployeeRoles(): Map<string, string> {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS01_Employee_Skill_Profile.csv'), 'utf-8');
+  const source = 'DS01_Employee_Skill_Profile.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const idIdx = header.indexOf('Employee_ID');
-  const roleIdx = header.indexOf('Position');
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Employee_ID', source);
+  const roleIdx = getColumnIndex(header, 'Position', source);
 
   const map = new Map<string, string>();
   for (const row of rows.slice(1)) {
-    if (row[idIdx] && row[roleIdx]) {
-      map.set(row[idIdx]!, row[roleIdx]!);
+    const employeeId = row[idIdx];
+    const role = row[roleIdx];
+    if (employeeId && role) {
+      map.set(employeeId, role);
     }
   }
   return map;
@@ -99,15 +152,19 @@ export function loadEmployeeRoles(): Map<string, string> {
 // ---------------------------------------------------------------------------
 
 function loadGoalQuarterMap(): Map<string, string> {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS05_BOD_Training_Goals.csv'), 'utf-8');
+  const source = 'DS05_BOD_Training_Goals.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const goalIdIdx = header.indexOf('Goal_ID');
-  const quarterIdx = header.indexOf('Target_Quarter');
+  const header = getCSVHeader(rows, source);
+  const goalIdIdx = getColumnIndex(header, 'Goal_ID', source);
+  const quarterIdx = getColumnIndex(header, 'Target_Quarter', source);
 
   const map = new Map<string, string>();
-  for (const row of rows.slice(1)) {
-    map.set(row[goalIdIdx]!, row[quarterIdx]!);
+  for (const [index, row] of rows.slice(1).entries()) {
+    const rowNumber = index + 2;
+    const goalId = getRequiredCell(row, goalIdIdx, 'Goal_ID', source, rowNumber);
+    const quarter = getRequiredCell(row, quarterIdx, 'Target_Quarter', source, rowNumber);
+    map.set(goalId, quarter);
   }
   return map;
 }
@@ -206,7 +263,7 @@ export function loadRealData(targetTeam?: string) {
         // P3 (score < 65) are filtered by team
         const filteredTrainees = need.traineeIds.filter((id) => {
           const role = roleMap.get(id);
-          return role && role.toLowerCase().includes(teamKey);
+          return role?.toLowerCase().includes(teamKey) ?? false;
         });
         return {
           ...need,

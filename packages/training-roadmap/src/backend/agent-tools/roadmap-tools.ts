@@ -18,7 +18,7 @@ import { z } from 'zod';
 import { loadRealData, loadTrainersFromCSV } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { matchTrainers } from '../domain/match-trainers.ts';
-import type { InternalTrainer, ScoredTrainingNeed } from '../domain/types.ts';
+import type { InternalTrainer } from '../domain/types.ts';
 
 /**
  * Runtime scratch directory.
@@ -50,23 +50,15 @@ const EvidenceSchema = z.object({
   surveyIds: z.array(z.string()),
 });
 
-const ScoredTrainingNeedSchema = z.object({
-  needId: z.string(),
-  skillName: z.string(),
-  priorityScore: z.number(),
-  traineeIds: z.array(z.string()),
-  estimatedHours: z.number().positive(),
-  targetQuarter: z.string(),
-  evidence: EvidenceSchema,
-});
-
-const InternalTrainerSchema = z.object({
-  trainerId: z.string(),
-  expertise: z.array(z.string()),
-  availabilityHoursPerMonth: z.number().nonnegative(),
-});
-
 const FallbackReasonSchema = z.enum(['SKILL_NOT_FOUND_INTERNAL', 'CAPACITY_EXCEEDED']);
+const LearningFormatSchema = z.enum([
+  'INTERNAL_TRAINING',
+  'ON_JOB_TRAINING',
+  'GROUP_STUDY',
+  'EXTERNAL_TRAINER',
+  'ONLINE_COURSE',
+  'SEMINAR_SHARING',
+]);
 
 const MatchedTrainingClassSchema = z.object({
   classId: z.string(),
@@ -75,11 +67,17 @@ const MatchedTrainingClassSchema = z.object({
   assignedTrainer: z.string().nullable(),
   isExternalRequired: z.boolean(),
   fallbackReason: FallbackReasonSchema.optional(),
+  learningFormat: LearningFormatSchema.optional(),
   targetQuarter: z.string(),
   evidence: EvidenceSchema,
   priorityScore: z.number(),
   estimatedHours: z.number(),
+  formatExplanation: z.string().optional(),
+  evaluationCriteria: z.string().optional(),
+  durationWeeks: z.number().optional(),
 });
+
+export const MatchedTrainingClassesSchema = z.array(MatchedTrainingClassSchema);
 
 const RoadmapClassEntrySchema = z.object({
   classId: z.string(),
@@ -92,6 +90,10 @@ const RoadmapClassEntrySchema = z.object({
   traineeCount: z.number(),
   trainees: z.array(z.string()),
   estimatedHours: z.number(),
+  learningFormat: LearningFormatSchema.optional(),
+  formatExplanation: z.string().optional(),
+  evaluationCriteria: z.string().optional(),
+  durationWeeks: z.number().optional(),
   resource: z.object({
     trainerId: z.string().nullable(),
     isExternalRequired: z.boolean(),
@@ -106,11 +108,31 @@ const DraftRoadmapOutputSchema = z.object({
   quarters: z.record(z.string(), z.array(RoadmapClassEntrySchema)),
 });
 
-// Keep schemas referenced so strict TS/Biome configs do not treat them as accidental dead code.
-void ScoredTrainingNeedSchema;
-void InternalTrainerSchema;
-void MatchedTrainingClassSchema;
-void DraftRoadmapOutputSchema;
+const PendingSkillsOutputSchema = z.array(
+  z.object({
+    skillName: z.string(),
+    traineeCount: z.number(),
+    priorityScore: z.number(),
+    targetQuarter: z.string(),
+  }),
+);
+
+const TrainerAssignmentOutputSchema = z.object({
+  success: z.literal(true),
+  totalNeeds: z.number(),
+  internallyAssigned: z.number(),
+  externalRequired: z.number(),
+  matchedClasses: MatchedTrainingClassesSchema,
+});
+
+const LearningFormatsOutputSchema = z.object({
+  success: z.literal(true),
+  message: z.string(),
+});
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
 
 // ---------------------------------------------------------------------------
 // Tool 1: Get Pending Skills
@@ -123,8 +145,8 @@ export const lndGetPendingSkills = createTool({
   inputSchema: z.object({
     targetTeam: z.string().optional(),
   }),
-  outputSchema: z.any(),
-  execute: async (args: any) => {
+  outputSchema: PendingSkillsOutputSchema,
+  execute: async (args) => {
     const { targetTeam } = args;
 
     console.log(`Tool lndGetPendingSkills called by LLM with targetTeam: ${targetTeam || 'None'}`);
@@ -171,12 +193,12 @@ export const lndFindAndAssignTrainer = createTool({
         'A JSON object mapping skillName to estimated hours (e.g., {"Kubernetes": 40, "Python": 20})',
       ),
   }),
-  outputSchema: z.any(),
-  execute: async (args: any) => {
+  outputSchema: TrainerAssignmentOutputSchema,
+  execute: async (args) => {
     try {
       console.log('ARGS lndFindAndAssignTrainer:', JSON.stringify(args, null, 2));
 
-      const { estimatedHoursMap, targetTeam, relevantSkills } = args as any;
+      const { estimatedHoursMap, targetTeam, relevantSkills } = args;
 
       console.log(
         `Tool lndFindAndAssignTrainer called with targetTeam=${targetTeam}, relevantSkills=${relevantSkills?.length}`,
@@ -196,14 +218,14 @@ export const lndFindAndAssignTrainer = createTool({
       // Override estimated hours with LLM's estimations.
       if (estimatedHoursMap) {
         for (const need of resolvedNeeds) {
-          if (estimatedHoursMap[need.skillName]) {
-            need.estimatedHours = estimatedHoursMap[need.skillName];
+          const estimatedHours = estimatedHoursMap[need.skillName];
+          if (estimatedHours) {
+            need.estimatedHours = estimatedHours;
           }
         }
       }
 
-      const typedNeeds = resolvedNeeds as ScoredTrainingNeed[];
-      const matched = matchTrainers(typedNeeds, trainerPool);
+      const matched = matchTrainers(resolvedNeeds, trainerPool);
 
       // Save matched classes to runtime scratch for the next tool to use.
       writeFileSync(scratchPath('matched_classes.json'), JSON.stringify(matched, null, 2));
@@ -211,15 +233,15 @@ export const lndFindAndAssignTrainer = createTool({
       const assigned = matched.filter((m) => !m.isExternalRequired).length;
 
       return {
-        success: true,
-        totalNeeds: typedNeeds.length,
+        success: true as const,
+        totalNeeds: resolvedNeeds.length,
         internallyAssigned: assigned,
         externalRequired: matched.length - assigned,
         matchedClasses: matched,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error in lndFindAndAssignTrainer:', error);
-      throw new Error(`Failed to match trainers: ${error.message}`);
+      throw new Error(`Failed to match trainers: ${getErrorMessage(error)}`);
     }
   },
 });
@@ -239,24 +261,25 @@ export const lndAssignLearningFormats = createTool({
       .record(z.string(), z.string())
       .describe('A JSON object mapping skillName to LearningFormat enum string.'),
   }),
-  outputSchema: z.any(),
-  execute: async (args: any) => {
+  outputSchema: LearningFormatsOutputSchema,
+  execute: async (args) => {
     try {
       console.log('ARGS lndAssignLearningFormats:', JSON.stringify(args, null, 2));
 
-      const { formatMap } = args as any;
+      const { formatMap } = args;
 
       console.log('Tool lndAssignLearningFormats called by LLM with map:', formatMap);
 
-      const map = formatMap || {};
       const filePath = scratchPath('matched_classes.json');
 
       const raw = readFileSync(filePath, 'utf-8');
-      const matchedClasses = JSON.parse(raw);
+      const parsed: unknown = JSON.parse(raw);
+      const matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 
       for (const cls of matchedClasses) {
-        if (map[cls.skillName]) {
-          cls.learningFormat = map[cls.skillName];
+        const learningFormat = LearningFormatSchema.safeParse(formatMap[cls.skillName]);
+        if (learningFormat.success) {
+          cls.learningFormat = learningFormat.data;
         } else {
           cls.learningFormat = cls.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
         }
@@ -265,12 +288,12 @@ export const lndAssignLearningFormats = createTool({
       writeFileSync(filePath, JSON.stringify(matchedClasses, null, 2));
 
       return {
-        success: true,
+        success: true as const,
         message: 'Learning formats assigned successfully',
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error in lndAssignLearningFormats:', error);
-      throw new Error(`Failed to assign learning formats: ${error.message}`);
+      throw new Error(`Failed to assign learning formats: ${getErrorMessage(error)}`);
     }
   },
 });
@@ -295,12 +318,13 @@ export const lndCompileQuarterlyRoadmap = createTool({
       .optional()
       .describe('Roadmap version identifier. Defaults to "RM-2026-V1".'),
   }),
-  outputSchema: z.any(),
-  execute: async (args: any) => {
+  outputSchema: DraftRoadmapOutputSchema,
+  execute: async (args) => {
     const { roadmapId } = args;
 
     const raw = readFileSync(scratchPath('matched_classes.json'), 'utf-8');
-    const matchedClasses = JSON.parse(raw);
+    const parsed: unknown = JSON.parse(raw);
+    const matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 
     return generateDraftRoadmap(matchedClasses, roadmapId);
   },

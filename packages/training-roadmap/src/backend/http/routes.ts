@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { Agent } from '@mastra/core/agent';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
+import { z } from 'zod';
 import type { ApprovalDecision, ApprovalResponse, Priority, RoadmapResult } from '../../types.ts';
 import { lndCoordinatorSpec } from '../agent-specs/lnd-orchestrator-spec.ts';
 import {
@@ -11,10 +12,9 @@ import {
   lndCompileQuarterlyRoadmap,
   lndFindAndAssignTrainer,
   lndGetPendingSkills,
+  MatchedTrainingClassesSchema,
 } from '../agent-tools/roadmap-tools.ts';
-import { loadRealData } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
-import { matchTrainers } from '../domain/match-trainers.ts';
 import type { DraftRoadmapOutput, MatchedTrainingClass } from '../domain/types.ts';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -22,6 +22,29 @@ const SCRATCH_DIR = path.resolve(__dirname, '../../../../../scratch');
 fs.mkdirSync(SCRATCH_DIR, { recursive: true });
 
 export const trainingRoadmapRoutes = new Hono();
+
+const AgentSkillUpdatesSchema = z.object({
+  estimatedHours: z.number().optional(),
+  learningFormat: z
+    .enum([
+      'INTERNAL_TRAINING',
+      'ON_JOB_TRAINING',
+      'GROUP_STUDY',
+      'EXTERNAL_TRAINER',
+      'ONLINE_COURSE',
+      'SEMINAR_SHARING',
+    ])
+    .optional(),
+  formatExplanation: z.string().optional(),
+  evaluationCriteria: z.string().optional(),
+  durationWeeks: z.number().optional(),
+});
+
+const AgentSkillsResponseSchema = z.object({
+  skills: z.record(z.string(), AgentSkillUpdatesSchema),
+});
+
+type AgentSkillUpdates = z.infer<typeof AgentSkillUpdatesSchema>;
 
 function isApprovalDecision(value: unknown): value is ApprovalDecision {
   return value === 'approved' || value === 'revision_requested' || value === 'rejected';
@@ -50,7 +73,10 @@ function scoreToPriority(score: number): Priority {
  * Convert the new DraftRoadmapOutput into the legacy RoadmapResult shape
  * so existing approval flow and tests continue to work.
  */
-function toLegacyResult(draft: DraftRoadmapOutput, classes: MatchedTrainingClass[]): RoadmapResult {
+function toLegacyResult(
+  _draft: DraftRoadmapOutput,
+  classes: MatchedTrainingClass[],
+): RoadmapResult {
   return {
     runId: createRunId(),
     reviewStatus: 'pending',
@@ -160,9 +186,9 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     console.log('=======================================\n');
 
     // Extract JSON block from response.text
-    let extractedMap: any = {};
+    let extractedMap: Record<string, AgentSkillUpdates> = {};
     const jsonMatch = response.text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-    let rawJson = jsonMatch && jsonMatch[1] ? jsonMatch[1] : response.text || '';
+    let rawJson = jsonMatch?.[1] ?? response.text ?? '';
 
     // Clean up potential markdown formatting if regex didn't catch it
     if (!jsonMatch && rawJson.includes('```')) {
@@ -170,9 +196,12 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     }
 
     try {
-      const parsed = JSON.parse(rawJson.trim());
-      if (parsed.skills) {
-        extractedMap = parsed.skills;
+      const parsed: unknown = JSON.parse(rawJson.trim());
+      const result = AgentSkillsResponseSchema.safeParse(parsed);
+      if (result.success) {
+        extractedMap = result.data.skills;
+      } else {
+        console.error('Agent JSON block did not match the expected schema', result.error);
       }
     } catch (e) {
       console.error('Failed to parse agent JSON block', e);
@@ -182,11 +211,12 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     const scratchPath = path.resolve(SCRATCH_DIR, 'matched_classes.json');
     if (fs.existsSync(scratchPath)) {
       const raw = fs.readFileSync(scratchPath, 'utf-8');
-      let matchedClasses = JSON.parse(raw);
+      const parsed: unknown = JSON.parse(raw);
+      let matchedClasses: MatchedTrainingClass[] = MatchedTrainingClassesSchema.parse(parsed);
 
       // Filter out skills that the LLM dropped (semantic filtering)
       if (userPrompt && Object.keys(extractedMap).length > 0) {
-        matchedClasses = matchedClasses.filter((cls: any) => {
+        matchedClasses = matchedClasses.filter((cls) => {
           // Fallback fuzzy matching in case LLM shortens the name
           return (
             extractedMap[cls.skillName] !== undefined ||
@@ -218,12 +248,13 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     }
 
     // Directly call the compilation tool to guarantee the JSON is captured correctly
-    let draftRoadmap = null;
-    let matchedClasses: any[] = [];
+    let draftRoadmap: DraftRoadmapOutput | null = null;
+    let matchedClasses: MatchedTrainingClass[] = [];
     try {
       // Read matchedClasses for legacy support
       const raw = fs.readFileSync(path.resolve(SCRATCH_DIR, 'matched_classes.json'), 'utf-8');
-      matchedClasses = JSON.parse(raw);
+      const parsed: unknown = JSON.parse(raw);
+      matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 
       // Generate draft roadmap directly using the domain function
       draftRoadmap = generateDraftRoadmap(matchedClasses, 'RM-2026-V1');
