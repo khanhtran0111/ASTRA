@@ -1,6 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import * as path from 'node:path';
 import * as dotenv from 'dotenv';
+import { describe, expect, it } from 'vitest';
+
 dotenv.config({ path: path.resolve(__dirname, '../../../../.env') });
 
 import { buildTrainingRoadmapRoutes } from '../../src/backend/http/index.ts';

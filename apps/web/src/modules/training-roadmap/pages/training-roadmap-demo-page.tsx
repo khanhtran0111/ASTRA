@@ -65,7 +65,7 @@ export function TrainingRoadmapDemoPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [userPrompt]);
 
   const handleDecision = useCallback(
     async (decision: ApprovalDecision) => {
