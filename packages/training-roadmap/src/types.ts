@@ -10,7 +10,10 @@ export type TrainingInitiative = {
   quarter: string;
   targetTrainees: string[];
   trainerName: string | null;
-  format: 'internal' | 'external' | 'self-study';
+  format: string;
+  formatExplanation?: string;
+  evaluationCriteria?: string;
+  durationWeeks?: number;
   estimatedHours: number;
   evidence: string[];
   fallbackReason?: string;

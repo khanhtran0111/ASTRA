@@ -24,8 +24,10 @@
     "@seta/shared-testing": "workspace:^",
     "@types/pg": "^8.20.0",
     "drizzle-kit": "^0.31.10",
+    "@types/node": "^22.10.2",
+    "dotenv": "^16.4.7",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "@seta/agent-sdk": "workspace:^",

@@ -120,12 +120,15 @@ function isConnectionOrPayloadError(error: unknown): boolean {
   return error instanceof TypeError || error instanceof SyntaxError;
 }
 
-export async function runTrainingRoadmap(): Promise<TrainingRoadmapClientResult<RoadmapResult>> {
+export async function runTrainingRoadmap(
+  userPrompt?: string,
+): Promise<TrainingRoadmapClientResult<RoadmapResult>> {
   try {
     const response = await fetch('/api/training-roadmap/run', {
       method: 'POST',
       credentials: 'include',
       headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ userPrompt }),
     });
 
     if (canUseDemoFallback(response)) {
