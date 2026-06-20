@@ -1,0 +1,1878 @@
+{
+  "_cross_reference": {
+    "priority_report": "priority_result.json",
+    "note": "These org-level findings back the per-skill initiatives in priority_result.json. F-02/F-04 numbers match each initiative's internal_trainer_available / current_holder_count."
+  },
+  "F-01_declared_gap_frequency": {
+    "description": "DS01 Skill_Gap ranked by employee frequency (high-frequency gaps first).",
+    "ranking": [
+      {
+        "skill": "Containerization",
+        "employee_count": 58,
+        "percent_of_workforce": 28.3
+      },
+      {
+        "skill": "Cloud Services",
+        "employee_count": 48,
+        "percent_of_workforce": 23.4
+      },
+      {
+        "skill": "Automation Testing",
+        "employee_count": 36,
+        "percent_of_workforce": 17.6
+      },
+      {
+        "skill": "DevOps",
+        "employee_count": 32,
+        "percent_of_workforce": 15.6
+      },
+      {
+        "skill": "Performance Testing",
+        "employee_count": 31,
+        "percent_of_workforce": 15.1
+      },
+      {
+        "skill": "API Testing",
+        "employee_count": 29,
+        "percent_of_workforce": 14.1
+      },
+      {
+        "skill": "Technical Depth",
+        "employee_count": 18,
+        "percent_of_workforce": 8.8
+      },
+      {
+        "skill": "AI Tools & Copilot Usage",
+        "employee_count": 16,
+        "percent_of_workforce": 7.8
+      },
+      {
+        "skill": "System Architecture",
+        "employee_count": 15,
+        "percent_of_workforce": 7.3
+      },
+      {
+        "skill": "UI/UX",
+        "employee_count": 15,
+        "percent_of_workforce": 7.3
+      },
+      {
+        "skill": "Go",
+        "employee_count": 14,
+        "percent_of_workforce": 6.8
+      },
+      {
+        "skill": "Version Control (Git)",
+        "employee_count": 13,
+        "percent_of_workforce": 6.3
+      },
+      {
+        "skill": "Agile/Scrum",
+        "employee_count": 13,
+        "percent_of_workforce": 6.3
+      },
+      {
+        "skill": "Kubernetes",
+        "employee_count": 13,
+        "percent_of_workforce": 6.3
+      },
+      {
+        "skill": "Strategic Planning",
+        "employee_count": 10,
+        "percent_of_workforce": 4.9
+      },
+      {
+        "skill": "Security Testing",
+        "employee_count": 9,
+        "percent_of_workforce": 4.4
+      },
+      {
+        "skill": "Data Analysis",
+        "employee_count": 7,
+        "percent_of_workforce": 3.4
+      },
+      {
+        "skill": "Testing",
+        "employee_count": 7,
+        "percent_of_workforce": 3.4
+      },
+      {
+        "skill": "Data Visualization",
+        "employee_count": 6,
+        "percent_of_workforce": 2.9
+      },
+      {
+        "skill": "ETL/Data Pipeline",
+        "employee_count": 6,
+        "percent_of_workforce": 2.9
+      },
+      {
+        "skill": "MLOps",
+        "employee_count": 6,
+        "percent_of_workforce": 2.9
+      },
+      {
+        "skill": "Data Engineering",
+        "employee_count": 6,
+        "percent_of_workforce": 2.9
+      },
+      {
+        "skill": "gRPC",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Microservices",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Automation Testing (Playwright)",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "CI/CD Integration",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Test Framework Design",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Script Writing",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Playwright",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Cypress",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "CI/CD Pipeline",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Automation Testing (Selenium/Playwright)",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "Test Reporting",
+        "employee_count": 5,
+        "percent_of_workforce": 2.4
+      },
+      {
+        "skill": "ML Integration",
+        "employee_count": 4,
+        "percent_of_workforce": 2.0
+      },
+      {
+        "skill": "System Design",
+        "employee_count": 4,
+        "percent_of_workforce": 2.0
+      },
+      {
+        "skill": "LLM/GenAI",
+        "employee_count": 4,
+        "percent_of_workforce": 2.0
+      },
+      {
+        "skill": "Model Deployment",
+        "employee_count": 3,
+        "percent_of_workforce": 1.5
+      },
+      {
+        "skill": "Frontend",
+        "employee_count": 3,
+        "percent_of_workforce": 1.5
+      },
+      {
+        "skill": "User Research",
+        "employee_count": 3,
+        "percent_of_workforce": 1.5
+      },
+      {
+        "skill": "Prototyping",
+        "employee_count": 3,
+        "percent_of_workforce": 1.5
+      },
+      {
+        "skill": "Cloud",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "AI Tools",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Monitoring/Observability",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Manual Testing",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Data Science",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "AI",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Python",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "CI/CD",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Backend",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Backend Development",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "BA",
+        "employee_count": 2,
+        "percent_of_workforce": 1.0
+      },
+      {
+        "skill": "Automation",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Technical Leadership",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Deep Learning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Reinforcement Learning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Figma",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Manual QA",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "SQL Testing",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AI/ML Engineering",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "DevSecOps",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Backend (.NET)",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Automation (Cypress/JavaScript)",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Frontend Angular",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "NodeJS Backend",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "DevOps & Infrastructure",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Azure DevOps",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AWS",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "ML/AI",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Java",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AI Agents",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "LLMs",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "DevOps (AWS",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Terraform",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "K8s)",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Marketing",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Frontend HTML/CSS",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Business Management",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Documentation",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Monitoring",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Threat Hunting",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Accessibility Design",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Auto Test",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Tester",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Robot Framework",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Manager",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Planning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Time Management",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AI for Developers",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "IT Outsourcing & Embedded System",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Web Development",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Azure Cloud",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AI Agent",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Data Engineering Pipeline",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Embedded Development",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "AI Training Model",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Computer Vision Model Training",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "2D Artist",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Team Management",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Mathematical Analysis",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Cloud Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Container Security",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "GitOps",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "IaC",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "CI/CD pipeline design",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Cloud Deployment",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "SRE practices",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Performance Tuning",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      },
+      {
+        "skill": "Observability Stack",
+        "employee_count": 1,
+        "percent_of_workforce": 0.5
+      }
+    ]
+  },
+  "F-02_trainer_supply_demand": {
+    "description": "Demanded skills with a trainee pool but no internal trainer (capacity gap).",
+    "internal_trainer_count": 10,
+    "skills_covered_internally": [
+      "AI",
+      "AWS",
+      "Agentic AI",
+      "Angular",
+      "Ansible",
+      "Azure",
+      "Bash",
+      "BigQuery",
+      "C#",
+      "C++",
+      "C/C++",
+      "Cloud Platform",
+      "DBA",
+      "Dbt",
+      "DevOps",
+      "Docker",
+      "FastAPI",
+      "GCP",
+      "GitHub Actions",
+      "Go",
+      "Grafana",
+      "Java",
+      "JavaScript",
+      "Jenkins",
+      "Kubernetes",
+      "LLM/GenAI",
+      "LangChain",
+      "Machine Learning",
+      "Management skills",
+      "MySQL",
+      "Nginx",
+      "Node.js",
+      "PostgreSQL",
+      "Project Management",
+      "Prometheus",
+      "PyTorch",
+      "Python",
+      "React",
+      "Revit",
+      "Rust",
+      "SQL",
+      "Scikit-learn",
+      "Shell Script",
+      "Spring Boot",
+      "TensorFlow",
+      "Terraform",
+      "UI/UX"
+    ],
+    "demanded_skills_without_trainer": [
+      {
+        "skill": "Cloud",
+        "priority_tier": "P2",
+        "target_employee_count": 58
+      },
+      {
+        "skill": "Automation Testing",
+        "priority_tier": "P2",
+        "target_employee_count": 49
+      },
+      {
+        "skill": "System Design",
+        "priority_tier": "P1",
+        "target_employee_count": 24
+      },
+      {
+        "skill": "AI Tools",
+        "priority_tier": "P1",
+        "target_employee_count": 21
+      },
+      {
+        "skill": "Leadership",
+        "priority_tier": "P2",
+        "target_employee_count": 20
+      },
+      {
+        "skill": "Data Engineering",
+        "priority_tier": "P3",
+        "target_employee_count": 15
+      },
+      {
+        "skill": "CI/CD",
+        "priority_tier": "P1",
+        "target_employee_count": 14
+      },
+      {
+        "skill": "Backend",
+        "priority_tier": "P2",
+        "target_employee_count": 11
+      },
+      {
+        "skill": "Communication",
+        "priority_tier": "P2",
+        "target_employee_count": 8
+      },
+      {
+        "skill": "MLOps",
+        "priority_tier": "P2",
+        "target_employee_count": 7
+      },
+      {
+        "skill": "AI Agent",
+        "priority_tier": "P2",
+        "target_employee_count": 5
+      },
+      {
+        "skill": "gRPC",
+        "priority_tier": "P3",
+        "target_employee_count": 5
+      },
+      {
+        "skill": "Container Security",
+        "priority_tier": "P3",
+        "target_employee_count": 1
+      },
+      {
+        "skill": "DevSecOps",
+        "priority_tier": "P3",
+        "target_employee_count": 1
+      },
+      {
+        "skill": "IaC",
+        "priority_tier": "P2",
+        "target_employee_count": 1
+      },
+      {
+        "skill": "Interview Skills",
+        "priority_tier": "P2",
+        "target_employee_count": 1
+      }
+    ],
+    "uncovered_count": 16
+  },
+  "F-03_goal_coverage": {
+    "description": "Current dev-team coverage vs each BOD goal's target % (e.g. GOAL-2026-07 >=60%).",
+    "goals": [
+      {
+        "goal_id": "GOAL-2025-08",
+        "target_quarter": "Q3_2025",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "Cloud",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "System Design",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "Backend",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "Leadership",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "Communication",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "Interview Skills",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2025-09",
+        "target_quarter": "Q3_2025",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "Automation Testing",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2025-11",
+        "target_quarter": "Q4_2025",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "DevOps",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "LLM/GenAI",
+            "dev_holders": 1,
+            "current_percent": 0.5
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2026-01",
+        "target_quarter": "Q1_2026",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "Leadership",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "Communication",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2026-04",
+        "target_quarter": "Q2_2026",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "AI Tools",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "System Design",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2026-07",
+        "target_quarter": "Q3_2026",
+        "target_percent": 60,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "Kubernetes",
+            "dev_holders": 5,
+            "current_percent": 2.7,
+            "target_percent": 60,
+            "shortfall_percent": 57.3,
+            "employees_to_train": 105
+          },
+          {
+            "skill": "CI/CD",
+            "dev_holders": 0,
+            "current_percent": 0.0,
+            "target_percent": 60,
+            "shortfall_percent": 60.0,
+            "employees_to_train": 110
+          },
+          {
+            "skill": "IaC",
+            "dev_holders": 0,
+            "current_percent": 0.0,
+            "target_percent": 60,
+            "shortfall_percent": 60.0,
+            "employees_to_train": 110
+          },
+          {
+            "skill": "Cloud",
+            "dev_holders": 0,
+            "current_percent": 0.0,
+            "target_percent": 60,
+            "shortfall_percent": 60.0,
+            "employees_to_train": 110
+          }
+        ]
+      },
+      {
+        "goal_id": "GOAL-2026-10",
+        "target_quarter": "Q4_2026",
+        "target_percent": null,
+        "dev_team_size": 182,
+        "skills_coverage": [
+          {
+            "skill": "AI Agent",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          },
+          {
+            "skill": "AI Tools",
+            "dev_holders": 0,
+            "current_percent": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  "F-04_skill_supply_index": {
+    "description": "Who currently HAS each demanded skill (cross-reference DS01); scarce skills flagged.",
+    "supply": [
+      {
+        "skill": "AI Agent",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "AI Agent Development",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "AI Services",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "AI Tools",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "AWS Lambda",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Android",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "AutoGen",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Automation Testing",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Backend",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "CI/CD",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Claude API",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Cloud",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Cognito",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Communication",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Computer Vision",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Container Security",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Cost Optimization",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "CrewAI",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Cybersecurity",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Databricks",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Delta Lake",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "DevOps",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "DevSecOps",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Edge AI",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "FinOps",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "GraphQL",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "IAM",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "IaC",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Interview Skills",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "IoT",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "LLM Fine-tuning",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Leadership",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Multi-cloud (AWS/Azure/GCP)",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "OpenAI API",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Penetration Testing",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Power Platform",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Prompt Engineering",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "RAG",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "React Native",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "SIEM",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "SOC",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Security (OWASP)",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "System Design",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Vault",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Vector DB",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Vertex AI",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "gRPC",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "iOS",
+        "holder_count": 0,
+        "holders": [],
+        "scarce": true
+      },
+      {
+        "skill": "Data Engineering",
+        "holder_count": 1,
+        "holders": [
+          "EMP-029"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "DynamoDB",
+        "holder_count": 1,
+        "holders": [
+          "EMP-060"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "Firebase",
+        "holder_count": 1,
+        "holders": [
+          "EMP-018"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "LLM/GenAI",
+        "holder_count": 1,
+        "holders": [
+          "EMP-062"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "MLOps",
+        "holder_count": 1,
+        "holders": [
+          "EMP-127"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "Airflow",
+        "holder_count": 2,
+        "holders": [
+          "EMP-098",
+          "EMP-151"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "LangChain",
+        "holder_count": 2,
+        "holders": [
+          "EMP-098",
+          "EMP-162"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "Spark",
+        "holder_count": 2,
+        "holders": [
+          "EMP-061",
+          "EMP-151"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "TensorFlow",
+        "holder_count": 2,
+        "holders": [
+          "EMP-077",
+          "EMP-162"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "BigQuery",
+        "holder_count": 3,
+        "holders": [
+          "EMP-012",
+          "EMP-017",
+          "EMP-162"
+        ],
+        "scarce": true
+      },
+      {
+        "skill": "PyTorch",
+        "holder_count": 4,
+        "holders": [
+          "EMP-022",
+          "EMP-077",
+          "EMP-127",
+          "EMP-162"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Azure",
+        "holder_count": 5,
+        "holders": [
+          "EMP-023",
+          "EMP-061",
+          "EMP-069",
+          "EMP-134",
+          "EMP-162"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Kafka",
+        "holder_count": 5,
+        "holders": [
+          "EMP-008",
+          "EMP-045",
+          "EMP-047",
+          "EMP-098",
+          "EMP-172"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Kubernetes",
+        "holder_count": 6,
+        "holders": [
+          "EMP-016",
+          "EMP-031",
+          "EMP-036",
+          "EMP-037",
+          "EMP-098",
+          "EMP-162"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Terraform",
+        "holder_count": 6,
+        "holders": [
+          "EMP-037",
+          "EMP-081",
+          "EMP-101",
+          "EMP-117",
+          "EMP-162",
+          "EMP-180"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "GCP",
+        "holder_count": 7,
+        "holders": [
+          "EMP-016",
+          "EMP-031",
+          "EMP-037",
+          "EMP-061",
+          "EMP-081",
+          "EMP-103",
+          "EMP-162"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Redis",
+        "holder_count": 9,
+        "holders": [
+          "EMP-008",
+          "EMP-026",
+          "EMP-045",
+          "EMP-047",
+          "EMP-093",
+          "EMP-105",
+          "EMP-115",
+          "EMP-166",
+          "EMP-173"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Angular",
+        "holder_count": 11,
+        "holders": [
+          "EMP-001",
+          "EMP-002",
+          "EMP-045",
+          "EMP-054",
+          "EMP-066",
+          "EMP-075",
+          "EMP-077",
+          "EMP-128",
+          "EMP-129",
+          "EMP-134",
+          "EMP-159"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "SQL Server",
+        "holder_count": 11,
+        "holders": [
+          "EMP-048",
+          "EMP-049",
+          "EMP-052",
+          "EMP-059",
+          "EMP-060",
+          "EMP-070",
+          "EMP-102",
+          "EMP-128",
+          "EMP-130",
+          "EMP-135",
+          "EMP-147"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "MongoDB",
+        "holder_count": 12,
+        "holders": [
+          "EMP-018",
+          "EMP-026",
+          "EMP-030",
+          "EMP-053",
+          "EMP-057",
+          "EMP-060",
+          "EMP-062",
+          "EMP-091",
+          "EMP-105",
+          "EMP-122",
+          "EMP-129",
+          "EMP-170"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": ".NET",
+        "holder_count": 13,
+        "holders": [
+          "EMP-014",
+          "EMP-048",
+          "EMP-049",
+          "EMP-060",
+          "EMP-066",
+          "EMP-069",
+          "EMP-070",
+          "EMP-102",
+          "EMP-115",
+          "EMP-128",
+          "EMP-136",
+          "EMP-145",
+          "EMP-152"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Docker",
+        "holder_count": 14,
+        "holders": [
+          "EMP-004",
+          "EMP-028",
+          "EMP-031",
+          "EMP-036",
+          "EMP-037",
+          "EMP-045",
+          "EMP-094",
+          "EMP-115",
+          "EMP-140",
+          "EMP-151",
+          "EMP-162",
+          "EMP-177",
+          "EMP-178",
+          "EMP-179"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "FastAPI",
+        "holder_count": 14,
+        "holders": [
+          "EMP-026",
+          "EMP-029",
+          "EMP-037",
+          "EMP-055",
+          "EMP-059",
+          "EMP-062",
+          "EMP-077",
+          "EMP-094",
+          "EMP-098",
+          "EMP-132",
+          "EMP-156",
+          "EMP-157",
+          "EMP-164",
+          "EMP-173"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "AWS",
+        "holder_count": 16,
+        "holders": [
+          "EMP-004",
+          "EMP-018",
+          "EMP-024",
+          "EMP-031",
+          "EMP-037",
+          "EMP-060",
+          "EMP-061",
+          "EMP-069",
+          "EMP-076",
+          "EMP-081",
+          "EMP-094",
+          "EMP-101",
+          "EMP-133",
+          "EMP-140",
+          "EMP-162",
+          "EMP-179"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Go",
+        "holder_count": 17,
+        "holders": [
+          "EMP-024",
+          "EMP-032",
+          "EMP-036",
+          "EMP-037",
+          "EMP-060",
+          "EMP-087",
+          "EMP-091",
+          "EMP-092",
+          "EMP-093",
+          "EMP-097",
+          "EMP-112",
+          "EMP-113",
+          "EMP-114",
+          "EMP-115",
+          "EMP-135",
+          "EMP-150",
+          "EMP-151"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Spring Boot",
+        "holder_count": 36,
+        "holders": [
+          "EMP-004",
+          "EMP-008",
+          "EMP-010",
+          "EMP-013",
+          "EMP-021",
+          "EMP-030",
+          "EMP-031",
+          "EMP-034",
+          "EMP-037",
+          "EMP-045",
+          "EMP-047",
+          "EMP-053",
+          "EMP-056",
+          "EMP-073",
+          "EMP-078",
+          "EMP-080",
+          "EMP-086",
+          "EMP-087",
+          "EMP-092",
+          "EMP-100",
+          "EMP-105",
+          "EMP-129",
+          "EMP-132",
+          "EMP-134",
+          "EMP-137",
+          "EMP-138",
+          "EMP-139",
+          "EMP-143",
+          "EMP-149",
+          "EMP-159",
+          "EMP-163",
+          "EMP-166",
+          "EMP-169",
+          "EMP-172",
+          "EMP-174",
+          "EMP-178"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Node.js",
+        "holder_count": 44,
+        "holders": [
+          "EMP-007",
+          "EMP-011",
+          "EMP-019",
+          "EMP-024",
+          "EMP-026",
+          "EMP-028",
+          "EMP-029",
+          "EMP-032",
+          "EMP-036",
+          "EMP-048",
+          "EMP-060",
+          "EMP-064",
+          "EMP-068",
+          "EMP-071",
+          "EMP-077",
+          "EMP-079",
+          "EMP-083",
+          "EMP-084",
+          "EMP-091",
+          "EMP-093",
+          "EMP-094",
+          "EMP-098",
+          "EMP-103",
+          "EMP-107",
+          "EMP-110",
+          "EMP-113",
+          "EMP-114",
+          "EMP-115",
+          "EMP-116",
+          "EMP-118",
+          "EMP-126",
+          "EMP-132",
+          "EMP-135",
+          "EMP-141",
+          "EMP-144",
+          "EMP-150",
+          "EMP-152",
+          "EMP-159",
+          "EMP-161",
+          "EMP-165",
+          "EMP-170",
+          "EMP-171",
+          "EMP-175",
+          "EMP-179"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "PostgreSQL",
+        "holder_count": 56,
+        "holders": [
+          "EMP-019",
+          "EMP-024",
+          "EMP-026",
+          "EMP-028",
+          "EMP-031",
+          "EMP-032",
+          "EMP-034",
+          "EMP-045",
+          "EMP-048",
+          "EMP-049",
+          "EMP-051",
+          "EMP-055",
+          "EMP-056",
+          "EMP-059",
+          "EMP-060",
+          "EMP-062",
+          "EMP-065",
+          "EMP-068",
+          "EMP-070",
+          "EMP-077",
+          "EMP-078",
+          "EMP-080",
+          "EMP-086",
+          "EMP-088",
+          "EMP-091",
+          "EMP-092",
+          "EMP-093",
+          "EMP-094",
+          "EMP-097",
+          "EMP-100",
+          "EMP-103",
+          "EMP-109",
+          "EMP-110",
+          "EMP-115",
+          "EMP-116",
+          "EMP-124",
+          "EMP-133",
+          "EMP-135",
+          "EMP-139",
+          "EMP-141",
+          "EMP-143",
+          "EMP-149",
+          "EMP-150",
+          "EMP-151",
+          "EMP-152",
+          "EMP-153",
+          "EMP-156",
+          "EMP-160",
+          "EMP-161",
+          "EMP-163",
+          "EMP-164",
+          "EMP-165",
+          "EMP-167",
+          "EMP-171",
+          "EMP-172",
+          "EMP-173"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Python",
+        "holder_count": 66,
+        "holders": [
+          "EMP-001",
+          "EMP-002",
+          "EMP-005",
+          "EMP-006",
+          "EMP-013",
+          "EMP-015",
+          "EMP-016",
+          "EMP-022",
+          "EMP-023",
+          "EMP-024",
+          "EMP-026",
+          "EMP-034",
+          "EMP-035",
+          "EMP-036",
+          "EMP-037",
+          "EMP-041",
+          "EMP-044",
+          "EMP-052",
+          "EMP-055",
+          "EMP-057",
+          "EMP-058",
+          "EMP-059",
+          "EMP-061",
+          "EMP-062",
+          "EMP-065",
+          "EMP-071",
+          "EMP-073",
+          "EMP-076",
+          "EMP-081",
+          "EMP-082",
+          "EMP-090",
+          "EMP-091",
+          "EMP-093",
+          "EMP-094",
+          "EMP-098",
+          "EMP-099",
+          "EMP-101",
+          "EMP-113",
+          "EMP-119",
+          "EMP-122",
+          "EMP-127",
+          "EMP-131",
+          "EMP-132",
+          "EMP-135",
+          "EMP-142",
+          "EMP-146",
+          "EMP-151",
+          "EMP-152",
+          "EMP-153",
+          "EMP-154",
+          "EMP-155",
+          "EMP-156",
+          "EMP-157",
+          "EMP-162",
+          "EMP-164",
+          "EMP-168",
+          "EMP-173",
+          "EMP-176",
+          "EMP-177",
+          "EMP-180",
+          "EMP-183",
+          "EMP-186",
+          "EMP-192",
+          "EMP-195",
+          "EMP-200",
+          "EMP-203"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "Java",
+        "holder_count": 69,
+        "holders": [
+          "EMP-003",
+          "EMP-004",
+          "EMP-006",
+          "EMP-008",
+          "EMP-010",
+          "EMP-013",
+          "EMP-014",
+          "EMP-017",
+          "EMP-021",
+          "EMP-024",
+          "EMP-027",
+          "EMP-030",
+          "EMP-031",
+          "EMP-034",
+          "EMP-036",
+          "EMP-037",
+          "EMP-045",
+          "EMP-047",
+          "EMP-050",
+          "EMP-051",
+          "EMP-053",
+          "EMP-056",
+          "EMP-072",
+          "EMP-073",
+          "EMP-074",
+          "EMP-078",
+          "EMP-080",
+          "EMP-086",
+          "EMP-087",
+          "EMP-092",
+          "EMP-095",
+          "EMP-100",
+          "EMP-105",
+          "EMP-106",
+          "EMP-111",
+          "EMP-115",
+          "EMP-118",
+          "EMP-121",
+          "EMP-122",
+          "EMP-123",
+          "EMP-129",
+          "EMP-132",
+          "EMP-134",
+          "EMP-137",
+          "EMP-138",
+          "EMP-139",
+          "EMP-140",
+          "EMP-142",
+          "EMP-143",
+          "EMP-144",
+          "EMP-149",
+          "EMP-159",
+          "EMP-161",
+          "EMP-163",
+          "EMP-166",
+          "EMP-169",
+          "EMP-172",
+          "EMP-174",
+          "EMP-178",
+          "EMP-181",
+          "EMP-184",
+          "EMP-187",
+          "EMP-189",
+          "EMP-191",
+          "EMP-193",
+          "EMP-196",
+          "EMP-198",
+          "EMP-201",
+          "EMP-204"
+        ],
+        "scarce": false
+      },
+      {
+        "skill": "React",
+        "holder_count": 71,
+        "holders": [
+          "EMP-001",
+          "EMP-002",
+          "EMP-007",
+          "EMP-011",
+          "EMP-014",
+          "EMP-016",
+          "EMP-018",
+          "EMP-019",
+          "EMP-020",
+          "EMP-024",
+          "EMP-026",
+          "EMP-028",
+          "EMP-029",
+          "EMP-032",
+          "EMP-038",
+          "EMP-039",
+          "EMP-046",
+          "EMP-048",
+          "EMP-054",
+          "EMP-057",
+          "EMP-060",
+          "EMP-062",
+          "EMP-064",
+          "EMP-067",
+          "EMP-068",
+          "EMP-069",
+          "EMP-070",
+          "EMP-071",
+          "EMP-073",
+          "EMP-075",
+          "EMP-077",
+          "EMP-079",
+          "EMP-083",
+          "EMP-084",
+          "EMP-085",
+          "EMP-088",
+          "EMP-094",
+          "EMP-098",
+          "EMP-100",
+          "EMP-103",
+          "EMP-107",
+          "EMP-109",
+          "EMP-110",
+          "EMP-113",
+          "EMP-115",
+          "EMP-116",
+          "EMP-121",
+          "EMP-122",
+          "EMP-124",
+          "EMP-125",
+          "EMP-126",
+          "EMP-132",
+          "EMP-133",
+          "EMP-135",
+          "EMP-137",
+          "EMP-139",
+          "EMP-141",
+          "EMP-143",
+          "EMP-144",
+          "EMP-146",
+          "EMP-149",
+          "EMP-150",
+          "EMP-152",
+          "EMP-153",
+          "EMP-155",
+          "EMP-159",
+          "EMP-160",
+          "EMP-161",
+          "EMP-165",
+          "EMP-171",
+          "EMP-185"
+        ],
+        "scarce": false
+      }
+    ]
+  }
+}
