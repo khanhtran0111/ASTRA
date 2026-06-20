@@ -10,8 +10,8 @@
     "build": "pnpm generate-routes && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "NODE_OPTIONS='--no-experimental-webstorage' vitest run",
-    "test:watch": "NODE_OPTIONS='--no-experimental-webstorage' vitest",
+    "test": "cross-env NODE_OPTIONS='--no-experimental-webstorage' vitest run",
+    "test:watch": "cross-env NODE_OPTIONS='--no-experimental-webstorage' vitest",
     "test:e2e": "playwright test",
     "typecheck": "pnpm generate-routes && tsc -b --noEmit"
   },

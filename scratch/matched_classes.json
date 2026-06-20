@@ -1,0 +1,91 @@
+[
+  {
+    "classId": "CLS-001",
+    "skillName": "Kubernetes",
+    "trainees": [
+      "EMP-100",
+      "EMP-117",
+      "EMP-164",
+      "EMP-165",
+      "EMP-167",
+      "EMP-168",
+      "EMP-170",
+      "EMP-171",
+      "EMP-173",
+      "EMP-174",
+      "EMP-176",
+      "EMP-177",
+      "EMP-178"
+    ],
+    "assignedTrainer": null,
+    "isExternalRequired": true,
+    "fallbackReason": "CAPACITY_EXCEEDED",
+    "targetQuarter": "Q3_2026",
+    "evidence": {
+      "bodGoals": ["GOAL-2026-07"],
+      "projectIds": ["PRJ-002", "PRJ-005", "PRJ-007", "PRJ-009"],
+      "surveyIds": ["SUR_2025_Q4"]
+    },
+    "priorityScore": 98,
+    "estimatedHours": 40,
+    "learningFormat": "ONLINE_COURSE",
+    "formatExplanation": "Capacity exceeded with internal trainers; opting for a comprehensive online course.",
+    "evaluationCriteria": "Completion of course and project implementation",
+    "durationWeeks": 8
+  },
+  {
+    "classId": "CLS-002",
+    "skillName": "CI/CD",
+    "trainees": [
+      "EMP-053",
+      "EMP-094",
+      "EMP-177",
+      "EMP-179",
+      "EMP-182",
+      "EMP-185",
+      "EMP-187",
+      "EMP-190",
+      "EMP-192",
+      "EMP-195",
+      "EMP-197",
+      "EMP-200",
+      "EMP-202",
+      "EMP-205"
+    ],
+    "assignedTrainer": null,
+    "isExternalRequired": true,
+    "fallbackReason": "SKILL_NOT_FOUND_INTERNAL",
+    "targetQuarter": "Q3_2026",
+    "evidence": {
+      "bodGoals": ["GOAL-2026-07"],
+      "projectIds": ["PRJ-005", "PRJ-009"],
+      "surveyIds": ["SUR_2025_Q4"]
+    },
+    "priorityScore": 90,
+    "estimatedHours": 30,
+    "learningFormat": "EXTERNAL_TRAINER",
+    "formatExplanation": "Skill not found internally; hiring an external trainer for hands-on workshop.",
+    "evaluationCriteria": "Successful deployment of CI/CD pipelines",
+    "durationWeeks": 6
+  },
+  {
+    "classId": "CLS-003",
+    "skillName": "IaC",
+    "trainees": ["EMP-179"],
+    "assignedTrainer": null,
+    "isExternalRequired": true,
+    "fallbackReason": "SKILL_NOT_FOUND_INTERNAL",
+    "targetQuarter": "Q3_2026",
+    "evidence": {
+      "bodGoals": ["GOAL-2026-07"],
+      "projectIds": [],
+      "surveyIds": []
+    },
+    "priorityScore": 58,
+    "estimatedHours": 30,
+    "learningFormat": "GROUP_STUDY",
+    "formatExplanation": "Skill not found internally; using group study to leverage self-paced learning.",
+    "evaluationCriteria": "Integration of IaC practices into current projects",
+    "durationWeeks": 6
+  }
+]
