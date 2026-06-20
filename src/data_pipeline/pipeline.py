@@ -42,8 +42,12 @@ def _ts() -> str:
 
 def _write_json(path: str, obj) -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
+    # newline="\n" pins LF on Windows too — otherwise Python's text-mode "w"
+    # translates every \n to \r\n, and the JS/TS monorepo's biome formatter
+    # (which expects LF) flags the whole file as "needs formatting" in CI.
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(obj, f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
 
 def run_pipeline(
