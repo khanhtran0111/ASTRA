@@ -1,0 +1,8 @@
+Goal_ID,Goal_Description,Target_Quarter
+GOAL-2025-08,"Prepare selected employees with interview skills for technical leadership roles, covering leadership responsibilities, problem-solving approaches, team communication, and technical experience across web/backend/DB/system design/infra/cloud domains.",Q3_2025
+GOAL-2025-09,"Address technical skill gaps required by current project demands, focusing on platform-specific testing experience and automation test framework knowledge to align with client requirements.",Q3_2025
+GOAL-2025-11,"Build next-generation DevOps capability capable of supporting AI-heavy projects with high traffic, using modern LLM-serving technology stacks.",Q4_2025
+GOAL-2026-01,Develop next-generation leadership pipeline with team-leading capability and strong communication skills to support organizational growth.,Q1_2026
+GOAL-2026-04,Train engineering staff to achieve AI application proficiency and earn professional certifications in AI tools and architecture.,Q2_2026
+GOAL-2026-07,"Upskill at least 60% of development team in cloud-native technologies (Kubernetes, CI/CD, IaC) to support cloud-first project delivery.",Q3_2026
+GOAL-2026-10,Establish internal AI agent development competency so teams can prototype and deploy AI-powered workflows independently.,Q4_2026

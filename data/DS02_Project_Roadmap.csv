@@ -1,0 +1,21 @@
+Project_ID,Required_Skills,Timeline
+PRJ-001,"Python, FastAPI, PostgreSQL, Docker",Q1–Q2 2025
+PRJ-002,"Java, Spring Boot, Kubernetes, AWS",Q2–Q3 2025
+PRJ-003,"ReactJS, NodeJS, MongoDB, Redis",Q3–Q4 2025
+PRJ-004,"Python, TensorFlow, MLOps, GCP",Q1–Q2 2026
+PRJ-005,"FastAPI, Kubernetes, Docker, CI/CD",Q2–Q3 2026
+PRJ-006,".NET, Angular, SQL Server, Azure",Q3–Q4 2025
+PRJ-007,"Golang, gRPC, Kafka, Kubernetes",Q4 2025–Q1 2026
+PRJ-008,"Python, LangChain, OpenAI API, Vector DB, Docker",Q1–Q2 2026
+PRJ-009,"AWS, Terraform, Kubernetes, Security (OWASP), CI/CD",Q2–Q3 2026
+PRJ-010,"Azure, .NET, AI Services, Power Platform",Q3–Q4 2026
+PRJ-011,"GCP, BigQuery, Vertex AI, MLOps, Python",Q1–Q2 2027
+PRJ-012,"Cybersecurity, Penetration Testing, SIEM, SOC",Q2–Q3 2026
+PRJ-013,"React, NodeJS, AWS Lambda, DynamoDB, Cognito",Q3–Q4 2026
+PRJ-014,"LLM Fine-tuning, RAG, Claude API, Prompt Engineering",Q1–Q2 2027
+PRJ-015,"DevSecOps, Container Security, Vault, IAM",Q2–Q3 2027
+PRJ-016,"Multi-cloud (AWS/Azure/GCP), Cost Optimization, FinOps",Q3–Q4 2027
+PRJ-017,"AI Agent Development, AutoGen, CrewAI, Python",Q1–Q2 2027
+PRJ-018,"React Native, iOS, Android, Firebase, GraphQL",Q2–Q3 2026
+PRJ-019,"Data Engineering, Airflow, Spark, Databricks, Delta Lake",Q3–Q4 2026
+PRJ-020,"Computer Vision, TensorFlow, PyTorch, Edge AI, IoT",Q1–Q2 2027

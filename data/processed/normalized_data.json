@@ -1,0 +1,6785 @@
+{
+  "_source_status": {
+    "DS01": "ok",
+    "DS02": "ok",
+    "DS03": "ok",
+    "DS04": "ok",
+    "DS05": "ok"
+  },
+  "employees": [
+    {
+      "employee_id": "EMP-001",
+      "position": "Software Developer",
+      "current_skills": [
+        "C#",
+        "Python",
+        "React",
+        "Angular",
+        "SQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud",
+        "Automation",
+        "Version Control (Git)",
+        "Containerization"
+      ],
+      "_raw_skills": "C#; Python; ReactJS; Angular; SQL",
+      "_raw_skill_gap": "Cloud, Automation; Version Control (Git), Containerization"
+    },
+    {
+      "employee_id": "EMP-002",
+      "position": ".NET Developer",
+      "current_skills": [
+        "C#",
+        "Angular",
+        "React",
+        "Python"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Data Analysis",
+        "Version Control (Git)",
+        "Containerization"
+      ],
+      "_raw_skills": "C#; Angular; React; Python",
+      "_raw_skill_gap": "Data Analysis; Version Control (Git), Containerization"
+    },
+    {
+      "employee_id": "EMP-003",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Selenium",
+        "Java",
+        "SQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing",
+        "System Architecture"
+      ],
+      "_raw_skills": "Selenium; Java; SQL",
+      "_raw_skill_gap": "Automation Testing, API Testing, Performance Testing, System Architecture"
+    },
+    {
+      "employee_id": "EMP-004",
+      "position": "Project Manager",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Kotlin",
+        "Docker",
+        "AWS"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning",
+        "AI Tools & Copilot Usage",
+        "Technical Leadership"
+      ],
+      "_raw_skills": "Java; Spring Boot; Kotlin; Docker; AWS",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning, AI Tools & Copilot Usage, Technical Leadership"
+    },
+    {
+      "employee_id": "EMP-005",
+      "position": "Data Scientist",
+      "current_skills": [
+        "Python",
+        "C/C++"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "ETL/Data Pipeline",
+        "Data Visualization",
+        "ML Integration"
+      ],
+      "_raw_skills": "Python; C/C++",
+      "_raw_skill_gap": "ETL/Data Pipeline, Data Visualization, ML Integration"
+    },
+    {
+      "employee_id": "EMP-006",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript",
+        "SQL",
+        "HTML",
+        "CSS",
+        "Python",
+        "Java"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "JavaScript; SQL; HTML; CSS; Python; Java",
+      "_raw_skill_gap": "Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-007",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "NestJS",
+        "Next.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "UI/UX",
+        "Version Control (Git)",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; NodeJS; NestJS; NextJS",
+      "_raw_skill_gap": "Automation Testing, UI/UX; Version Control (Git), Containerization"
+    },
+    {
+      "employee_id": "EMP-008",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "Oracle",
+        "Redis",
+        "Kafka"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Version Control (Git)",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; MySQL; Oracle; Redis; Kafka",
+      "_raw_skill_gap": "Version Control (Git), Containerization"
+    },
+    {
+      "employee_id": "EMP-009",
+      "position": "Accountant",
+      "current_skills": [
+        "Office tools",
+        "Accounting software"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "Office tools; Accounting software",
+      "_raw_skill_gap": "AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-010",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "Java; Spring Boot",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-011",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "JavaScript; TypeScript; ReactJS; NodeJS",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-012",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Postman",
+        "BigQuery",
+        "Jira"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Version Control (Git)",
+        "Containerization",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Postman; BigQuery; Jira",
+      "_raw_skill_gap": "Version Control (Git), Containerization, Cloud Services"
+    },
+    {
+      "employee_id": "EMP-013",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Python",
+        "JavaScript",
+        "Spring Boot",
+        "MySQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Deep Learning",
+        "Reinforcement Learning",
+        "Version Control (Git)"
+      ],
+      "_raw_skills": "Java; Python; JavaScript; SpringBoot; MySQL",
+      "_raw_skill_gap": "Deep Learning, Reinforcement Learning; Version Control (Git)"
+    },
+    {
+      "employee_id": "EMP-014",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "C#",
+        "JavaScript",
+        "NestJS",
+        ".NET",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; C#; JavaScript; NestJS; .NET; ReactJS",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-015",
+      "position": "Data Scientist",
+      "current_skills": [
+        "Python"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "ETL/Data Pipeline",
+        "Data Visualization",
+        "ML Integration"
+      ],
+      "_raw_skills": "Python",
+      "_raw_skill_gap": "ETL/Data Pipeline, Data Visualization, ML Integration"
+    },
+    {
+      "employee_id": "EMP-016",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "TypeScript",
+        "Python",
+        "React",
+        "Next.js",
+        "Kubernetes",
+        "GCP"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "UI/UX",
+        "System Design"
+      ],
+      "_raw_skills": "JavaScript; TypeScript; Python; ReactJS; NextJS; K8s; GCloud",
+      "_raw_skill_gap": "Automation Testing, UI/UX; System Design"
+    },
+    {
+      "employee_id": "EMP-017",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Postman",
+        "MySQL",
+        "BigQuery",
+        "Cucumber",
+        "Java"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "Postman; MySQL; BigQuery; Cucumber; Java",
+      "_raw_skill_gap": "Automation Testing, Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-018",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React",
+        "NestJS",
+        "Next.js",
+        "MySQL",
+        "MongoDB",
+        "Firebase",
+        "AWS"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Figma",
+        "Version Control (Git)"
+      ],
+      "_raw_skills": "ReactJS; NestJS; NextJS; MySQL; MongoDB; Firebase; AWS",
+      "_raw_skill_gap": "UI/UX Design, Figma; Version Control (Git)"
+    },
+    {
+      "employee_id": "EMP-019",
+      "position": "Technical Lead",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; PostgreSQL",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-020",
+      "position": "QA Engineer",
+      "current_skills": [
+        "PHP",
+        "Laravel",
+        "SQL",
+        "Vue.js",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "PHP; Laravel; SQL; VueJS; ReactJS",
+      "_raw_skill_gap": "Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-021",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Spring Boot; MySQL",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-022",
+      "position": "AI Engineer",
+      "current_skills": [
+        "Python",
+        "PySpark",
+        "MySQL",
+        "PyTorch"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "MLOps",
+        "LLM/GenAI",
+        "Model Deployment"
+      ],
+      "_raw_skills": "Python; pySpark; MySQL; PyTorch",
+      "_raw_skill_gap": "MLOps, LLM/GenAI, Model Deployment"
+    },
+    {
+      "employee_id": "EMP-023",
+      "position": "Python Developer",
+      "current_skills": [
+        "Python",
+        "Azure"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Containerization",
+        "Testing",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "Python; Azure",
+      "_raw_skill_gap": "Containerization, Testing, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-024",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python",
+        "Node.js",
+        "Go",
+        "Java",
+        "React",
+        "PostgreSQL",
+        "AWS"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Version Control (Git)"
+      ],
+      "_raw_skills": "Python; NodeJS; Golang; Java; ReactJS; PostgreSQL; AWS",
+      "_raw_skill_gap": "DevOps; Version Control (Git)"
+    },
+    {
+      "employee_id": "EMP-025",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Playwright",
+        "JavaScript"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Manual QA",
+        "SQL Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Playwright; JavaScript",
+      "_raw_skill_gap": "Manual QA, SQL Testing, API Testing; Performance Testing"
+    },
+    {
+      "employee_id": "EMP-026",
+      "position": "Software Developer",
+      "current_skills": [
+        "Node.js",
+        "Python",
+        "React",
+        "FastAPI",
+        "MySQL",
+        "MongoDB",
+        "PostgreSQL",
+        "Redis"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "NodeJS; Python; ReactJS; FastAPI; MySQL; MongoDB; PostgreSQL; Redis",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-027",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Selenium",
+        "Java",
+        "TestNG"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing",
+        "AI Tools"
+      ],
+      "_raw_skills": "Selenium; Java; TestNG",
+      "_raw_skill_gap": "Automation Testing, API Testing, Performance Testing, AI Tools"
+    },
+    {
+      "employee_id": "EMP-028",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "PostgreSQL",
+        "Node.js",
+        "Docker"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Automation Testing",
+        "UI/UX",
+        "Cloud Services"
+      ],
+      "_raw_skills": "ReactJS; PostgreSQL; NodeJS; Docker",
+      "_raw_skill_gap": "DevOps, Automation Testing, UI/UX; Cloud Services"
+    },
+    {
+      "employee_id": "EMP-029",
+      "position": "Technical Lead",
+      "current_skills": [
+        "Node.js",
+        "React",
+        "FastAPI",
+        "Data Engineering"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "NodeJS; React; FastAPI; Data Engineering",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-030",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Java EE",
+        "Selenium",
+        "MySQL",
+        "MongoDB"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; JavaEE; Selenium; MySQL; MongoDB",
+      "_raw_skill_gap": "Automation Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-031",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "PostgreSQL",
+        "Docker",
+        "Kubernetes",
+        "GCP",
+        "AWS"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Testing",
+        "System Design",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "Java; SpringBoot; PostgreSQL; Docker; Kubernetes; GCP; AWS",
+      "_raw_skill_gap": "Testing, System Design, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-032",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Node.js",
+        "Go",
+        "JavaScript",
+        "React",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Frontend",
+        "Containerization"
+      ],
+      "_raw_skills": "NodeJS; Go; JavaScript; ReactJS; PostgreSQL",
+      "_raw_skill_gap": "Frontend; Containerization"
+    },
+    {
+      "employee_id": "EMP-033",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "JavaScript",
+      "_raw_skill_gap": "Automation Testing, API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-034",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "JUnit",
+        "Mockito",
+        "PostgreSQL",
+        "Python"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Spring Boot; JUnit; Mockito; PostgreSQL; Python",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-035",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Python",
+        "R",
+        "SQL",
+        "Machine Learning"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "AI/ML Engineering",
+        "Containerization"
+      ],
+      "_raw_skills": "Python; R; SQL; Machine Learning Libraries",
+      "_raw_skill_gap": "AI/ML Engineering; Containerization"
+    },
+    {
+      "employee_id": "EMP-036",
+      "position": "DevOps Engineer",
+      "current_skills": [
+        "C#",
+        "Java",
+        "PHP",
+        "Node.js",
+        "Go",
+        "Python",
+        "Docker",
+        "Kubernetes"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Kubernetes",
+        "Monitoring/Observability"
+      ],
+      "_raw_skills": "C#; Java; PHP; NodeJS; Golang; Python; Docker; K8s",
+      "_raw_skill_gap": "Container Orchestration, Monitoring/Observability"
+    },
+    {
+      "employee_id": "EMP-037",
+      "position": "DevOps Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Python",
+        "FastAPI",
+        "Go",
+        "Terraform",
+        "Ansible",
+        "AWS",
+        "GCP",
+        "Docker",
+        "Kubernetes"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevSecOps",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Spring Boot; Python; FastAPI; Golang; Terraform; Ansible; AWS; GCP; Docker; Kubernetes",
+      "_raw_skill_gap": "DevSecOps, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-038",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "ReactJS",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-039",
+      "position": "Software Engineer",
+      "current_skills": [
+        "React"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Backend (.NET)",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS",
+      "_raw_skill_gap": "Backend (.NET); Containerization"
+    },
+    {
+      "employee_id": "EMP-040",
+      "position": "Software Developer",
+      "current_skills": [
+        "PHP",
+        "Laravel",
+        "MySQL",
+        "JavaScript"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "PHP; Laravel; MySQL; JavaScript",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-041",
+      "position": "AI Engineer",
+      "current_skills": [
+        "Python"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "MLOps",
+        "LLM/GenAI"
+      ],
+      "_raw_skills": "Python",
+      "_raw_skill_gap": "MLOps, LLM/GenAI"
+    },
+    {
+      "employee_id": "EMP-042",
+      "position": "Mobile Developer",
+      "current_skills": [
+        "Flutter"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "Flutter",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-043",
+      "position": "QA Engineer",
+      "current_skills": [
+        "MySQL",
+        "Postman",
+        "JMeter"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation (Cypress/JavaScript)",
+        "Security Testing"
+      ],
+      "_raw_skills": "MySQL; Postman; JMeter",
+      "_raw_skill_gap": "Automation (Cypress/JavaScript); Security Testing"
+    },
+    {
+      "employee_id": "EMP-044",
+      "position": "AI Engineer",
+      "current_skills": [
+        "Python",
+        "C/C++"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Data Engineering",
+        "MLOps",
+        "LLM/GenAI"
+      ],
+      "_raw_skills": "Python; C/C++",
+      "_raw_skill_gap": "Data Engineering; MLOps, LLM/GenAI"
+    },
+    {
+      "employee_id": "EMP-045",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "JavaScript",
+        "Spring Boot",
+        "Angular",
+        "MySQL",
+        "PostgreSQL",
+        "Docker",
+        "Kafka",
+        "Redis"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Frontend Angular",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; JavaScript; Spring Boot; Angular; MySQL; PostgreSQL; Docker; Kafka; Redis",
+      "_raw_skill_gap": "Frontend Angular; Cloud Services"
+    },
+    {
+      "employee_id": "EMP-046",
+      "position": "QA Engineer",
+      "current_skills": [
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Manual Testing",
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "ReactJS",
+      "_raw_skill_gap": "Manual Testing; Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-047",
+      "position": "Java Technical Lead",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Kafka",
+        "SQL",
+        "Redis"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "Java; Spring Boot; Kafka; SQL; Redis",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-048",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        ".NET",
+        "SQL Server",
+        "PostgreSQL",
+        "Vue.js",
+        "React",
+        "Node.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "ASP.NET Core; SQL Server; PostgreSQL; VueJS; ReactJS; NodeJS",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-049",
+      "position": ".NET Developer",
+      "current_skills": [
+        ".NET",
+        "C#",
+        "SQL Server",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": ".NET; C#; SQL Server; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-050",
+      "position": "Mobile Developer",
+      "current_skills": [
+        "Java",
+        "Swift",
+        "Kotlin"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "Java; Swift; Kotlin",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-051",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Cucumber",
+        "JavaScript",
+        "TypeScript",
+        "Jest",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "Java; Cucumber; JavaScript; TypeScript; Jest; PostgreSQL",
+      "_raw_skill_gap": "Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-052",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python",
+        "SQL Server",
+        "Oracle"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Data Analysis",
+        "Data Science",
+        "Containerization"
+      ],
+      "_raw_skills": "Python; MS SQL; Oracle SQL",
+      "_raw_skill_gap": "Data Analysis, Data Science; Containerization"
+    },
+    {
+      "employee_id": "EMP-053",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "JavaScript",
+        "Selenium",
+        "MySQL",
+        "MongoDB"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; Spring Boot; JavaScript; Selenium; MySQL; MongoDB",
+      "_raw_skill_gap": "Automation Testing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-054",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React",
+        "Angular"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "NodeJS Backend",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; Angular",
+      "_raw_skill_gap": "NodeJS Backend; Containerization"
+    },
+    {
+      "employee_id": "EMP-055",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Python",
+        "Django",
+        "PostgreSQL",
+        "FastAPI"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Python; Django; PostgreSQL; FastAPI",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-056",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Spring Boot; MySQL; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-057",
+      "position": "Web Developer",
+      "current_skills": [
+        "CodeIgniter",
+        "Laravel",
+        "React",
+        "MySQL",
+        "MongoDB",
+        "Python",
+        "Ruby"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "CodeIgniter; Laravel; ReactJS; MySQL; MongoDB; Python; Ruby",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-058",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Data Engineering",
+        "AI",
+        "Containerization"
+      ],
+      "_raw_skills": "Python",
+      "_raw_skill_gap": "DevOps, Data Engineering, AI; Containerization"
+    },
+    {
+      "employee_id": "EMP-059",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "SQL Server"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Python; FastAPI; PostgreSQL; MSSQL Server",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-060",
+      "position": "Backend Technical Lead",
+      "current_skills": [
+        "AWS",
+        ".NET",
+        "C#",
+        "Node.js",
+        "NestJS",
+        "Go",
+        "SQL Server",
+        "PostgreSQL",
+        "MongoDB",
+        "DynamoDB",
+        "React"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps & Infrastructure",
+        "Data Engineering",
+        "Agile/Scrum"
+      ],
+      "_raw_skills": "AWS; .NET; C#; NodeJS; NestJS; Golang; SQL Server; PostgreSQL; MongoDB; DynamoDB; React",
+      "_raw_skill_gap": "DevOps & Infrastructure, Data Engineering; Agile/Scrum"
+    },
+    {
+      "employee_id": "EMP-061",
+      "position": "Data Engineer",
+      "current_skills": [
+        "Azure",
+        "AWS",
+        "GCP",
+        "Python",
+        "Spark"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Data Visualization",
+        "ML Integration"
+      ],
+      "_raw_skills": "Azure; AWS; GCP; Python; Spark",
+      "_raw_skill_gap": "Data Visualization, ML Integration"
+    },
+    {
+      "employee_id": "EMP-062",
+      "position": "AI Engineer",
+      "current_skills": [
+        "Python",
+        "React",
+        "PostgreSQL",
+        "MongoDB",
+        "FastAPI",
+        "LLM/GenAI"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "Data Analysis",
+        "MLOps",
+        "Model Deployment"
+      ],
+      "_raw_skills": "Python; ReactJS; PostgreSQL; MongoDB; FastAPI; LLM Tools",
+      "_raw_skill_gap": "DevOps, Data Analysis; MLOps, Model Deployment"
+    },
+    {
+      "employee_id": "EMP-063",
+      "position": "QA Engineer",
+      "current_skills": [
+        "SQL",
+        "Postman"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "SQL; Postman",
+      "_raw_skill_gap": "Automation Testing, Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-064",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; NodeJS",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-065",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python",
+        "Django",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Python; Django; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-066",
+      "position": ".NET Developer",
+      "current_skills": [
+        ".NET",
+        "Angular"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "AWS",
+        "Azure DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": ".NET; Angular",
+      "_raw_skill_gap": "AWS, Azure DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-067",
+      "position": "Software Developer",
+      "current_skills": [
+        "PHP",
+        "Magento",
+        "Laravel",
+        "JavaScript",
+        "React"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "AI Tools & Copilot Usage",
+        "Containerization"
+      ],
+      "_raw_skills": "PHP; Magento; Laravel; JavaScript; ReactJS",
+      "_raw_skill_gap": "AI Tools & Copilot Usage; Containerization"
+    },
+    {
+      "employee_id": "EMP-068",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "React",
+        "PostgreSQL",
+        "Node.js"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "UI/UX",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; PostgreSQL; NodeJS",
+      "_raw_skill_gap": "DevOps, UI/UX; Containerization"
+    },
+    {
+      "employee_id": "EMP-069",
+      "position": "Software Developer",
+      "current_skills": [
+        "C#",
+        ".NET",
+        "React",
+        "NestJS",
+        "AWS",
+        "Azure"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "C#; .NET; ReactJS; NestJS; AWS; Azure",
+      "_raw_skill_gap": "Automation Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-070",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        ".NET",
+        "React",
+        "NestJS",
+        "PostgreSQL",
+        "SQL Server"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "ASP.NET; ReactJS; NestJS; PostgreSQL; SQL Server",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-071",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Node.js",
+        "SQL",
+        "Python"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "JavaScript; TypeScript; React; NodeJS; SQL; Python",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-072",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript",
+        "Selenium",
+        "Java",
+        "Maven"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "JavaScript; Selenium; Java; Maven",
+      "_raw_skill_gap": "API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-073",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "SQL",
+        "Python",
+        "Copilot AI"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; SQL; Python; Copilot AI",
+      "_raw_skill_gap": "Containerization"
+    },
+    {
+      "employee_id": "EMP-074",
+      "position": "Mobile Developer",
+      "current_skills": [
+        "Swift",
+        "Java",
+        "Objective-C"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "Swift; Java; Objective-C",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-075",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "Angular",
+        "React",
+        "Next.js",
+        "React Testing Library"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "JavaScript; Angular; ReactJS; NextJS; React Testing Library",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-076",
+      "position": "Data Engineer",
+      "current_skills": [
+        "Python",
+        "PySpark",
+        "AWS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "ML/AI",
+        "Data Visualization"
+      ],
+      "_raw_skills": "Python; pySpark; AWS",
+      "_raw_skill_gap": "ML/AI; Data Visualization"
+    },
+    {
+      "employee_id": "EMP-077",
+      "position": "Data Scientist",
+      "current_skills": [
+        "React",
+        "Angular",
+        "Node.js",
+        "FastAPI",
+        "MySQL",
+        "PostgreSQL",
+        "PyTorch",
+        "TensorFlow",
+        "Scikit-learn"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "ETL/Data Pipeline",
+        "ML Integration"
+      ],
+      "_raw_skills": "React; Angular; NodeJS; FastAPI; MySQL; PostgreSQL; PyTorch; TensorFlow; Scikit-learn",
+      "_raw_skill_gap": "ETL/Data Pipeline, ML Integration"
+    },
+    {
+      "employee_id": "EMP-078",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Hibernate",
+        "PostgreSQL",
+        "MySQL",
+        "Oracle"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "System Design",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; Hibernate; PostgreSQL; MySQL; Oracle",
+      "_raw_skill_gap": "System Design; Containerization"
+    },
+    {
+      "employee_id": "EMP-079",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "Express",
+        "GitHub Actions",
+        "Figma"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; NodeJS; Express; GitHub Actions; Figma",
+      "_raw_skill_gap": "Containerization"
+    },
+    {
+      "employee_id": "EMP-080",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Spring Boot; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-081",
+      "position": "Data Engineer",
+      "current_skills": [
+        "Python",
+        "SQL",
+        "Terraform",
+        "AWS",
+        "GCP"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "ETL/Data Pipeline",
+        "Data Visualization"
+      ],
+      "_raw_skills": "Python; SQL; Terraform; AWS; GCP",
+      "_raw_skill_gap": "DevOps; ETL/Data Pipeline, Data Visualization"
+    },
+    {
+      "employee_id": "EMP-082",
+      "position": "Python Developer",
+      "current_skills": [
+        "Python",
+        "C#"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Python; C#",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-083",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "TypeScript",
+        "JavaScript",
+        "Node.js",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Python",
+        "Java",
+        "Containerization"
+      ],
+      "_raw_skills": "TypeScript; JavaScript; NodeJS; ReactJS",
+      "_raw_skill_gap": "Python, Java; Containerization"
+    },
+    {
+      "employee_id": "EMP-084",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "Node.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "ReactJS; NodeJS",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-085",
+      "position": "Software Developer",
+      "current_skills": [
+        "React"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-086",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; PostgreSQL",
+      "_raw_skill_gap": "Containerization"
+    },
+    {
+      "employee_id": "EMP-087",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Go",
+        "Spring Boot"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "Java; Golang; Spring Boot; Go Gin",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-088",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "NestJS",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "ReactJS; NestJS; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-089",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Playwright",
+        "TypeScript"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing",
+        "AI Tools"
+      ],
+      "_raw_skills": "Playwright; TypeScript",
+      "_raw_skill_gap": "Automation Testing, API Testing, Performance Testing, AI Tools"
+    },
+    {
+      "employee_id": "EMP-090",
+      "position": "Data Scientist",
+      "current_skills": [
+        "Python"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "ETL/Data Pipeline",
+        "Data Visualization"
+      ],
+      "_raw_skills": "Python",
+      "_raw_skill_gap": "DevOps; ETL/Data Pipeline, Data Visualization"
+    },
+    {
+      "employee_id": "EMP-091",
+      "position": "Software Developer",
+      "current_skills": [
+        "PHP",
+        "Laravel",
+        "Python",
+        "Go",
+        "Vue.js",
+        "Node.js",
+        "MySQL",
+        "PostgreSQL",
+        "MongoDB"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services"
+      ],
+      "_raw_skills": "PHP; Laravel; Python; Golang; VueJS; NodeJS; MySQL; PostgreSQL; MongoDB",
+      "_raw_skill_gap": "Cloud Services"
+    },
+    {
+      "employee_id": "EMP-092",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "Go",
+        "Spring Boot",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Golang; Spring Boot; PostgreSQL",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-093",
+      "position": "Team Lead",
+      "current_skills": [
+        "Node.js",
+        "Python",
+        "Go",
+        "PHP",
+        "PostgreSQL",
+        "MySQL",
+        "Redis",
+        "Message-Queue"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "NodeJS; Python; Golang; PHP; PostgreSQL; MySQL; Redis; Message-Queue",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-094",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Node.js",
+        "NestJS",
+        "React",
+        "PostgreSQL",
+        "Python",
+        "FastAPI",
+        "Docker",
+        "AWS"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "CI/CD",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "NodeJS; NestJS; ReactJS; PostgreSQL; Python; FastAPI; Docker; AWS",
+      "_raw_skill_gap": "CI/CD, Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-095",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "C++",
+        "JavaScript",
+        "Express",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; C++; JavaScript; Express; SQL",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-096",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Python Selenium",
+        "MySQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python Selenium; MySQL",
+      "_raw_skill_gap": "Automation Testing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-097",
+      "position": "Software Developer",
+      "current_skills": [
+        "Go",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Golang; PostgreSQL",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-098",
+      "position": "Software Engineer",
+      "current_skills": [
+        "TypeScript",
+        "Node.js",
+        "React",
+        "Python",
+        "FastAPI",
+        "LangChain",
+        "Airflow",
+        "Kubernetes",
+        "Kafka"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "AI Agents",
+        "LLMs",
+        "Testing",
+        "System Architecture"
+      ],
+      "_raw_skills": "TypeScript; NodeJS; React; Python; FastAPI; LangChain; Airflow; Kubernetes; Kafka",
+      "_raw_skill_gap": "DevOps, AI Agents, LLMs; Testing, System Architecture"
+    },
+    {
+      "employee_id": "EMP-099",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Python",
+        "MySQL",
+        "Selenium"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python; MySQL; Selenium",
+      "_raw_skill_gap": "Automation Testing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-100",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL",
+        "Selenium",
+        "Cucumber",
+        "TypeScript"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps (AWS",
+        "Terraform",
+        "K8s)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; PostgreSQL; Selenium; Cucumber; TypeScript",
+      "_raw_skill_gap": "DevOps (AWS, Terraform, K8s); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-101",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "SQL",
+        "Python",
+        "Terraform",
+        "Ansible",
+        "AWS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Frontend",
+        "Backend",
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; SQL; Python; Terraform; Ansible; AWS",
+      "_raw_skill_gap": "Frontend, Backend, DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-102",
+      "position": "Software Developer",
+      "current_skills": [
+        ".NET",
+        "PHP",
+        "JavaScript",
+        "MySQL",
+        "SQL Server"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": ".NET; PHP; JavaScript; MySQL; SQL Server",
+      "_raw_skill_gap": "AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-103",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "GCP"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; PostgreSQL; GCP",
+      "_raw_skill_gap": "Automation Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-104",
+      "position": "UI/UX Designer",
+      "current_skills": [
+        "Figma"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Marketing",
+        "Frontend HTML/CSS",
+        "User Research",
+        "Prototyping"
+      ],
+      "_raw_skills": "Figma",
+      "_raw_skill_gap": "Marketing, Frontend HTML/CSS; User Research, Prototyping"
+    },
+    {
+      "employee_id": "EMP-105",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Spring Webflux",
+        "Spring Security",
+        "MySQL",
+        "MongoDB",
+        "Redis"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; Spring Webflux; Spring Security; MySQL; MongoDB; Redis",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-106",
+      "position": "CTO",
+      "current_skills": [
+        "C++",
+        "Java"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Business Management",
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "C++; Java",
+      "_raw_skill_gap": "Business Management; Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-107",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; NodeJS",
+      "_raw_skill_gap": "Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-108",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Manual Testing",
+        "API",
+        "SQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Documentation",
+        "Containerization"
+      ],
+      "_raw_skills": "Manual Testing; API; SQL",
+      "_raw_skill_gap": "Documentation; Containerization"
+    },
+    {
+      "employee_id": "EMP-109",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "React",
+        "NestJS",
+        "TypeScript",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Python",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; NestJS; TypeScript; PostgreSQL",
+      "_raw_skill_gap": "Python; Containerization"
+    },
+    {
+      "employee_id": "EMP-110",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Node.js",
+        "TypeScript",
+        "NestJS",
+        "PostgreSQL",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Manual Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "NodeJS; TypeScript; NestJS; PostgreSQL; ReactJS",
+      "_raw_skill_gap": "Manual Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-111",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "Java",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-112",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Go"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Golang",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-113",
+      "position": "Backend Developer",
+      "current_skills": [
+        "PHP",
+        "JavaScript",
+        "Node.js",
+        "Go",
+        "Python",
+        "Django",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "PHP; JavaScript; NodeJS; Go; Python; Django; React",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-114",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Node.js",
+        "Go"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "NodeJS; Golang",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-115",
+      "position": "Intern",
+      "current_skills": [
+        ".NET",
+        "Node.js",
+        "Go",
+        "Java",
+        "PostgreSQL",
+        "React",
+        "Redis",
+        "Docker"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Testing",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": ".NET; NodeJS; GoLang; Java; PostgreSQL; ReactJS; Redis; Docker",
+      "_raw_skill_gap": "Cloud Services, Testing, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-116",
+      "position": "Software Developer",
+      "current_skills": [
+        "PHP",
+        "React",
+        "PostgreSQL",
+        "Next.js",
+        "NestJS",
+        "Node.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "AI Tools & Copilot Usage"
+      ],
+      "_raw_skills": "PHP; ReactJS; PostgreSQL; NextJS; NestJS; NodeJS",
+      "_raw_skill_gap": "Cloud Services, AI Tools & Copilot Usage"
+    },
+    {
+      "employee_id": "EMP-117",
+      "position": "DevOps Engineer",
+      "current_skills": [
+        "Terraform",
+        "GitHub Actions"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Security",
+        "Threat Hunting",
+        "Kubernetes",
+        "Monitoring"
+      ],
+      "_raw_skills": "Terraform; GitHub Actions",
+      "_raw_skill_gap": "Security, Threat Hunting; Container Orchestration, Monitoring"
+    },
+    {
+      "employee_id": "EMP-118",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Node.js",
+        "TypeScript",
+        "JavaScript",
+        "Cypress",
+        "Jest",
+        "Playwright"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Backend Development",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; NodeJS; TypeScript; JavaScript; Cypress; Jest; Playwright",
+      "_raw_skill_gap": "Backend Development; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-119",
+      "position": "Data Scientist",
+      "current_skills": [
+        "Python",
+        "SQL",
+        "C",
+        "C++",
+        "Matlab"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "MLOps",
+        "Data Analysis",
+        "ETL/Data Pipeline",
+        "System Architecture"
+      ],
+      "_raw_skills": "Python; SQL; C; C++; Matlab",
+      "_raw_skill_gap": "MLOps, Data Analysis; ETL/Data Pipeline, System Architecture"
+    },
+    {
+      "employee_id": "EMP-120",
+      "position": "UI/UX Designer",
+      "current_skills": [
+        "Figma"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "User Research",
+        "Prototyping",
+        "Accessibility Design"
+      ],
+      "_raw_skills": "Figma",
+      "_raw_skill_gap": "User Research, Prototyping, Accessibility Design"
+    },
+    {
+      "employee_id": "EMP-121",
+      "position": "QA Engineer",
+      "current_skills": [
+        "C",
+        "Java",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "C; Java; React",
+      "_raw_skill_gap": "Automation Testing, API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-122",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Python",
+        "Java",
+        "MySQL",
+        "MongoDB"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; Python; Java; MySQL; MongoDB",
+      "_raw_skill_gap": "UI/UX, Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-123",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "Java",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-124",
+      "position": "Frontend Technical Lead",
+      "current_skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Vue.js",
+        "NestJS",
+        "Next.js",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Auto Test",
+        "DevOps",
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "JavaScript; TypeScript; React; Vue; NestJS; NextJS; PostgreSQL",
+      "_raw_skill_gap": "UI/UX, Auto Test, DevOps; Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-125",
+      "position": "Software Engineer",
+      "current_skills": [
+        "React",
+        "Python FastAPI"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Backend",
+        "Data Engineering",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; Python FastAPI",
+      "_raw_skill_gap": "UI/UX, Backend, Data Engineering; Containerization"
+    },
+    {
+      "employee_id": "EMP-126",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "Next.js",
+        "NestJS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; NextJS; NestJS",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-127",
+      "position": "AI Engineer",
+      "current_skills": [
+        "Python",
+        "MLOps",
+        "PyTorch"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "LLM/GenAI",
+        "Model Deployment"
+      ],
+      "_raw_skills": "Python; MLOps; PyTorch",
+      "_raw_skill_gap": "DevOps; LLM/GenAI, Model Deployment"
+    },
+    {
+      "employee_id": "EMP-128",
+      "position": "Software Developer",
+      "current_skills": [
+        ".NET",
+        "Angular",
+        "SQL Server"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "BA",
+        "Tester",
+        "Containerization"
+      ],
+      "_raw_skills": ".NET; Angular; SQL Server",
+      "_raw_skill_gap": "BA, Tester; Containerization"
+    },
+    {
+      "employee_id": "EMP-129",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "JavaScript",
+        "Spring Boot",
+        "Angular",
+        "Vue.js",
+        "MongoDB",
+        "SQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Cloud",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; JavaScript; Spring Boot; Angular; Vue; MongoDB; SQL",
+      "_raw_skill_gap": "DevOps, Cloud; Containerization"
+    },
+    {
+      "employee_id": "EMP-130",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Postman API",
+        "SQL Server"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Robot Framework",
+        "Containerization"
+      ],
+      "_raw_skills": "Postman API; SQL Server",
+      "_raw_skill_gap": "Robot Framework; Containerization"
+    },
+    {
+      "employee_id": "EMP-131",
+      "position": "Project Manager",
+      "current_skills": [
+        "Python"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Manager",
+        "UI/UX",
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "Python",
+      "_raw_skill_gap": "DevOps, Manager, UI/UX Design; Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-132",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "Python",
+        "FastAPI",
+        "Java",
+        "Spring Boot"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Data Engineering",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; Python; FastAPI; Java; Spring Boot",
+      "_raw_skill_gap": "DevOps, Data Engineering; Containerization"
+    },
+    {
+      "employee_id": "EMP-133",
+      "position": "Backend Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Next.js",
+        "NestJS",
+        "AWS",
+        "PostgreSQL",
+        "MySQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "DevOps",
+        "BA",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; NextJS; NestJS; AWS; PostgreSQL; MySQL",
+      "_raw_skill_gap": "DevOps, BA; Containerization"
+    },
+    {
+      "employee_id": "EMP-134",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "TypeScript",
+        "Angular",
+        "MySQL",
+        "Oracle",
+        "Azure"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "AI for Developers",
+        "Time Management",
+        "Planning"
+      ],
+      "_raw_skills": "Java; SpringBoot; TypeScript; Angular; MySQL; Oracle; Azure",
+      "_raw_skill_gap": "AI for Developers; Time Management, Planning"
+    },
+    {
+      "employee_id": "EMP-135",
+      "position": "Technical Lead",
+      "current_skills": [
+        "C#",
+        "JavaScript",
+        "Go",
+        "Python",
+        "Node.js",
+        "React",
+        "PostgreSQL",
+        "SQL Server",
+        "DevOps Tools"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "C#; JavaScript; Golang; Python; NodeJS; ReactJS; PostgreSQL; MS SQL; DevOps Tools",
+      "_raw_skill_gap": "Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-136",
+      "position": "Product Manager",
+      "current_skills": [
+        "C#",
+        ".NET",
+        "Java Spring"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Data Analysis",
+        "Agile/Scrum",
+        "Strategic Planning"
+      ],
+      "_raw_skills": "C#; .NET; Java Spring",
+      "_raw_skill_gap": "UI/UX, Data Analysis; Agile/Scrum, Strategic Planning"
+    },
+    {
+      "employee_id": "EMP-137",
+      "position": "CTO",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "AI",
+        "DBA",
+        "Cloud Platform"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "IT Outsourcing & Embedded System",
+        "Agile/Scrum"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; AI; DBA; Cloud Platform",
+      "_raw_skill_gap": "IT Outsourcing & Embedded System; Agile/Scrum"
+    },
+    {
+      "employee_id": "EMP-138",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "TypeScript"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Backend Development",
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "Java; Spring Boot; TypeScript",
+      "_raw_skill_gap": "Backend Development; Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-139",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "ZK",
+        "Oracle",
+        "Spring Boot",
+        "React",
+        "C#",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "System Architecture"
+      ],
+      "_raw_skills": "Java; ZK; Oracle SQL; Spring Boot; ReactJS; C#; PostgreSQL",
+      "_raw_skill_gap": "Cloud Services, System Architecture"
+    },
+    {
+      "employee_id": "EMP-140",
+      "position": "IT Helpdesk",
+      "current_skills": [
+        "PHP",
+        "Laravel",
+        "Java",
+        "AWS",
+        "GitHub",
+        "Docker"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Testing",
+        "System Design"
+      ],
+      "_raw_skills": "PHP; Laravel; Java; AWS; GitHub; Docker",
+      "_raw_skill_gap": "Testing, System Design"
+    },
+    {
+      "employee_id": "EMP-141",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; PostgreSQL",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-142",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Python",
+        "TypeScript",
+        "Java"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python; TypeScript; Java",
+      "_raw_skill_gap": "Automation Testing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-143",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; PostgreSQL",
+      "_raw_skill_gap": "Automation Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-144",
+      "position": "Mobile Developer",
+      "current_skills": [
+        "Java",
+        "Kotlin",
+        "Swift",
+        "Node.js",
+        "TypeScript",
+        "React",
+        "Next.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Web Development",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Kotlin; Swift; NodeJS; TypeScript; ReactJS; NextJS",
+      "_raw_skill_gap": "Web Development; Containerization"
+    },
+    {
+      "employee_id": "EMP-145",
+      "position": "Software Developer",
+      "current_skills": [
+        "C#",
+        ".NET"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Azure Cloud",
+        "Automation Testing",
+        "Containerization"
+      ],
+      "_raw_skills": "C#; ASP.NET Core",
+      "_raw_skill_gap": "Azure Cloud, Automation Testing; Containerization"
+    },
+    {
+      "employee_id": "EMP-146",
+      "position": "Software Engineer",
+      "current_skills": [
+        "JavaScript",
+        "TypeScript",
+        "React",
+        "Python"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "UI/UX",
+        "AI",
+        "Data Analysis",
+        "Containerization"
+      ],
+      "_raw_skills": "JavaScript; TypeScript; ReactJS; Python",
+      "_raw_skill_gap": "UI/UX, AI, Data Analysis; Containerization"
+    },
+    {
+      "employee_id": "EMP-147",
+      "position": "Software Developer",
+      "current_skills": [
+        "SQL Server",
+        "C#",
+        "HTML",
+        "Power Query"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Cloud Services"
+      ],
+      "_raw_skills": "SQL Server; C#; HTML; Power Query",
+      "_raw_skill_gap": "Cloud Services"
+    },
+    {
+      "employee_id": "EMP-148",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "Automation Testing",
+        "API Testing"
+      ],
+      "_raw_skills": "JavaScript",
+      "_raw_skill_gap": "DevOps; Automation Testing, API Testing"
+    },
+    {
+      "employee_id": "EMP-149",
+      "position": "Intern",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Automation Testing",
+        "UI/UX",
+        "AI Agent",
+        "Containerization"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; PostgreSQL",
+      "_raw_skill_gap": "DevOps, Automation Testing, UI/UX, AI Agent; Containerization"
+    },
+    {
+      "employee_id": "EMP-150",
+      "position": "Intern",
+      "current_skills": [
+        "Go",
+        "Node.js",
+        "React",
+        "Next.js",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "Golang; NodeJS; ReactJS; NextJS; PostgreSQL",
+      "_raw_skill_gap": "DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-151",
+      "position": "Intern",
+      "current_skills": [
+        "Python",
+        "PostgreSQL",
+        "MySQL",
+        "Go",
+        "Power BI",
+        "Tableau",
+        "Spark",
+        "Airflow",
+        "Docker",
+        "MLflow"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Data Analysis",
+        "Data Science",
+        "Data Engineering Pipeline",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Python; PostgreSQL; MySQL; Go; Power BI; Tableau; Apache Spark; Airflow; Docker; MLflow",
+      "_raw_skill_gap": "Data Analysis, Data Science, Data Engineering Pipeline; Cloud Services"
+    },
+    {
+      "employee_id": "EMP-152",
+      "position": "Software Developer",
+      "current_skills": [
+        "Next.js",
+        "React",
+        "Vue.js",
+        "Python",
+        "Node.js",
+        ".NET",
+        "C/C++",
+        "PostgreSQL",
+        "MySQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Embedded Development",
+        "DevOps",
+        "Containerization"
+      ],
+      "_raw_skills": "NextJS; React; Vue; Python; NodeJS; .NET; C/C++; PostgreSQL; MySQL",
+      "_raw_skill_gap": "Embedded Development, DevOps; Containerization"
+    },
+    {
+      "employee_id": "EMP-153",
+      "position": "PHP Developer",
+      "current_skills": [
+        "PHP",
+        "Python",
+        "JavaScript",
+        "Vue.js",
+        "React",
+        "MySQL",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "DevOps",
+        "UI/UX",
+        "Containerization"
+      ],
+      "_raw_skills": "PHP; Python; JavaScript; VueJS; ReactJS; MySQL; PostgreSQL",
+      "_raw_skill_gap": "DevOps, UI/UX; Containerization"
+    },
+    {
+      "employee_id": "EMP-154",
+      "position": "IT Infrastructure Engineer",
+      "current_skills": [
+        "C++",
+        "Python",
+        "JavaScript"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "AI Training Model",
+        "Containerization"
+      ],
+      "_raw_skills": "C++; Python; JavaScript",
+      "_raw_skill_gap": "AI Training Model; Containerization"
+    },
+    {
+      "employee_id": "EMP-155",
+      "position": "Python Developer",
+      "current_skills": [
+        "Python",
+        "C++",
+        "Qt",
+        "HTML/CSS",
+        "React"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Frontend",
+        "Containerization"
+      ],
+      "_raw_skills": "Python; C++; Qt; HTML/CSS; ReactJS",
+      "_raw_skill_gap": "UI/UX, Frontend; Containerization"
+    },
+    {
+      "employee_id": "EMP-156",
+      "position": "Intern",
+      "current_skills": [
+        "C/C++",
+        "CMake",
+        "Python",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Computer Vision Model Training",
+        "Containerization"
+      ],
+      "_raw_skills": "C/C++; CMake; Python; FastAPI; PostgreSQL",
+      "_raw_skill_gap": "Computer Vision Model Training; Containerization"
+    },
+    {
+      "employee_id": "EMP-157",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Python",
+        "FastAPI",
+        "Flask",
+        "MySQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "DevOps",
+        "Data Engineering",
+        "Containerization"
+      ],
+      "_raw_skills": "Python; FastAPI; Flask; MySQL",
+      "_raw_skill_gap": "DevOps, Data Engineering; Containerization"
+    },
+    {
+      "employee_id": "EMP-158",
+      "position": "UI/UX Designer",
+      "current_skills": [
+        "Figma"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "2D Artist",
+        "User Research",
+        "Prototyping"
+      ],
+      "_raw_skills": "Figma",
+      "_raw_skill_gap": "2D Artist; User Research, Prototyping"
+    },
+    {
+      "employee_id": "EMP-159",
+      "position": "Project Manager",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "MySQL",
+        "Angular",
+        "JavaScript",
+        "Node.js"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "UI/UX",
+        "Team Management",
+        "Agile/Scrum"
+      ],
+      "_raw_skills": "Java; Spring Boot; ReactJS; MySQL; Angular; JavaScript; NodeJS",
+      "_raw_skill_gap": "UI/UX, Team Management; Agile/Scrum"
+    },
+    {
+      "employee_id": "EMP-160",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "React",
+        "PostgreSQL",
+        "Next.js",
+        "NestJS",
+        "TypeScript"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "ReactJS; PostgreSQL; NextJS; NestJS; TypeScript",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-161",
+      "position": "Software Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "MySQL",
+        "Java",
+        "Next.js",
+        "NestJS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Cloud Services",
+        "Technical Depth"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; PostgreSQL; MySQL; Java; NextJS; NestJS",
+      "_raw_skill_gap": "Cloud Services, Technical Depth"
+    },
+    {
+      "employee_id": "EMP-162",
+      "position": "AI Lead",
+      "current_skills": [
+        "Python",
+        "BigQuery",
+        "SQL",
+        "Shell Script",
+        "C++",
+        "Rust",
+        "Dbt",
+        "Scikit-learn",
+        "TensorFlow",
+        "Keras",
+        "PyTorch",
+        "LangChain",
+        "Kubernetes",
+        "Docker",
+        "Jenkins",
+        "Terraform",
+        "GitHub Actions",
+        "GCP",
+        "Azure",
+        "AWS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "MLOps",
+        "Technical Depth",
+        "Mathematical Analysis"
+      ],
+      "_raw_skills": "Python; BigQuery; SQL; Shell Script; C++; Rust; dbt; Scikit-learn; TensorFlow; Keras; PyTorch; LangChain; Kubernetes; Docker; Jenkins; Terraform; GitHub Actions; GCP; Azure; AWS",
+      "_raw_skill_gap": "MLOps, Technical Depth, Mathematical Analysis"
+    },
+    {
+      "employee_id": "EMP-163",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Go",
+        "gRPC",
+        "Version Control (Git)",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; Spring Boot; PostgreSQL",
+      "_raw_skill_gap": "Golang, gRPC; Version Control (Git), Cloud Services"
+    },
+    {
+      "employee_id": "EMP-164",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "_raw_skills": "Python; FastAPI; PostgreSQL",
+      "_raw_skill_gap": "Golang; Microservices, Container Orchestration"
+    },
+    {
+      "employee_id": "EMP-165",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "Node.js",
+        "React",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "Kubernetes",
+        "System Architecture",
+        "Cloud Services"
+      ],
+      "_raw_skills": "NodeJS; ReactJS; PostgreSQL",
+      "_raw_skill_gap": "Golang, Kubernetes; System Architecture, Cloud Services"
+    },
+    {
+      "employee_id": "EMP-166",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL",
+        "Redis"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Go",
+        "gRPC",
+        "Version Control (Git)",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; Spring Boot; MySQL; Redis",
+      "_raw_skill_gap": "Golang, gRPC; Version Control (Git), Cloud Services"
+    },
+    {
+      "employee_id": "EMP-167",
+      "position": "Software Engineer",
+      "current_skills": [
+        "TypeScript",
+        "NestJS",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "_raw_skills": "TypeScript; NestJS; PostgreSQL",
+      "_raw_skill_gap": "Golang; Microservices, Container Orchestration"
+    },
+    {
+      "employee_id": "EMP-168",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Python",
+        "Django",
+        "MySQL"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Go",
+        "Kubernetes",
+        "System Architecture",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Python; Django; MySQL",
+      "_raw_skill_gap": "Golang, Kubernetes; System Architecture, Cloud Services"
+    },
+    {
+      "employee_id": "EMP-169",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Kotlin",
+        "Spring Boot"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "gRPC",
+        "Version Control (Git)",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; Kotlin; Spring Boot",
+      "_raw_skill_gap": "Golang, gRPC; Version Control (Git), Cloud Services"
+    },
+    {
+      "employee_id": "EMP-170",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "Node.js",
+        "Express",
+        "MongoDB"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Go",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "_raw_skills": "NodeJS; Express; MongoDB",
+      "_raw_skill_gap": "Golang; Microservices, Container Orchestration"
+    },
+    {
+      "employee_id": "EMP-171",
+      "position": "Java Developer",
+      "current_skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Go",
+        "Kubernetes",
+        "System Architecture",
+        "Cloud Services"
+      ],
+      "_raw_skills": "ReactJS; NodeJS; PostgreSQL",
+      "_raw_skill_gap": "Golang, Kubernetes; System Architecture, Cloud Services"
+    },
+    {
+      "employee_id": "EMP-172",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Kafka",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "gRPC",
+        "Version Control (Git)",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; Spring Boot; Kafka; PostgreSQL",
+      "_raw_skill_gap": "Golang, gRPC; Version Control (Git), Cloud Services"
+    },
+    {
+      "employee_id": "EMP-173",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Python",
+        "FastAPI",
+        "Redis",
+        "PostgreSQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "_raw_skills": "Python; FastAPI; Redis; PostgreSQL",
+      "_raw_skill_gap": "Golang; Microservices, Container Orchestration"
+    },
+    {
+      "employee_id": "EMP-174",
+      "position": "Software Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Elasticsearch"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Go",
+        "Kubernetes",
+        "System Architecture",
+        "Cloud Services"
+      ],
+      "_raw_skills": "Java; Spring Boot; Elasticsearch",
+      "_raw_skill_gap": "Golang, Kubernetes; System Architecture, Cloud Services"
+    },
+    {
+      "employee_id": "EMP-175",
+      "position": "Fullstack Developer",
+      "current_skills": [
+        "Node.js",
+        "NestJS",
+        "MySQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Go",
+        "gRPC",
+        "Version Control (Git)",
+        "Cloud Services"
+      ],
+      "_raw_skills": "NodeJS; NestJS; MySQL",
+      "_raw_skill_gap": "Golang, gRPC; Version Control (Git), Cloud Services"
+    },
+    {
+      "employee_id": "EMP-176",
+      "position": "Java Developer",
+      "current_skills": [
+        "Python",
+        "Flask",
+        "SQLite"
+      ],
+      "proficiency_level": "Advanced",
+      "self_reported_gaps": [
+        "Go",
+        "Microservices",
+        "Kubernetes"
+      ],
+      "_raw_skills": "Python; Flask; SQLite",
+      "_raw_skill_gap": "Golang; Microservices, Container Orchestration"
+    },
+    {
+      "employee_id": "EMP-177",
+      "position": "DevOps Engineer",
+      "current_skills": [
+        "Python",
+        "Docker",
+        "Linux",
+        "Bash"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Kubernetes",
+        "CI/CD",
+        "Monitoring/Observability",
+        "Cloud Security"
+      ],
+      "_raw_skills": "Python; Docker; Linux; Bash",
+      "_raw_skill_gap": "Kubernetes, CI/CD, Monitoring/Observability; Cloud Security"
+    },
+    {
+      "employee_id": "EMP-178",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "Spring Boot",
+        "Docker"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Kubernetes",
+        "GitOps",
+        "Container Security"
+      ],
+      "_raw_skills": "Java; Spring Boot; Docker",
+      "_raw_skill_gap": "K8s orchestration, GitOps; Container Security"
+    },
+    {
+      "employee_id": "EMP-179",
+      "position": "Software Developer",
+      "current_skills": [
+        "Node.js",
+        "Docker",
+        "AWS"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "CI/CD pipeline design",
+        "IaC",
+        "Cloud Deployment"
+      ],
+      "_raw_skills": "NodeJS; Docker; AWS",
+      "_raw_skill_gap": "CI/CD pipeline design, Infrastructure as Code; Cloud Deployment"
+    },
+    {
+      "employee_id": "EMP-180",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Python",
+        "Ansible",
+        "Terraform"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Performance Tuning",
+        "SRE practices",
+        "Observability Stack"
+      ],
+      "_raw_skills": "Python; Ansible; Terraform",
+      "_raw_skill_gap": "Performance Tuning, SRE practices; Observability Stack"
+    },
+    {
+      "employee_id": "EMP-181",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "Postman"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Playwright)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; SQL; Postman",
+      "_raw_skill_gap": "Automation Testing (Playwright); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-182",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "SQL",
+        "Manual Testing"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "CI/CD Integration",
+        "Test Framework Design"
+      ],
+      "_raw_skills": "JavaScript; SQL; Manual Testing",
+      "_raw_skill_gap": "Automation Testing; CI/CD Integration, Test Framework Design"
+    },
+    {
+      "employee_id": "EMP-183",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Python",
+        "MySQL",
+        "Manual Testing"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Script Writing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python; MySQL; Manual Testing",
+      "_raw_skill_gap": "Automation Testing, Script Writing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-184",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "Java",
+        "TestNG",
+        "JUnit"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Playwright",
+        "Cypress",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "Java; TestNG; JUnit",
+      "_raw_skill_gap": "Playwright, Cypress; Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-185",
+      "position": "Backend Developer",
+      "current_skills": [
+        "JavaScript",
+        "React",
+        "Manual Testing"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Selenium/Playwright)",
+        "CI/CD Pipeline",
+        "Test Reporting"
+      ],
+      "_raw_skills": "JavaScript; ReactJS; Manual Testing",
+      "_raw_skill_gap": "Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+    },
+    {
+      "employee_id": "EMP-186",
+      "position": "Java Developer",
+      "current_skills": [
+        "Python",
+        "Selenium (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing (Playwright)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python; Selenium (basic); SQL",
+      "_raw_skill_gap": "Automation Testing (Playwright); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-187",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Cucumber (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "CI/CD Integration",
+        "Test Framework Design"
+      ],
+      "_raw_skills": "Java; Cucumber (basic); SQL",
+      "_raw_skill_gap": "Automation Testing; CI/CD Integration, Test Framework Design"
+    },
+    {
+      "employee_id": "EMP-188",
+      "position": "Software Developer",
+      "current_skills": [
+        "TypeScript",
+        "Jest",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Script Writing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "TypeScript; Jest; SQL",
+      "_raw_skill_gap": "Automation Testing, Script Writing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-189",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Java",
+        "Spring Boot (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Playwright",
+        "Cypress",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "Java; Spring Boot (basic); SQL",
+      "_raw_skill_gap": "Playwright, Cypress; Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-190",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "JavaScript",
+        "Playwright (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Selenium/Playwright)",
+        "CI/CD Pipeline",
+        "Test Reporting"
+      ],
+      "_raw_skills": "JavaScript; Playwright (basic); SQL",
+      "_raw_skill_gap": "Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+    },
+    {
+      "employee_id": "EMP-191",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "JIRA"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Playwright)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; SQL; JIRA",
+      "_raw_skill_gap": "Automation Testing (Playwright); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-192",
+      "position": "Java Developer",
+      "current_skills": [
+        "Python",
+        "SQL",
+        "API Testing (basic)"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "CI/CD Integration",
+        "Test Framework Design"
+      ],
+      "_raw_skills": "Python; SQL; API Testing (basic)",
+      "_raw_skill_gap": "Automation Testing; CI/CD Integration, Test Framework Design"
+    },
+    {
+      "employee_id": "EMP-193",
+      "position": "QA Engineer",
+      "current_skills": [
+        "Java",
+        "Postman",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Script Writing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; Postman; SQL",
+      "_raw_skill_gap": "Automation Testing, Script Writing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-194",
+      "position": "Software Developer",
+      "current_skills": [
+        "JavaScript",
+        "Cypress (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Playwright",
+        "Cypress",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "JavaScript; Cypress (basic); SQL",
+      "_raw_skill_gap": "Playwright, Cypress; Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-195",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Python",
+        "Robot Framework (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing (Selenium/Playwright)",
+        "CI/CD Pipeline",
+        "Test Reporting"
+      ],
+      "_raw_skills": "Python; Robot Framework (basic); SQL",
+      "_raw_skill_gap": "Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+    },
+    {
+      "employee_id": "EMP-196",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "JMeter (basic)"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Playwright)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; SQL; JMeter (basic)",
+      "_raw_skill_gap": "Automation Testing (Playwright); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-197",
+      "position": "Backend Developer",
+      "current_skills": [
+        "TypeScript",
+        "Postman",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "CI/CD Integration",
+        "Test Framework Design"
+      ],
+      "_raw_skills": "TypeScript; Postman; SQL",
+      "_raw_skill_gap": "Automation Testing; CI/CD Integration, Test Framework Design"
+    },
+    {
+      "employee_id": "EMP-198",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "Selenium IDE"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Script Writing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; SQL; Selenium IDE",
+      "_raw_skill_gap": "Automation Testing, Script Writing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-199",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript",
+        "SQL",
+        "Manual QA"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Playwright",
+        "Cypress",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "JavaScript; SQL; Manual QA",
+      "_raw_skill_gap": "Playwright, Cypress; Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-200",
+      "position": "Software Developer",
+      "current_skills": [
+        "Python",
+        "SQL",
+        "API Testing"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Selenium/Playwright)",
+        "CI/CD Pipeline",
+        "Test Reporting"
+      ],
+      "_raw_skills": "Python; SQL; API Testing",
+      "_raw_skill_gap": "Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+    },
+    {
+      "employee_id": "EMP-201",
+      "position": "Software Engineer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "JUnit"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Automation Testing (Playwright)",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Java; SQL; JUnit",
+      "_raw_skill_gap": "Automation Testing (Playwright); API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-202",
+      "position": "Frontend Developer",
+      "current_skills": [
+        "TypeScript",
+        "Playwright (basic)",
+        "SQL"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "CI/CD Integration",
+        "Test Framework Design"
+      ],
+      "_raw_skills": "TypeScript; Playwright (basic); SQL",
+      "_raw_skill_gap": "Automation Testing; CI/CD Integration, Test Framework Design"
+    },
+    {
+      "employee_id": "EMP-203",
+      "position": "Backend Developer",
+      "current_skills": [
+        "Python",
+        "SQL",
+        "Automation (basic)"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing",
+        "Script Writing",
+        "API Testing",
+        "Performance Testing"
+      ],
+      "_raw_skills": "Python; SQL; Automation (basic)",
+      "_raw_skill_gap": "Automation Testing, Script Writing; API Testing, Performance Testing"
+    },
+    {
+      "employee_id": "EMP-204",
+      "position": "Java Developer",
+      "current_skills": [
+        "Java",
+        "SQL",
+        "TestNG (basic)"
+      ],
+      "proficiency_level": "Intermediate",
+      "self_reported_gaps": [
+        "Playwright",
+        "Cypress",
+        "Performance Testing",
+        "Security Testing"
+      ],
+      "_raw_skills": "Java; SQL; TestNG (basic)",
+      "_raw_skill_gap": "Playwright, Cypress; Performance Testing, Security Testing"
+    },
+    {
+      "employee_id": "EMP-205",
+      "position": "QA Engineer",
+      "current_skills": [
+        "JavaScript",
+        "SQL",
+        "Cypress (basic)"
+      ],
+      "proficiency_level": "Beginner",
+      "self_reported_gaps": [
+        "Automation Testing (Selenium/Playwright)",
+        "CI/CD Pipeline",
+        "Test Reporting"
+      ],
+      "_raw_skills": "JavaScript; SQL; Cypress (basic)",
+      "_raw_skill_gap": "Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+    }
+  ],
+  "projects": [
+    {
+      "project_id": "PRJ-001",
+      "required_skills": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "start_date": "2025-01-01",
+      "deadline": "2025-06-30",
+      "_raw_timeline": "Q1–Q2 2025",
+      "_raw_skills": "Python, FastAPI, PostgreSQL, Docker"
+    },
+    {
+      "project_id": "PRJ-002",
+      "required_skills": [
+        "Java",
+        "Spring Boot",
+        "Kubernetes",
+        "AWS"
+      ],
+      "start_date": "2025-04-01",
+      "deadline": "2025-09-30",
+      "_raw_timeline": "Q2–Q3 2025",
+      "_raw_skills": "Java, Spring Boot, Kubernetes, AWS"
+    },
+    {
+      "project_id": "PRJ-003",
+      "required_skills": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Redis"
+      ],
+      "start_date": "2025-07-01",
+      "deadline": "2025-12-31",
+      "_raw_timeline": "Q3–Q4 2025",
+      "_raw_skills": "ReactJS, NodeJS, MongoDB, Redis"
+    },
+    {
+      "project_id": "PRJ-004",
+      "required_skills": [
+        "Python",
+        "TensorFlow",
+        "MLOps",
+        "GCP"
+      ],
+      "start_date": "2026-01-01",
+      "deadline": "2026-06-30",
+      "_raw_timeline": "Q1–Q2 2026",
+      "_raw_skills": "Python, TensorFlow, MLOps, GCP"
+    },
+    {
+      "project_id": "PRJ-005",
+      "required_skills": [
+        "FastAPI",
+        "Kubernetes",
+        "Docker",
+        "CI/CD"
+      ],
+      "start_date": "2026-04-01",
+      "deadline": "2026-09-30",
+      "_raw_timeline": "Q2–Q3 2026",
+      "_raw_skills": "FastAPI, Kubernetes, Docker, CI/CD"
+    },
+    {
+      "project_id": "PRJ-006",
+      "required_skills": [
+        ".NET",
+        "Angular",
+        "SQL Server",
+        "Azure"
+      ],
+      "start_date": "2025-07-01",
+      "deadline": "2025-12-31",
+      "_raw_timeline": "Q3–Q4 2025",
+      "_raw_skills": ".NET, Angular, SQL Server, Azure"
+    },
+    {
+      "project_id": "PRJ-007",
+      "required_skills": [
+        "Go",
+        "gRPC",
+        "Kafka",
+        "Kubernetes"
+      ],
+      "start_date": "2025-10-01",
+      "deadline": "2026-03-31",
+      "_raw_timeline": "Q4 2025–Q1 2026",
+      "_raw_skills": "Golang, gRPC, Kafka, Kubernetes"
+    },
+    {
+      "project_id": "PRJ-008",
+      "required_skills": [
+        "Python",
+        "LangChain",
+        "OpenAI API",
+        "Vector DB",
+        "Docker"
+      ],
+      "start_date": "2026-01-01",
+      "deadline": "2026-06-30",
+      "_raw_timeline": "Q1–Q2 2026",
+      "_raw_skills": "Python, LangChain, OpenAI API, Vector DB, Docker"
+    },
+    {
+      "project_id": "PRJ-009",
+      "required_skills": [
+        "AWS",
+        "Terraform",
+        "Kubernetes",
+        "Security (OWASP)",
+        "CI/CD"
+      ],
+      "start_date": "2026-04-01",
+      "deadline": "2026-09-30",
+      "_raw_timeline": "Q2–Q3 2026",
+      "_raw_skills": "AWS, Terraform, Kubernetes, Security (OWASP), CI/CD"
+    },
+    {
+      "project_id": "PRJ-010",
+      "required_skills": [
+        "Azure",
+        ".NET",
+        "AI Services",
+        "Power Platform"
+      ],
+      "start_date": "2026-07-01",
+      "deadline": "2026-12-31",
+      "_raw_timeline": "Q3–Q4 2026",
+      "_raw_skills": "Azure, .NET, AI Services, Power Platform"
+    },
+    {
+      "project_id": "PRJ-011",
+      "required_skills": [
+        "GCP",
+        "BigQuery",
+        "Vertex AI",
+        "MLOps",
+        "Python"
+      ],
+      "start_date": "2027-01-01",
+      "deadline": "2027-06-30",
+      "_raw_timeline": "Q1–Q2 2027",
+      "_raw_skills": "GCP, BigQuery, Vertex AI, MLOps, Python"
+    },
+    {
+      "project_id": "PRJ-012",
+      "required_skills": [
+        "Cybersecurity",
+        "Penetration Testing",
+        "SIEM",
+        "SOC"
+      ],
+      "start_date": "2026-04-01",
+      "deadline": "2026-09-30",
+      "_raw_timeline": "Q2–Q3 2026",
+      "_raw_skills": "Cybersecurity, Penetration Testing, SIEM, SOC"
+    },
+    {
+      "project_id": "PRJ-013",
+      "required_skills": [
+        "React",
+        "Node.js",
+        "AWS Lambda",
+        "DynamoDB",
+        "Cognito"
+      ],
+      "start_date": "2026-07-01",
+      "deadline": "2026-12-31",
+      "_raw_timeline": "Q3–Q4 2026",
+      "_raw_skills": "React, NodeJS, AWS Lambda, DynamoDB, Cognito"
+    },
+    {
+      "project_id": "PRJ-014",
+      "required_skills": [
+        "LLM Fine-tuning",
+        "RAG",
+        "Claude API",
+        "Prompt Engineering"
+      ],
+      "start_date": "2027-01-01",
+      "deadline": "2027-06-30",
+      "_raw_timeline": "Q1–Q2 2027",
+      "_raw_skills": "LLM Fine-tuning, RAG, Claude API, Prompt Engineering"
+    },
+    {
+      "project_id": "PRJ-015",
+      "required_skills": [
+        "DevSecOps",
+        "Container Security",
+        "Vault",
+        "IAM"
+      ],
+      "start_date": "2027-04-01",
+      "deadline": "2027-09-30",
+      "_raw_timeline": "Q2–Q3 2027",
+      "_raw_skills": "DevSecOps, Container Security, Vault, IAM"
+    },
+    {
+      "project_id": "PRJ-016",
+      "required_skills": [
+        "Multi-cloud (AWS/Azure/GCP)",
+        "Cost Optimization",
+        "FinOps"
+      ],
+      "start_date": "2027-07-01",
+      "deadline": "2027-12-31",
+      "_raw_timeline": "Q3–Q4 2027",
+      "_raw_skills": "Multi-cloud (AWS/Azure/GCP), Cost Optimization, FinOps"
+    },
+    {
+      "project_id": "PRJ-017",
+      "required_skills": [
+        "AI Agent Development",
+        "AutoGen",
+        "CrewAI",
+        "Python"
+      ],
+      "start_date": "2027-01-01",
+      "deadline": "2027-06-30",
+      "_raw_timeline": "Q1–Q2 2027",
+      "_raw_skills": "AI Agent Development, AutoGen, CrewAI, Python"
+    },
+    {
+      "project_id": "PRJ-018",
+      "required_skills": [
+        "React Native",
+        "iOS",
+        "Android",
+        "Firebase",
+        "GraphQL"
+      ],
+      "start_date": "2026-04-01",
+      "deadline": "2026-09-30",
+      "_raw_timeline": "Q2–Q3 2026",
+      "_raw_skills": "React Native, iOS, Android, Firebase, GraphQL"
+    },
+    {
+      "project_id": "PRJ-019",
+      "required_skills": [
+        "Data Engineering",
+        "Airflow",
+        "Spark",
+        "Databricks",
+        "Delta Lake"
+      ],
+      "start_date": "2026-07-01",
+      "deadline": "2026-12-31",
+      "_raw_timeline": "Q3–Q4 2026",
+      "_raw_skills": "Data Engineering, Airflow, Spark, Databricks, Delta Lake"
+    },
+    {
+      "project_id": "PRJ-020",
+      "required_skills": [
+        "Computer Vision",
+        "TensorFlow",
+        "PyTorch",
+        "Edge AI",
+        "IoT"
+      ],
+      "start_date": "2027-01-01",
+      "deadline": "2027-06-30",
+      "_raw_timeline": "Q1–Q2 2027",
+      "_raw_skills": "Computer Vision, TensorFlow, PyTorch, Edge AI, IoT"
+    }
+  ],
+  "surveys": [
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-024",
+      "requested_skills": [
+        "Go"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Go language development - internal",
+      "_skill_extraction": [
+        {
+          "skill": "Go",
+          "matched_keyword": "go language",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-028",
+      "requested_skills": [
+        "Cloud",
+        "AWS"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Cloud deployment on AWS - online",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-036",
+      "requested_skills": [
+        "Kubernetes"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Kubernetes and container orchestration",
+      "_skill_extraction": [
+        {
+          "skill": "Kubernetes",
+          "matched_keyword": "container orchestration",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-041",
+      "requested_skills": [
+        "LLM/GenAI"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "LLM application development",
+      "_skill_extraction": [
+        {
+          "skill": "LLM/GenAI",
+          "matched_keyword": "llm",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-044",
+      "requested_skills": [
+        "MLOps"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "MLOps practices and tooling",
+      "_skill_extraction": [
+        {
+          "skill": "MLOps",
+          "matched_keyword": "mlops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-060",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Team leadership and strategic planning",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "strategic planning",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-076",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AI and ML foundations - online",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-077",
+      "requested_skills": [
+        "Data Engineering"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Data engineering pipelines - internal",
+      "_skill_extraction": [
+        {
+          "skill": "Data Engineering",
+          "matched_keyword": "data engineering",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-081",
+      "requested_skills": [
+        "AWS"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AWS data services - online",
+      "_skill_extraction": [
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-093",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Leadership and team management",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-098",
+      "requested_skills": [
+        "LLM/GenAI",
+        "AI Agent"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AI agents and LLM workflows - internal",
+      "_skill_extraction": [
+        {
+          "skill": "LLM/GenAI",
+          "matched_keyword": "llm",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "AI Agent",
+          "matched_keyword": "ai agent",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-103",
+      "requested_skills": [
+        "Frontend"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Frontend performance and testing - internal",
+      "_skill_extraction": [
+        {
+          "skill": "Frontend",
+          "matched_keyword": "frontend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-106",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Technology strategy and roadmap planning",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-117",
+      "requested_skills": [
+        "Security"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Security and threat detection - online",
+      "_skill_extraction": [
+        {
+          "skill": "Security",
+          "matched_keyword": "security",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-127",
+      "requested_skills": [
+        "LLM/GenAI"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "LLM fine-tuning and GenAI - online",
+      "_skill_extraction": [
+        {
+          "skill": "LLM/GenAI",
+          "matched_keyword": "fine-tuning",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-131",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Advanced PM and stakeholder management",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "stakeholder",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-135",
+      "requested_skills": [
+        "System Design",
+        "Leadership"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Technical leadership and architecture review",
+      "_skill_extraction": [
+        {
+          "skill": "System Design",
+          "matched_keyword": "architecture",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Leadership",
+          "matched_keyword": "technical leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-137",
+      "requested_skills": [
+        "AI Tools"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AI adoption strategy and roadmap",
+      "_skill_extraction": [
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai adoption",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-001",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Leadership skills",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-002",
+      "requested_skills": [
+        "Soft Skills"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Soft skills, online learning",
+      "_skill_extraction": [
+        {
+          "skill": "Soft Skills",
+          "matched_keyword": "soft skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-003",
+      "requested_skills": [
+        "Foreign Language"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Japanese language - self-learning",
+      "_skill_extraction": [
+        {
+          "skill": "Foreign Language",
+          "matched_keyword": "japanese",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-005",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Build personal agent to enhance workflow",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-007",
+      "requested_skills": [
+        "Interview Skills"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Interview skills",
+      "_skill_extraction": [
+        {
+          "skill": "Interview Skills",
+          "matched_keyword": "interview skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-008",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI-related skills",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-009",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Self-learning external courses",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-010",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-011",
+      "requested_skills": [
+        "Planning"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Planning skills",
+      "_skill_extraction": [
+        {
+          "skill": "Planning",
+          "matched_keyword": "planning skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-012",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation Testing",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-013",
+      "requested_skills": [
+        "MLOps",
+        "AI Agent",
+        "Security"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI Agent, MLOps, Security - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "MLOps",
+          "matched_keyword": "mlops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "AI Agent",
+          "matched_keyword": "ai agent",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Security",
+          "matched_keyword": "security",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-014",
+      "requested_skills": [
+        "Python"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python development - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-015",
+      "requested_skills": [
+        "Data Science"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Data Scientist skills - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Data Science",
+          "matched_keyword": "data scientist",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-016",
+      "requested_skills": [
+        "AI Agent",
+        "Planning"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Planning Skills, Agentic AI knowledge",
+      "_skill_extraction": [
+        {
+          "skill": "AI Agent",
+          "matched_keyword": "agentic",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Planning",
+          "matched_keyword": "planning skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-018",
+      "requested_skills": [
+        "AWS",
+        "GCP",
+        "Python",
+        "Backend",
+        "Foreign Language"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python backend (internal), AWS/GCP (online), Japanese (online)",
+      "_skill_extraction": [
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "GCP",
+          "matched_keyword": "gcp",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Foreign Language",
+          "matched_keyword": "japanese",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-020",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Technical skills with project practice opportunity",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-021",
+      "requested_skills": [
+        "DevOps",
+        "Backend"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps, modern backend technologies",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-025",
+      "requested_skills": [
+        "Leadership",
+        "Communication"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Communication and leadership skills",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-027",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation testing from basics",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-030",
+      "requested_skills": [
+        "React"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Advanced React",
+      "_skill_extraction": [
+        {
+          "skill": "React",
+          "matched_keyword": "react",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-031",
+      "requested_skills": [
+        "Cloud",
+        "English"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI, English, Cloud",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "English",
+          "matched_keyword": "english",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-035",
+      "requested_skills": [
+        "Communication",
+        "Soft Skills"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Soft skills, client communication, problem-solving",
+      "_skill_extraction": [
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Soft Skills",
+          "matched_keyword": "soft skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-037",
+      "requested_skills": [
+        "Kubernetes",
+        "DevOps"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "CKA certification - online, DevOps - online",
+      "_skill_extraction": [
+        {
+          "skill": "Kubernetes",
+          "matched_keyword": "cka",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-039",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Internal DevOps training course",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-040",
+      "requested_skills": [
+        "Communication",
+        "English"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "English communication",
+      "_skill_extraction": [
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "English",
+          "matched_keyword": "english",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-042",
+      "requested_skills": [
+        "Communication"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Communication skills",
+      "_skill_extraction": [
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-043",
+      "requested_skills": [
+        "Python"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation skill - Python",
+      "_skill_extraction": [
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-045",
+      "requested_skills": [
+        "Go",
+        "Python",
+        "Leadership",
+        "Communication"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python/Golang internal; communication/leadership internal",
+      "_skill_extraction": [
+        {
+          "skill": "Go",
+          "matched_keyword": "golang",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-046",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Mobile App Automation Testing",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-047",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "C++ development",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-048",
+      "requested_skills": [
+        "Cloud",
+        "AWS",
+        "System Design",
+        "Security"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AWS Cloud Architecture and Cloud Security - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "System Design",
+          "matched_keyword": "architecture",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Security",
+          "matched_keyword": "security",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-049",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI integration into systems - internal training",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-051",
+      "requested_skills": [
+        "Cloud"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Cloud services",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-053",
+      "requested_skills": [
+        "CI/CD"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "CI/CD pipeline",
+      "_skill_extraction": [
+        {
+          "skill": "CI/CD",
+          "matched_keyword": "ci/cd",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-054",
+      "requested_skills": [
+        "Leadership",
+        "Communication"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Communication, leadership, PM skills",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-056",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Java development - online course",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-058",
+      "requested_skills": [
+        "Communication"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Communication skills",
+      "_skill_extraction": [
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-061",
+      "requested_skills": [
+        "LLM/GenAI"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "GenAI, LLM skills - online course",
+      "_skill_extraction": [
+        {
+          "skill": "LLM/GenAI",
+          "matched_keyword": "genai",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-062",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Management skills",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-063",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation Testing for beginners",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-064",
+      "requested_skills": [
+        "Backend"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Backend/AI skills - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-065",
+      "requested_skills": [
+        "AI Agent"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI agent - online course",
+      "_skill_extraction": [
+        {
+          "skill": "AI Agent",
+          "matched_keyword": "ai agent",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-066",
+      "requested_skills": [
+        "Cloud"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Infrastructure & Cloud, Management skills",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-068",
+      "requested_skills": [
+        "Python"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python, Java",
+      "_skill_extraction": [
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-069",
+      "requested_skills": [
+        "Cloud",
+        "System Design"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Cloud, Domain knowledge, Architecture - online",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "System Design",
+          "matched_keyword": "architecture",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-070",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "New language skills (e.g., Chinese/Korean)",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-073",
+      "requested_skills": [
+        "Node.js",
+        "Python",
+        "Leadership",
+        "Communication"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "NodeJS, Python, leadership, communication - online",
+      "_skill_extraction": [
+        {
+          "skill": "Node.js",
+          "matched_keyword": "nodejs",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-074",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Cross-functional project participation as learner",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-075",
+      "requested_skills": [
+        "DevOps",
+        "Python"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python development, DevOps",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-079",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Online course with self-study materials",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-080",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Not sure yet",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-082",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Omniverse development - internal training",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-084",
+      "requested_skills": [
+        "Planning"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Planning skills",
+      "_skill_extraction": [
+        {
+          "skill": "Planning",
+          "matched_keyword": "planning skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-085",
+      "requested_skills": [
+        "Agile/Scrum"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Scrum Master certification",
+      "_skill_extraction": [
+        {
+          "skill": "Agile/Scrum",
+          "matched_keyword": "scrum master",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-086",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-089",
+      "requested_skills": [
+        "Automation Testing",
+        "Playwright"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation Testing (Playwright) + AI Testing",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Playwright",
+          "matched_keyword": "playwright",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-090",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-091",
+      "requested_skills": [
+        "Python",
+        "Foreign Language"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python, foreign language",
+      "_skill_extraction": [
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Foreign Language",
+          "matched_keyword": "foreign language",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-092",
+      "requested_skills": [
+        "Cloud",
+        "AWS",
+        "GCP"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Cloud Services (AWS, GCP) - online, Cloud certification",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "GCP",
+          "matched_keyword": "gcp",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-094",
+      "requested_skills": [
+        "English"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "English - internal; Safe and effective AI usage - internal/online",
+      "_skill_extraction": [
+        {
+          "skill": "English",
+          "matched_keyword": "english",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-095",
+      "requested_skills": [
+        "Python"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python + AI skills",
+      "_skill_extraction": [
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-096",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Effective AI usage in testing",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-099",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Online course",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-101",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Self-learning",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-102",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Leadership and people management",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-105",
+      "requested_skills": [
+        "System Design"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Java development, Software architecture - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "System Design",
+          "matched_keyword": "architecture",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-108",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation testing",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-109",
+      "requested_skills": [
+        "Data Engineering",
+        "Backend"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Data engineering/Backend development - internal training",
+      "_skill_extraction": [
+        {
+          "skill": "Data Engineering",
+          "matched_keyword": "data engineering",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-110",
+      "requested_skills": [
+        "Foreign Language"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Japanese language class - offline",
+      "_skill_extraction": [
+        {
+          "skill": "Foreign Language",
+          "matched_keyword": "japanese",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-111",
+      "requested_skills": [
+        "Data Engineering"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Data Engineering skills - online",
+      "_skill_extraction": [
+        {
+          "skill": "Data Engineering",
+          "matched_keyword": "data engineering",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-113",
+      "requested_skills": [
+        "DevOps",
+        "React",
+        "Python"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps - internal; Python + React - online",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "React",
+          "matched_keyword": "react",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-116",
+      "requested_skills": [
+        "English"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "English - online course",
+      "_skill_extraction": [
+        {
+          "skill": "English",
+          "matched_keyword": "english",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-118",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "ISTQB certification",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "istqb",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-119",
+      "requested_skills": [],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Self-learning online",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-120",
+      "requested_skills": [
+        "Motion Design"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Motion design - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Motion Design",
+          "matched_keyword": "motion design",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-121",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "ISTQB certification",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "istqb",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-124",
+      "requested_skills": [
+        "Project Management"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "PMP certification - international",
+      "_skill_extraction": [
+        {
+          "skill": "Project Management",
+          "matched_keyword": "pmp",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-125",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Management skills",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-128",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "DevOps",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-129",
+      "requested_skills": [
+        "Go"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Go development",
+      "_skill_extraction": [
+        {
+          "skill": "Go",
+          "matched_keyword": "go development",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-130",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Domain knowledge - Product Mindset",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-132",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Tech Lead and leadership skills",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-133",
+      "requested_skills": [
+        "AWS"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AWS advanced cases sharing - internal",
+      "_skill_extraction": [
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-134",
+      "requested_skills": [
+        "AI Tools",
+        "Planning"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI for developers - online; Time management, prioritization - online",
+      "_skill_extraction": [
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai for developer",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Planning",
+          "matched_keyword": "time management",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-138",
+      "requested_skills": [
+        "Automation Testing"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Automation testing - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation testing",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-139",
+      "requested_skills": [
+        "Soft Skills"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Soft skills - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Soft Skills",
+          "matched_keyword": "soft skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-143",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI skills",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-144",
+      "requested_skills": [
+        "Backend"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Backend JS - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-147",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "PM and BA skills",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-149",
+      "requested_skills": [
+        "Planning"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Planning skills",
+      "_skill_extraction": [
+        {
+          "skill": "Planning",
+          "matched_keyword": "planning skill",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-151",
+      "requested_skills": [
+        "English"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "English skills",
+      "_skill_extraction": [
+        {
+          "skill": "English",
+          "matched_keyword": "english",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-153",
+      "requested_skills": [
+        "React",
+        "Python"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Python, ReactJS - online or internal",
+      "_skill_extraction": [
+        {
+          "skill": "React",
+          "matched_keyword": "reactjs",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Python",
+          "matched_keyword": "python",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-155",
+      "requested_skills": [
+        "Frontend"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Frontend development",
+      "_skill_extraction": [
+        {
+          "skill": "Frontend",
+          "matched_keyword": "frontend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-158",
+      "requested_skills": [
+        "3D Design",
+        "UI/UX"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "3D design, UI motion",
+      "_skill_extraction": [
+        {
+          "skill": "3D Design",
+          "matched_keyword": "3d design",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "UI/UX",
+          "matched_keyword": "ui motion",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-159",
+      "requested_skills": [
+        "AI Tools"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "AI-powered workflow management",
+      "_skill_extraction": [
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai-powered",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-160",
+      "requested_skills": [
+        "System Design"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "System Design fundamentals",
+      "_skill_extraction": [
+        {
+          "skill": "System Design",
+          "matched_keyword": "system design",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-163",
+      "requested_skills": [],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Design - internal training or online course",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-164",
+      "requested_skills": [
+        "TypeScript",
+        "JavaScript"
+      ],
+      "priority": "High",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Coding Skills - TypeScript, JavaScript - internal",
+      "_skill_extraction": [
+        {
+          "skill": "TypeScript",
+          "matched_keyword": "typescript",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "JavaScript",
+          "matched_keyword": "javascript",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-165",
+      "requested_skills": [
+        "UI/UX"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "UX analysis, product skills",
+      "_skill_extraction": [
+        {
+          "skill": "UI/UX",
+          "matched_keyword": "ux analysis",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-166",
+      "requested_skills": [
+        "Project Management",
+        "Data Analysis"
+      ],
+      "priority": "Medium",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Data analysis, Stress management, Project management - mixed",
+      "_skill_extraction": [
+        {
+          "skill": "Project Management",
+          "matched_keyword": "project management",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Data Analysis",
+          "matched_keyword": "data analysis",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2026_Q1",
+      "employee_id": "EMP-167",
+      "requested_skills": [
+        "Leadership"
+      ],
+      "priority": "Low",
+      "survey_period": "2026_Q1",
+      "_raw_topic": "Leadership skills - online or internal; Total reward knowledge",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    }
+  ],
+  "_superseded_surveys": [
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-001",
+      "requested_skills": [
+        "System Design"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Advanced system design and architecture",
+      "_skill_extraction": [
+        {
+          "skill": "System Design",
+          "matched_keyword": "system design",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-007",
+      "requested_skills": [
+        "CI/CD",
+        "DevOps"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "CI/CD and DevOps fundamentals",
+      "_skill_extraction": [
+        {
+          "skill": "CI/CD",
+          "matched_keyword": "ci/cd",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-010",
+      "requested_skills": [
+        "Kubernetes",
+        "Microservices"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Microservices and container orchestration",
+      "_skill_extraction": [
+        {
+          "skill": "Kubernetes",
+          "matched_keyword": "container orchestration",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Microservices",
+          "matched_keyword": "microservice",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-013",
+      "requested_skills": [
+        "Machine Learning"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Machine Learning fundamentals - online course",
+      "_skill_extraction": [
+        {
+          "skill": "Machine Learning",
+          "matched_keyword": "machine learning",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-016",
+      "requested_skills": [
+        "React"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Advanced ReactJS and state management",
+      "_skill_extraction": [
+        {
+          "skill": "React",
+          "matched_keyword": "reactjs",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-018",
+      "requested_skills": [
+        "Node.js",
+        "Backend"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Backend development with NodeJS - internal",
+      "_skill_extraction": [
+        {
+          "skill": "Node.js",
+          "matched_keyword": "nodejs",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-021",
+      "requested_skills": [
+        "Spring Boot"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Spring Boot advanced topics - internal",
+      "_skill_extraction": [
+        {
+          "skill": "Spring Boot",
+          "matched_keyword": "spring boot",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-031",
+      "requested_skills": [
+        "Cloud"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AI and Cloud fundamentals",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-037",
+      "requested_skills": [
+        "Kubernetes"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "CKA certification prep - online",
+      "_skill_extraction": [
+        {
+          "skill": "Kubernetes",
+          "matched_keyword": "cka",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-047",
+      "requested_skills": [],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Java performance tuning - internal",
+      "_skill_extraction": []
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-048",
+      "requested_skills": [
+        "AWS"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AWS solutions architect - online",
+      "_skill_extraction": [
+        {
+          "skill": "AWS",
+          "matched_keyword": "aws",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-061",
+      "requested_skills": [
+        "Data Engineering"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "ML integration with data pipelines",
+      "_skill_extraction": [
+        {
+          "skill": "Data Engineering",
+          "matched_keyword": "data pipeline",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-062",
+      "requested_skills": [
+        "MLOps",
+        "Model Deployment"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Model deployment and MLOps",
+      "_skill_extraction": [
+        {
+          "skill": "MLOps",
+          "matched_keyword": "mlops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Model Deployment",
+          "matched_keyword": "model deployment",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-066",
+      "requested_skills": [
+        "DevOps",
+        "Azure"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Azure DevOps - online course",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Azure",
+          "matched_keyword": "azure",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-086",
+      "requested_skills": [
+        "DevOps"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "DevOps foundations - internal",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-089",
+      "requested_skills": [
+        "Playwright"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Advanced Playwright and AI testing",
+      "_skill_extraction": [
+        {
+          "skill": "Playwright",
+          "matched_keyword": "playwright",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-090",
+      "requested_skills": [
+        "DevOps",
+        "Cloud"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "DevOps and cloud - internal",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-092",
+      "requested_skills": [
+        "Cloud"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Cloud certification prep - online",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-094",
+      "requested_skills": [
+        "System Design"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "System design and architecture",
+      "_skill_extraction": [
+        {
+          "skill": "System Design",
+          "matched_keyword": "system design",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-119",
+      "requested_skills": [
+        "Deep Learning"
+      ],
+      "priority": "High",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Advanced ML and deep learning - online",
+      "_skill_extraction": [
+        {
+          "skill": "Deep Learning",
+          "matched_keyword": "deep learning",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-124",
+      "requested_skills": [
+        "Project Management"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "Product and project management skills",
+      "_skill_extraction": [
+        {
+          "skill": "Project Management",
+          "matched_keyword": "project management",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    },
+    {
+      "survey_id": "SUR_2025_Q4",
+      "employee_id": "EMP-159",
+      "requested_skills": [
+        "AI Tools",
+        "Project Management"
+      ],
+      "priority": "Medium",
+      "survey_period": "2025_Q4",
+      "_raw_topic": "AI-assisted project management tools",
+      "_skill_extraction": [
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai-assisted",
+          "source_field": "DS03.Training_Topic"
+        },
+        {
+          "skill": "Project Management",
+          "matched_keyword": "project management",
+          "source_field": "DS03.Training_Topic"
+        }
+      ]
+    }
+  ],
+  "trainers": [
+    {
+      "trainer_id": "TRN-001",
+      "skills": [
+        "Java",
+        "Management skills"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Java, Management skills"
+    },
+    {
+      "trainer_id": "TRN-002",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "MySQL",
+        "Angular",
+        "JavaScript",
+        "Node.js",
+        "Revit",
+        "Project Management"
+      ],
+      "available_hours_per_month": 8,
+      "_raw_expertise": "Java; Spring Boot; ReactJS; MySQL; Angular; JavaScript; NodeJS; Revit; Project Management"
+    },
+    {
+      "trainer_id": "TRN-003",
+      "skills": [
+        "C#",
+        "Python",
+        "React",
+        "Angular",
+        "SQL"
+      ],
+      "available_hours_per_month": 8,
+      "_raw_expertise": "C#; Python; ReactJS; Angular; SQL"
+    },
+    {
+      "trainer_id": "TRN-004",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "Python",
+        "FastAPI",
+        "Go",
+        "Bash",
+        "PostgreSQL",
+        "MySQL",
+        "Terraform",
+        "Ansible",
+        "AWS",
+        "GCP",
+        "Jenkins",
+        "Docker",
+        "Kubernetes",
+        "Nginx",
+        "Prometheus",
+        "Grafana"
+      ],
+      "available_hours_per_month": 8,
+      "_raw_expertise": "Java; Spring Boot; Python; FastAPI; Golang; Bash; PostgreSQL; MySQL; Terraform; Ansible; AWS; GCP; Jenkins; Docker; Kubernetes; Nginx; Prometheus; Grafana"
+    },
+    {
+      "trainer_id": "TRN-005",
+      "skills": [
+        "Project Management",
+        "Java",
+        "Spring Boot",
+        "React",
+        "AI",
+        "DBA",
+        "Cloud Platform"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Project Management; Java; Spring Boot; ReactJS; AI; DBA; Cloud Platform"
+    },
+    {
+      "trainer_id": "TRN-006",
+      "skills": [
+        "Python",
+        "DevOps",
+        "Project Management",
+        "UI/UX"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Python; DevOps; Project Management; UI/UX Design"
+    },
+    {
+      "trainer_id": "TRN-007",
+      "skills": [
+        "Python",
+        "Agentic AI",
+        "LLM/GenAI",
+        "Machine Learning"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Python; Agentic AI; LLM; Machine Learning"
+    },
+    {
+      "trainer_id": "TRN-008",
+      "skills": [
+        "Python",
+        "Docker",
+        "React",
+        "C/C++"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Python; Docker; ReactJS; C/C++"
+    },
+    {
+      "trainer_id": "TRN-009",
+      "skills": [
+        "Python",
+        "BigQuery",
+        "SQL",
+        "Shell Script",
+        "C++",
+        "Rust",
+        "Dbt",
+        "Scikit-learn",
+        "TensorFlow",
+        "PyTorch",
+        "LangChain",
+        "Kubernetes",
+        "Docker",
+        "Jenkins",
+        "Terraform",
+        "GitHub Actions",
+        "GCP",
+        "Azure",
+        "AWS"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Python; BigQuery; SQL; Shell Script; C++; Rust; dbt; Scikit-learn; TensorFlow; PyTorch; LangChain; Kubernetes; Docker; Jenkins; Terraform; GitHub Actions; GCP; Azure; AWS"
+    },
+    {
+      "trainer_id": "TRN-010",
+      "skills": [
+        "Python",
+        "Spring Boot",
+        "MySQL",
+        "Java"
+      ],
+      "available_hours_per_month": 4,
+      "_raw_expertise": "Python; Spring Boot; MySQL; Java"
+    }
+  ],
+  "goals": [
+    {
+      "goal_id": "GOAL-2025-08",
+      "required_skills": [
+        "Cloud",
+        "System Design",
+        "Backend",
+        "Leadership",
+        "Communication",
+        "Interview Skills"
+      ],
+      "target_quarter": "Q3_2025",
+      "target_deadline": "2025-09-30",
+      "_raw_description": "Prepare selected employees with interview skills for technical leadership roles, covering leadership responsibilities, problem-solving approaches, team communication, and technical experience across web/backend/DB/system design/infra/cloud domains.",
+      "_skill_extraction": [
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "System Design",
+          "matched_keyword": "system design",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Backend",
+          "matched_keyword": "backend",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Leadership",
+          "matched_keyword": "technical leadership",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Interview Skills",
+          "matched_keyword": "interview skill",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 5
+    },
+    {
+      "goal_id": "GOAL-2025-09",
+      "required_skills": [
+        "Automation Testing"
+      ],
+      "target_quarter": "Q3_2025",
+      "target_deadline": "2025-09-30",
+      "_raw_description": "Address technical skill gaps required by current project demands, focusing on platform-specific testing experience and automation test framework knowledge to align with client requirements.",
+      "_skill_extraction": [
+        {
+          "skill": "Automation Testing",
+          "matched_keyword": "automation test",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 4
+    },
+    {
+      "goal_id": "GOAL-2025-11",
+      "required_skills": [
+        "DevOps",
+        "LLM/GenAI"
+      ],
+      "target_quarter": "Q4_2025",
+      "target_deadline": "2025-12-31",
+      "_raw_description": "Build next-generation DevOps capability capable of supporting AI-heavy projects with high traffic, using modern LLM-serving technology stacks.",
+      "_skill_extraction": [
+        {
+          "skill": "DevOps",
+          "matched_keyword": "devops",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "LLM/GenAI",
+          "matched_keyword": "llm",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 7
+    },
+    {
+      "goal_id": "GOAL-2026-01",
+      "required_skills": [
+        "Leadership",
+        "Communication"
+      ],
+      "target_quarter": "Q1_2026",
+      "target_deadline": "2026-03-31",
+      "_raw_description": "Develop next-generation leadership pipeline with team-leading capability and strong communication skills to support organizational growth.",
+      "_skill_extraction": [
+        {
+          "skill": "Leadership",
+          "matched_keyword": "leadership",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Communication",
+          "matched_keyword": "communication",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 9
+    },
+    {
+      "goal_id": "GOAL-2026-04",
+      "required_skills": [
+        "AI Tools",
+        "System Design"
+      ],
+      "target_quarter": "Q2_2026",
+      "target_deadline": "2026-06-30",
+      "_raw_description": "Train engineering staff to achieve AI application proficiency and earn professional certifications in AI tools and architecture.",
+      "_skill_extraction": [
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai tools",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "System Design",
+          "matched_keyword": "architecture",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 10
+    },
+    {
+      "goal_id": "GOAL-2026-07",
+      "required_skills": [
+        "Kubernetes",
+        "CI/CD",
+        "IaC",
+        "Cloud"
+      ],
+      "target_quarter": "Q3_2026",
+      "target_deadline": "2026-09-30",
+      "_raw_description": "Upskill at least 60% of development team in cloud-native technologies (Kubernetes, CI/CD, IaC) to support cloud-first project delivery.",
+      "_skill_extraction": [
+        {
+          "skill": "Kubernetes",
+          "matched_keyword": "kubernetes",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "CI/CD",
+          "matched_keyword": "ci/cd",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "IaC",
+          "matched_keyword": "iac",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "Cloud",
+          "matched_keyword": "cloud-native",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 8
+    },
+    {
+      "goal_id": "GOAL-2026-10",
+      "required_skills": [
+        "AI Agent",
+        "AI Tools"
+      ],
+      "target_quarter": "Q4_2026",
+      "target_deadline": "2026-12-31",
+      "_raw_description": "Establish internal AI agent development competency so teams can prototype and deploy AI-powered workflows independently.",
+      "_skill_extraction": [
+        {
+          "skill": "AI Agent",
+          "matched_keyword": "ai agent",
+          "source_field": "DS05.Goal_Description"
+        },
+        {
+          "skill": "AI Tools",
+          "matched_keyword": "ai-powered",
+          "source_field": "DS05.Goal_Description"
+        }
+      ],
+      "strategic_weight": 6
+    }
+  ]
+}

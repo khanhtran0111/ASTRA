@@ -1,0 +1,142 @@
+Survey_ID,Employee_ID,Training_Topic,Priority
+SUR_2025_Q4,EMP-001,Advanced system design and architecture,High
+SUR_2025_Q4,EMP-007,CI/CD and DevOps fundamentals,Medium
+SUR_2025_Q4,EMP-010,Microservices and container orchestration,High
+SUR_2025_Q4,EMP-013,Machine Learning fundamentals - online course,Medium
+SUR_2025_Q4,EMP-016,Advanced ReactJS and state management,Medium
+SUR_2025_Q4,EMP-018,Backend development with NodeJS - internal,High
+SUR_2025_Q4,EMP-021,Spring Boot advanced topics - internal,High
+SUR_2025_Q4,EMP-024,Go language development - internal,High
+SUR_2025_Q4,EMP-028,Cloud deployment on AWS - online,Medium
+SUR_2025_Q4,EMP-031,AI and Cloud fundamentals,High
+SUR_2025_Q4,EMP-036,Kubernetes and container orchestration,High
+SUR_2025_Q4,EMP-037,CKA certification prep - online,Medium
+SUR_2025_Q4,EMP-041,LLM application development,High
+SUR_2025_Q4,EMP-044,MLOps practices and tooling,High
+SUR_2025_Q4,EMP-047,Java performance tuning - internal,Medium
+SUR_2025_Q4,EMP-048,AWS solutions architect - online,High
+SUR_2025_Q4,EMP-060,Team leadership and strategic planning,High
+SUR_2025_Q4,EMP-061,ML integration with data pipelines,Medium
+SUR_2025_Q4,EMP-062,Model deployment and MLOps,High
+SUR_2025_Q4,EMP-066,Azure DevOps - online course,Medium
+SUR_2025_Q4,EMP-076,AI and ML foundations - online,High
+SUR_2025_Q4,EMP-077,Data engineering pipelines - internal,Medium
+SUR_2025_Q4,EMP-081,AWS data services - online,High
+SUR_2025_Q4,EMP-086,DevOps foundations - internal,High
+SUR_2025_Q4,EMP-089,Advanced Playwright and AI testing,High
+SUR_2025_Q4,EMP-090,DevOps and cloud - internal,Medium
+SUR_2025_Q4,EMP-092,Cloud certification prep - online,High
+SUR_2025_Q4,EMP-093,Leadership and team management,Medium
+SUR_2025_Q4,EMP-094,System design and architecture,Medium
+SUR_2025_Q4,EMP-098,AI agents and LLM workflows - internal,High
+SUR_2025_Q4,EMP-103,Frontend performance and testing - internal,Medium
+SUR_2025_Q4,EMP-106,Technology strategy and roadmap planning,Medium
+SUR_2025_Q4,EMP-117,Security and threat detection - online,High
+SUR_2025_Q4,EMP-119,Advanced ML and deep learning - online,High
+SUR_2025_Q4,EMP-124,Product and project management skills,Medium
+SUR_2025_Q4,EMP-127,LLM fine-tuning and GenAI - online,High
+SUR_2025_Q4,EMP-131,Advanced PM and stakeholder management,High
+SUR_2025_Q4,EMP-135,Technical leadership and architecture review,High
+SUR_2025_Q4,EMP-137,AI adoption strategy and roadmap,High
+SUR_2025_Q4,EMP-159,AI-assisted project management tools,Medium
+SUR_2026_Q1,EMP-001,Leadership skills,High
+SUR_2026_Q1,EMP-002,"Soft skills, online learning",Low
+SUR_2026_Q1,EMP-003,Japanese language - self-learning,Medium
+SUR_2026_Q1,EMP-005,Build personal agent to enhance workflow,Medium
+SUR_2026_Q1,EMP-007,Interview skills,High
+SUR_2026_Q1,EMP-008,AI-related skills,Low
+SUR_2026_Q1,EMP-009,Self-learning external courses,Low
+SUR_2026_Q1,EMP-010,DevOps,Medium
+SUR_2026_Q1,EMP-011,Planning skills,Medium
+SUR_2026_Q1,EMP-012,Automation Testing,Low
+SUR_2026_Q1,EMP-013,"AI Agent, MLOps, Security - internal training",Low
+SUR_2026_Q1,EMP-014,Python development - internal training,Medium
+SUR_2026_Q1,EMP-015,Data Scientist skills - online course,Medium
+SUR_2026_Q1,EMP-016,"Planning Skills, Agentic AI knowledge",High
+SUR_2026_Q1,EMP-018,"Python backend (internal), AWS/GCP (online), Japanese (online)",High
+SUR_2026_Q1,EMP-020,Technical skills with project practice opportunity,Low
+SUR_2026_Q1,EMP-021,"DevOps, modern backend technologies",High
+SUR_2026_Q1,EMP-025,Communication and leadership skills,Medium
+SUR_2026_Q1,EMP-027,Automation testing from basics,Medium
+SUR_2026_Q1,EMP-030,Advanced React,Low
+SUR_2026_Q1,EMP-031,"AI, English, Cloud",High
+SUR_2026_Q1,EMP-035,"Soft skills, client communication, problem-solving",Low
+SUR_2026_Q1,EMP-037,"CKA certification - online, DevOps - online",Medium
+SUR_2026_Q1,EMP-039,Internal DevOps training course,High
+SUR_2026_Q1,EMP-040,English communication,Medium
+SUR_2026_Q1,EMP-042,Communication skills,Medium
+SUR_2026_Q1,EMP-043,Automation skill - Python,Low
+SUR_2026_Q1,EMP-045,Python/Golang internal; communication/leadership internal,High
+SUR_2026_Q1,EMP-046,Mobile App Automation Testing,Medium
+SUR_2026_Q1,EMP-047,C++ development,Medium
+SUR_2026_Q1,EMP-048,AWS Cloud Architecture and Cloud Security - internal training,High
+SUR_2026_Q1,EMP-049,AI integration into systems - internal training,Medium
+SUR_2026_Q1,EMP-051,Cloud services,Medium
+SUR_2026_Q1,EMP-053,CI/CD pipeline,Low
+SUR_2026_Q1,EMP-054,"Communication, leadership, PM skills",Medium
+SUR_2026_Q1,EMP-056,Java development - online course,Low
+SUR_2026_Q1,EMP-058,Communication skills,High
+SUR_2026_Q1,EMP-061,"GenAI, LLM skills - online course",Low
+SUR_2026_Q1,EMP-062,Management skills,High
+SUR_2026_Q1,EMP-063,Automation Testing for beginners,Low
+SUR_2026_Q1,EMP-064,Backend/AI skills - internal training,High
+SUR_2026_Q1,EMP-065,AI agent - online course,Low
+SUR_2026_Q1,EMP-066,"Infrastructure & Cloud, Management skills",Medium
+SUR_2026_Q1,EMP-068,"Python, Java",Medium
+SUR_2026_Q1,EMP-069,"Cloud, Domain knowledge, Architecture - online",Low
+SUR_2026_Q1,EMP-070,"New language skills (e.g., Chinese/Korean)",Low
+SUR_2026_Q1,EMP-073,"NodeJS, Python, leadership, communication - online",Low
+SUR_2026_Q1,EMP-074,Cross-functional project participation as learner,Low
+SUR_2026_Q1,EMP-075,"Python development, DevOps",Medium
+SUR_2026_Q1,EMP-079,Online course with self-study materials,High
+SUR_2026_Q1,EMP-080,Not sure yet,Medium
+SUR_2026_Q1,EMP-082,Omniverse development - internal training,Low
+SUR_2026_Q1,EMP-084,Planning skills,Low
+SUR_2026_Q1,EMP-085,Scrum Master certification,Medium
+SUR_2026_Q1,EMP-086,DevOps,High
+SUR_2026_Q1,EMP-089,Automation Testing (Playwright) + AI Testing,High
+SUR_2026_Q1,EMP-090,DevOps - internal training,High
+SUR_2026_Q1,EMP-091,"Python, foreign language",Medium
+SUR_2026_Q1,EMP-092,"Cloud Services (AWS, GCP) - online, Cloud certification",High
+SUR_2026_Q1,EMP-094,English - internal; Safe and effective AI usage - internal/online,High
+SUR_2026_Q1,EMP-095,Python + AI skills,Medium
+SUR_2026_Q1,EMP-096,Effective AI usage in testing,Medium
+SUR_2026_Q1,EMP-099,Online course,High
+SUR_2026_Q1,EMP-101,Self-learning,High
+SUR_2026_Q1,EMP-102,Leadership and people management,Low
+SUR_2026_Q1,EMP-105,"Java development, Software architecture - internal training",Medium
+SUR_2026_Q1,EMP-108,Automation testing,Medium
+SUR_2026_Q1,EMP-109,Data engineering/Backend development - internal training,Medium
+SUR_2026_Q1,EMP-110,Japanese language class - offline,Low
+SUR_2026_Q1,EMP-111,Data Engineering skills - online,Medium
+SUR_2026_Q1,EMP-113,DevOps - internal; Python + React - online,Medium
+SUR_2026_Q1,EMP-116,English - online course,High
+SUR_2026_Q1,EMP-118,ISTQB certification,Low
+SUR_2026_Q1,EMP-119,Self-learning online,Low
+SUR_2026_Q1,EMP-120,Motion design - online course,Medium
+SUR_2026_Q1,EMP-121,ISTQB certification,Medium
+SUR_2026_Q1,EMP-124,PMP certification - international,Low
+SUR_2026_Q1,EMP-125,Management skills,High
+SUR_2026_Q1,EMP-128,DevOps,Medium
+SUR_2026_Q1,EMP-129,Go development,High
+SUR_2026_Q1,EMP-130,Domain knowledge - Product Mindset,High
+SUR_2026_Q1,EMP-132,Tech Lead and leadership skills,Low
+SUR_2026_Q1,EMP-133,AWS advanced cases sharing - internal,Low
+SUR_2026_Q1,EMP-134,"AI for developers - online; Time management, prioritization - online",Medium
+SUR_2026_Q1,EMP-138,Automation testing - online course,High
+SUR_2026_Q1,EMP-139,Soft skills - online course,Medium
+SUR_2026_Q1,EMP-143,AI skills,Medium
+SUR_2026_Q1,EMP-144,Backend JS - online course,Medium
+SUR_2026_Q1,EMP-147,PM and BA skills,Medium
+SUR_2026_Q1,EMP-149,Planning skills,High
+SUR_2026_Q1,EMP-151,English skills,Low
+SUR_2026_Q1,EMP-153,"Python, ReactJS - online or internal",High
+SUR_2026_Q1,EMP-155,Frontend development,High
+SUR_2026_Q1,EMP-158,"3D design, UI motion",High
+SUR_2026_Q1,EMP-159,AI-powered workflow management,Low
+SUR_2026_Q1,EMP-160,System Design fundamentals,Low
+SUR_2026_Q1,EMP-163,Design - internal training or online course,High
+SUR_2026_Q1,EMP-164,"Coding Skills - TypeScript, JavaScript - internal",High
+SUR_2026_Q1,EMP-165,"UX analysis, product skills",Low
+SUR_2026_Q1,EMP-166,"Data analysis, Stress management, Project management - mixed",Medium
+SUR_2026_Q1,EMP-167,Leadership skills - online or internal; Total reward knowledge,Low

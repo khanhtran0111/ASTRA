@@ -1,0 +1,206 @@
+Employee_ID,Position,Skill,Proficiency_Level,Skill_Gap
+EMP-001,Software Developer,C#; Python; ReactJS; Angular; SQL,Advanced,"Cloud, Automation; Version Control (Git), Containerization"
+EMP-002,.NET Developer,C#; Angular; React; Python,Intermediate,"Data Analysis; Version Control (Git), Containerization"
+EMP-003,QA Engineer,Selenium; Java; SQL,Intermediate,"Automation Testing, API Testing, Performance Testing, System Architecture"
+EMP-004,Project Manager,Java; Spring Boot; Kotlin; Docker; AWS,Intermediate,"Agile/Scrum, Strategic Planning, AI Tools & Copilot Usage, Technical Leadership"
+EMP-005,Data Scientist,Python; C/C++,Intermediate,"ETL/Data Pipeline, Data Visualization, ML Integration"
+EMP-006,QA Engineer,JavaScript; SQL; HTML; CSS; Python; Java,Intermediate,"Automation Testing, API Testing"
+EMP-007,Software Developer,JavaScript; ReactJS; NodeJS; NestJS; NextJS,Advanced,"Automation Testing, UI/UX; Version Control (Git), Containerization"
+EMP-008,Software Developer,Java; Spring Boot; MySQL; Oracle; Redis; Kafka,Intermediate,"Version Control (Git), Containerization"
+EMP-009,Accountant,Office tools; Accounting software,Advanced,AI Tools & Copilot Usage
+EMP-010,Software Developer,Java; Spring Boot,Intermediate,"Cloud Services, System Architecture"
+EMP-011,Software Developer,JavaScript; TypeScript; ReactJS; NodeJS,Beginner,"Cloud Services, Technical Depth"
+EMP-012,QA Engineer,Postman; BigQuery; Jira,Beginner,"Version Control (Git), Containerization, Cloud Services"
+EMP-013,Java Developer,Java; Python; JavaScript; SpringBoot; MySQL,Intermediate,"Deep Learning, Reinforcement Learning; Version Control (Git)"
+EMP-014,Software Developer,Java; C#; JavaScript; NestJS; .NET; ReactJS,Beginner,"Cloud Services, Technical Depth"
+EMP-015,Data Scientist,Python,Beginner,"ETL/Data Pipeline, Data Visualization, ML Integration"
+EMP-016,Frontend Developer,JavaScript; TypeScript; Python; ReactJS; NextJS; K8s; GCloud,Intermediate,"Automation Testing, UI/UX; System Design"
+EMP-017,QA Engineer,Postman; MySQL; BigQuery; Cucumber; Java,Beginner,"Automation Testing, Performance Testing, Security Testing"
+EMP-018,Frontend Developer,ReactJS; NestJS; NextJS; MySQL; MongoDB; Firebase; AWS,Intermediate,"UI/UX Design, Figma; Version Control (Git)"
+EMP-019,Technical Lead,ReactJS; NodeJS; PostgreSQL,Intermediate,"Agile/Scrum, Strategic Planning, AI Tools & Copilot Usage"
+EMP-020,QA Engineer,PHP; Laravel; SQL; VueJS; ReactJS,Beginner,"Automation Testing, API Testing"
+EMP-021,Software Developer,Java; Spring Boot; MySQL,Beginner,"Cloud Services, Technical Depth"
+EMP-022,AI Engineer,Python; pySpark; MySQL; PyTorch,Beginner,"MLOps, LLM/GenAI, Model Deployment"
+EMP-023,Python Developer,Python; Azure,Advanced,"Containerization, Testing, AI Tools & Copilot Usage"
+EMP-024,Software Developer,Python; NodeJS; Golang; Java; ReactJS; PostgreSQL; AWS,Advanced,DevOps; Version Control (Git)
+EMP-025,QA Engineer,Playwright; JavaScript,Beginner,"Manual QA, SQL Testing, API Testing; Performance Testing"
+EMP-026,Software Developer,NodeJS; Python; ReactJS; FastAPI; MySQL; MongoDB; PostgreSQL; Redis,Intermediate,DevOps; Containerization
+EMP-027,QA Engineer,Selenium; Java; TestNG,Advanced,"Automation Testing, API Testing, Performance Testing, AI Tools"
+EMP-028,Software Developer,ReactJS; PostgreSQL; NodeJS; Docker,Advanced,"DevOps, Automation Testing, UI/UX; Cloud Services"
+EMP-029,Technical Lead,NodeJS; React; FastAPI; Data Engineering,Advanced,"Agile/Scrum, Strategic Planning"
+EMP-030,Java Developer,Java; Spring Boot; JavaEE; Selenium; MySQL; MongoDB,Advanced,Automation Testing; Containerization
+EMP-031,Java Developer,Java; SpringBoot; PostgreSQL; Docker; Kubernetes; GCP; AWS,Intermediate,"Testing, System Design, AI Tools & Copilot Usage"
+EMP-032,Backend Developer,NodeJS; Go; JavaScript; ReactJS; PostgreSQL,Advanced,Frontend; Containerization
+EMP-033,QA Engineer,JavaScript,Beginner,"Automation Testing, API Testing, Performance Testing"
+EMP-034,Software Developer,Java; Spring Boot; JUnit; Mockito; PostgreSQL; Python,Beginner,"Cloud Services, Technical Depth"
+EMP-035,Backend Developer,Python; R; SQL; Machine Learning Libraries,Intermediate,AI/ML Engineering; Containerization
+EMP-036,DevOps Engineer,C#; Java; PHP; NodeJS; Golang; Python; Docker; K8s,Intermediate,"Container Orchestration, Monitoring/Observability"
+EMP-037,DevOps Engineer,Java; Spring Boot; Python; FastAPI; Golang; Terraform; Ansible; AWS; GCP; Docker; Kubernetes,Beginner,"DevSecOps, Technical Depth"
+EMP-038,Frontend Developer,ReactJS,Beginner,"Cloud Services, Technical Depth"
+EMP-039,Software Engineer,ReactJS,Intermediate,Backend (.NET); Containerization
+EMP-040,Software Developer,PHP; Laravel; MySQL; JavaScript,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-041,AI Engineer,Python,Intermediate,"MLOps, LLM/GenAI"
+EMP-042,Mobile Developer,Flutter,Intermediate,"Cloud Services, System Architecture"
+EMP-043,QA Engineer,MySQL; Postman; JMeter,Advanced,Automation (Cypress/JavaScript); Security Testing
+EMP-044,AI Engineer,Python; C/C++,Intermediate,"Data Engineering; MLOps, LLM/GenAI"
+EMP-045,Java Developer,Java; JavaScript; Spring Boot; Angular; MySQL; PostgreSQL; Docker; Kafka; Redis,Beginner,Frontend Angular; Cloud Services
+EMP-046,QA Engineer,ReactJS,Beginner,"Manual Testing; Automation Testing, API Testing"
+EMP-047,Java Technical Lead,Java; Spring Boot; Kafka; SQL; Redis,Advanced,"Agile/Scrum, Strategic Planning"
+EMP-048,Fullstack Developer,ASP.NET Core; SQL Server; PostgreSQL; VueJS; ReactJS; NodeJS,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-049,.NET Developer,.NET; C#; SQL Server; PostgreSQL,Intermediate,"Cloud Services, System Architecture"
+EMP-050,Mobile Developer,Java; Swift; Kotlin,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-051,QA Engineer,Java; Cucumber; JavaScript; TypeScript; Jest; PostgreSQL,Intermediate,"Automation Testing, API Testing"
+EMP-052,Software Developer,Python; MS SQL; Oracle SQL,Intermediate,"Data Analysis, Data Science; Containerization"
+EMP-053,QA Engineer,Java; Spring Boot; JavaScript; Selenium; MySQL; MongoDB,Beginner,"Automation Testing; API Testing, Performance Testing"
+EMP-054,Frontend Developer,ReactJS; Angular,Intermediate,NodeJS Backend; Containerization
+EMP-055,Software Engineer,Python; Django; PostgreSQL; FastAPI,Beginner,"Cloud Services, Technical Depth"
+EMP-056,Software Developer,Java; Spring Boot; MySQL; PostgreSQL,Beginner,"Cloud Services, Technical Depth"
+EMP-057,Web Developer,CodeIgniter; Laravel; ReactJS; MySQL; MongoDB; Python; Ruby,Advanced,DevOps; Containerization
+EMP-058,Software Developer,Python,Advanced,"DevOps, Data Engineering, AI; Containerization"
+EMP-059,Software Engineer,Python; FastAPI; PostgreSQL; MSSQL Server,Intermediate,DevOps; Containerization
+EMP-060,Backend Technical Lead,AWS; .NET; C#; NodeJS; NestJS; Golang; SQL Server; PostgreSQL; MongoDB; DynamoDB; React,Advanced,"DevOps & Infrastructure, Data Engineering; Agile/Scrum"
+EMP-061,Data Engineer,Azure; AWS; GCP; Python; Spark,Advanced,"Data Visualization, ML Integration"
+EMP-062,AI Engineer,Python; ReactJS; PostgreSQL; MongoDB; FastAPI; LLM Tools,Intermediate,"DevOps, Data Analysis; MLOps, Model Deployment"
+EMP-063,QA Engineer,SQL; Postman,Intermediate,"Automation Testing, Performance Testing, Security Testing"
+EMP-064,Software Developer,JavaScript; ReactJS; NodeJS,Intermediate,"Cloud Services, System Architecture"
+EMP-065,Software Developer,Python; Django; PostgreSQL,Beginner,"Cloud Services, Technical Depth"
+EMP-066,.NET Developer,.NET; Angular,Intermediate,"AWS, Azure DevOps; Containerization"
+EMP-067,Software Developer,PHP; Magento; Laravel; JavaScript; ReactJS,Advanced,AI Tools & Copilot Usage; Containerization
+EMP-068,Fullstack Developer,ReactJS; PostgreSQL; NodeJS,Beginner,"DevOps, UI/UX; Containerization"
+EMP-069,Software Developer,C#; .NET; ReactJS; NestJS; AWS; Azure,Beginner,Automation Testing; Containerization
+EMP-070,Fullstack Developer,ASP.NET; ReactJS; NestJS; PostgreSQL; SQL Server,Beginner,"Cloud Services, Technical Depth"
+EMP-071,Frontend Developer,JavaScript; TypeScript; React; NodeJS; SQL; Python,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-072,QA Engineer,JavaScript; Selenium; Java; Maven,Beginner,"API Testing, Performance Testing"
+EMP-073,Java Developer,Java; Spring Boot; ReactJS; SQL; Python; Copilot AI,Advanced,Containerization
+EMP-074,Mobile Developer,Swift; Java; Objective-C,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-075,Frontend Developer,JavaScript; Angular; ReactJS; NextJS; React Testing Library,Beginner,"Cloud Services, Technical Depth"
+EMP-076,Data Engineer,Python; pySpark; AWS,Beginner,ML/AI; Data Visualization
+EMP-077,Data Scientist,React; Angular; NodeJS; FastAPI; MySQL; PostgreSQL; PyTorch; TensorFlow; Scikit-learn,Beginner,"ETL/Data Pipeline, ML Integration"
+EMP-078,Backend Developer,Java; Spring Boot; Hibernate; PostgreSQL; MySQL; Oracle,Advanced,System Design; Containerization
+EMP-079,Frontend Developer,JavaScript; ReactJS; NodeJS; Express; GitHub Actions; Figma,Intermediate,Containerization
+EMP-080,Java Developer,Java; Spring Boot; PostgreSQL,Beginner,"Cloud Services, Technical Depth"
+EMP-081,Data Engineer,Python; SQL; Terraform; AWS; GCP,Beginner,"DevOps; ETL/Data Pipeline, Data Visualization"
+EMP-082,Python Developer,Python; C#,Beginner,"Cloud Services, Technical Depth"
+EMP-083,Fullstack Developer,TypeScript; JavaScript; NodeJS; ReactJS,Beginner,"Python, Java; Containerization"
+EMP-084,Software Developer,ReactJS; NodeJS,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-085,Software Developer,ReactJS,Intermediate,DevOps; Containerization
+EMP-086,Java Developer,Java; Spring Boot; PostgreSQL,Intermediate,Containerization
+EMP-087,Software Developer,Java; Golang; Spring Boot; Go Gin,Beginner,"Cloud Services, Technical Depth"
+EMP-088,Software Developer,ReactJS; NestJS; PostgreSQL,Intermediate,"Cloud Services, System Architecture"
+EMP-089,QA Engineer,Playwright; TypeScript,Advanced,"Automation Testing, API Testing, Performance Testing, AI Tools"
+EMP-090,Data Scientist,Python,Intermediate,"DevOps; ETL/Data Pipeline, Data Visualization"
+EMP-091,Software Developer,PHP; Laravel; Python; Golang; VueJS; NodeJS; MySQL; PostgreSQL; MongoDB,Advanced,Cloud Services
+EMP-092,Backend Developer,Java; Golang; Spring Boot; PostgreSQL,Beginner,DevOps; Containerization
+EMP-093,Team Lead,NodeJS; Python; Golang; PHP; PostgreSQL; MySQL; Redis; Message-Queue,Advanced,"Agile/Scrum, Strategic Planning"
+EMP-094,Backend Developer,NodeJS; NestJS; ReactJS; PostgreSQL; Python; FastAPI; Docker; AWS,Advanced,"CI/CD, Performance Testing, Security Testing"
+EMP-095,Software Developer,Java; C++; JavaScript; Express; SQL,Beginner,DevOps; Containerization
+EMP-096,QA Engineer,Python Selenium; MySQL,Beginner,"Automation Testing; API Testing, Performance Testing"
+EMP-097,Software Developer,Golang; PostgreSQL,Beginner,DevOps; Containerization
+EMP-098,Software Engineer,TypeScript; NodeJS; React; Python; FastAPI; LangChain; Airflow; Kubernetes; Kafka,Intermediate,"DevOps, AI Agents, LLMs; Testing, System Architecture"
+EMP-099,QA Engineer,Python; MySQL; Selenium,Beginner,"Automation Testing; API Testing, Performance Testing"
+EMP-100,QA Engineer,Java; Spring Boot; ReactJS; PostgreSQL; Selenium; Cucumber; TypeScript,Intermediate,"DevOps (AWS, Terraform, K8s); API Testing, Performance Testing"
+EMP-101,Software Developer,JavaScript; SQL; Python; Terraform; Ansible; AWS,Beginner,"Frontend, Backend, DevOps; Containerization"
+EMP-102,Software Developer,.NET; PHP; JavaScript; MySQL; SQL Server,Advanced,AI Tools & Copilot Usage
+EMP-103,Frontend Developer,ReactJS; NodeJS; PostgreSQL; GCP,Advanced,Automation Testing; Containerization
+EMP-104,UI/UX Designer,Figma,Advanced,"Marketing, Frontend HTML/CSS; User Research, Prototyping"
+EMP-105,Backend Developer,Java; Spring Boot; Spring Webflux; Spring Security; MySQL; MongoDB; Redis,Beginner,DevOps; Containerization
+EMP-106,CTO,C++; Java,Intermediate,"Business Management; Agile/Scrum, Strategic Planning"
+EMP-107,Frontend Developer,JavaScript; ReactJS; NodeJS,Beginner,Testing; Containerization
+EMP-108,QA Engineer,Manual Testing; API; SQL,Advanced,Documentation; Containerization
+EMP-109,Fullstack Developer,ReactJS; NestJS; TypeScript; PostgreSQL,Beginner,Python; Containerization
+EMP-110,Backend Developer,NodeJS; TypeScript; NestJS; PostgreSQL; ReactJS,Beginner,Manual Testing; Containerization
+EMP-111,Java Developer,Java,Intermediate,"Cloud Services, System Architecture"
+EMP-112,Backend Developer,Golang,Beginner,DevOps; Containerization
+EMP-113,Backend Developer,PHP; JavaScript; NodeJS; Go; Python; Django; React,Beginner,"Cloud Services, Technical Depth"
+EMP-114,Backend Developer,NodeJS; Golang,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-115,Intern,.NET; NodeJS; GoLang; Java; PostgreSQL; ReactJS; Redis; Docker,Advanced,"Cloud Services, Testing, AI Tools & Copilot Usage"
+EMP-116,Software Developer,PHP; ReactJS; PostgreSQL; NextJS; NestJS; NodeJS,Advanced,"Cloud Services, AI Tools & Copilot Usage"
+EMP-117,DevOps Engineer,Terraform; GitHub Actions,Beginner,"Security, Threat Hunting; Container Orchestration, Monitoring"
+EMP-118,QA Engineer,Java; NodeJS; TypeScript; JavaScript; Cypress; Jest; Playwright,Beginner,"Backend Development; API Testing, Performance Testing"
+EMP-119,Data Scientist,Python; SQL; C; C++; Matlab,Intermediate,"MLOps, Data Analysis; ETL/Data Pipeline, System Architecture"
+EMP-120,UI/UX Designer,Figma,Beginner,"User Research, Prototyping, Accessibility Design"
+EMP-121,QA Engineer,C; Java; React,Beginner,"Automation Testing, API Testing, Performance Testing"
+EMP-122,Frontend Developer,JavaScript; ReactJS; Python; Java; MySQL; MongoDB,Intermediate,"UI/UX, Testing; Containerization"
+EMP-123,Software Developer,Java,Intermediate,"Cloud Services, System Architecture"
+EMP-124,Frontend Technical Lead,JavaScript; TypeScript; React; Vue; NestJS; NextJS; PostgreSQL,Advanced,"UI/UX, Auto Test, DevOps; Agile/Scrum, Strategic Planning"
+EMP-125,Software Engineer,ReactJS; Python FastAPI,Advanced,"UI/UX, Backend, Data Engineering; Containerization"
+EMP-126,Software Developer,ReactJS; NodeJS; NextJS; NestJS,Beginner,DevOps; Containerization
+EMP-127,AI Engineer,Python; MLOps; PyTorch,Beginner,"DevOps; LLM/GenAI, Model Deployment"
+EMP-128,Software Developer,.NET; Angular; SQL Server,Beginner,"BA, Tester; Containerization"
+EMP-129,Java Developer,Java; JavaScript; Spring Boot; Angular; Vue; MongoDB; SQL,Advanced,"DevOps, Cloud; Containerization"
+EMP-130,QA Engineer,Postman API; SQL Server,Intermediate,Robot Framework; Containerization
+EMP-131,Project Manager,Python,Advanced,"DevOps, Manager, UI/UX Design; Agile/Scrum, Strategic Planning"
+EMP-132,Frontend Developer,ReactJS; NodeJS; Python; FastAPI; Java; Spring Boot,Advanced,"DevOps, Data Engineering; Containerization"
+EMP-133,Backend Developer,JavaScript; ReactJS; NextJS; NestJS; AWS; PostgreSQL; MySQL,Intermediate,"DevOps, BA; Containerization"
+EMP-134,Software Developer,Java; SpringBoot; TypeScript; Angular; MySQL; Oracle; Azure,Advanced,"AI for Developers; Time Management, Planning"
+EMP-135,Technical Lead,C#; JavaScript; Golang; Python; NodeJS; ReactJS; PostgreSQL; MS SQL; DevOps Tools,Advanced,"Agile/Scrum, Strategic Planning"
+EMP-136,Product Manager,C#; .NET; Java Spring,Beginner,"UI/UX, Data Analysis; Agile/Scrum, Strategic Planning"
+EMP-137,CTO,Java; Spring Boot; ReactJS; AI; DBA; Cloud Platform,Advanced,IT Outsourcing & Embedded System; Agile/Scrum
+EMP-138,QA Engineer,Java; Spring Boot; TypeScript,Beginner,"Backend Development; Automation Testing, API Testing"
+EMP-139,Java Developer,Java; ZK; Oracle SQL; Spring Boot; ReactJS; C#; PostgreSQL,Intermediate,"Cloud Services, System Architecture"
+EMP-140,IT Helpdesk,PHP; Laravel; Java; AWS; GitHub; Docker,Intermediate,"Testing, System Design"
+EMP-141,Software Developer,ReactJS; NodeJS; PostgreSQL,Advanced,DevOps; Containerization
+EMP-142,QA Engineer,Python; TypeScript; Java,Beginner,"Automation Testing; API Testing, Performance Testing"
+EMP-143,Software Developer,Java; Spring Boot; ReactJS; PostgreSQL,Advanced,Automation Testing; Containerization
+EMP-144,Mobile Developer,Java; Kotlin; Swift; NodeJS; TypeScript; ReactJS; NextJS,Advanced,Web Development; Containerization
+EMP-145,Software Developer,C#; ASP.NET Core,Advanced,"Azure Cloud, Automation Testing; Containerization"
+EMP-146,Software Engineer,JavaScript; TypeScript; ReactJS; Python,Beginner,"UI/UX, AI, Data Analysis; Containerization"
+EMP-147,Software Developer,SQL Server; C#; HTML; Power Query,Advanced,Cloud Services
+EMP-148,QA Engineer,JavaScript,Advanced,"DevOps; Automation Testing, API Testing"
+EMP-149,Intern,Java; Spring Boot; ReactJS; PostgreSQL,Beginner,"DevOps, Automation Testing, UI/UX, AI Agent; Containerization"
+EMP-150,Intern,Golang; NodeJS; ReactJS; NextJS; PostgreSQL,Beginner,DevOps; Containerization
+EMP-151,Intern,Python; PostgreSQL; MySQL; Go; Power BI; Tableau; Apache Spark; Airflow; Docker; MLflow,Intermediate,"Data Analysis, Data Science, Data Engineering Pipeline; Cloud Services"
+EMP-152,Software Developer,NextJS; React; Vue; Python; NodeJS; .NET; C/C++; PostgreSQL; MySQL,Beginner,"Embedded Development, DevOps; Containerization"
+EMP-153,PHP Developer,PHP; Python; JavaScript; VueJS; ReactJS; MySQL; PostgreSQL,Advanced,"DevOps, UI/UX; Containerization"
+EMP-154,IT Infrastructure Engineer,C++; Python; JavaScript,Beginner,AI Training Model; Containerization
+EMP-155,Python Developer,Python; C++; Qt; HTML/CSS; ReactJS,Beginner,"UI/UX, Frontend; Containerization"
+EMP-156,Intern,C/C++; CMake; Python; FastAPI; PostgreSQL,Beginner,Computer Vision Model Training; Containerization
+EMP-157,Backend Developer,Python; FastAPI; Flask; MySQL,Beginner,"DevOps, Data Engineering; Containerization"
+EMP-158,UI/UX Designer,Figma,Beginner,"2D Artist; User Research, Prototyping"
+EMP-159,Project Manager,Java; Spring Boot; ReactJS; MySQL; Angular; JavaScript; NodeJS,Advanced,"UI/UX, Team Management; Agile/Scrum"
+EMP-160,Frontend Developer,ReactJS; PostgreSQL; NextJS; NestJS; TypeScript,Beginner,"Cloud Services, Technical Depth"
+EMP-161,Software Developer,ReactJS; NodeJS; PostgreSQL; MySQL; Java; NextJS; NestJS,Beginner,"Cloud Services, Technical Depth"
+EMP-162,AI Lead,Python; BigQuery; SQL; Shell Script; C++; Rust; dbt; Scikit-learn; TensorFlow; Keras; PyTorch; LangChain; Kubernetes; Docker; Jenkins; Terraform; GitHub Actions; GCP; Azure; AWS,Beginner,"MLOps, Technical Depth, Mathematical Analysis"
+EMP-163,Backend Developer,Java; Spring Boot; PostgreSQL,Beginner,"Golang, gRPC; Version Control (Git), Cloud Services"
+EMP-164,Software Developer,Python; FastAPI; PostgreSQL,Intermediate,"Golang; Microservices, Container Orchestration"
+EMP-165,Fullstack Developer,NodeJS; ReactJS; PostgreSQL,Intermediate,"Golang, Kubernetes; System Architecture, Cloud Services"
+EMP-166,Java Developer,Java; Spring Boot; MySQL; Redis,Beginner,"Golang, gRPC; Version Control (Git), Cloud Services"
+EMP-167,Software Engineer,TypeScript; NestJS; PostgreSQL,Intermediate,"Golang; Microservices, Container Orchestration"
+EMP-168,Backend Developer,Python; Django; MySQL,Advanced,"Golang, Kubernetes; System Architecture, Cloud Services"
+EMP-169,Software Developer,Java; Kotlin; Spring Boot,Intermediate,"Golang, gRPC; Version Control (Git), Cloud Services"
+EMP-170,Fullstack Developer,NodeJS; Express; MongoDB,Beginner,"Golang; Microservices, Container Orchestration"
+EMP-171,Java Developer,ReactJS; NodeJS; PostgreSQL,Beginner,"Golang, Kubernetes; System Architecture, Cloud Services"
+EMP-172,Software Engineer,Java; Spring Boot; Kafka; PostgreSQL,Intermediate,"Golang, gRPC; Version Control (Git), Cloud Services"
+EMP-173,Backend Developer,Python; FastAPI; Redis; PostgreSQL,Intermediate,"Golang; Microservices, Container Orchestration"
+EMP-174,Software Developer,Java; Spring Boot; Elasticsearch,Beginner,"Golang, Kubernetes; System Architecture, Cloud Services"
+EMP-175,Fullstack Developer,NodeJS; NestJS; MySQL,Intermediate,"Golang, gRPC; Version Control (Git), Cloud Services"
+EMP-176,Java Developer,Python; Flask; SQLite,Advanced,"Golang; Microservices, Container Orchestration"
+EMP-177,DevOps Engineer,Python; Docker; Linux; Bash,Beginner,"Kubernetes, CI/CD, Monitoring/Observability; Cloud Security"
+EMP-178,Backend Developer,Java; Spring Boot; Docker,Intermediate,"K8s orchestration, GitOps; Container Security"
+EMP-179,Software Developer,NodeJS; Docker; AWS,Beginner,"CI/CD pipeline design, Infrastructure as Code; Cloud Deployment"
+EMP-180,Software Engineer,Python; Ansible; Terraform,Intermediate,"Performance Tuning, SRE practices; Observability Stack"
+EMP-181,QA Engineer,Java; SQL; Postman,Beginner,"Automation Testing (Playwright); API Testing, Performance Testing"
+EMP-182,Software Developer,JavaScript; SQL; Manual Testing,Beginner,"Automation Testing; CI/CD Integration, Test Framework Design"
+EMP-183,Software Engineer,Python; MySQL; Manual Testing,Intermediate,"Automation Testing, Script Writing; API Testing, Performance Testing"
+EMP-184,Frontend Developer,Java; TestNG; JUnit,Beginner,"Playwright, Cypress; Performance Testing, Security Testing"
+EMP-185,Backend Developer,JavaScript; ReactJS; Manual Testing,Beginner,"Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+EMP-186,Java Developer,Python; Selenium (basic); SQL,Intermediate,"Automation Testing (Playwright); API Testing, Performance Testing"
+EMP-187,QA Engineer,Java; Cucumber (basic); SQL,Beginner,"Automation Testing; CI/CD Integration, Test Framework Design"
+EMP-188,Software Developer,TypeScript; Jest; SQL,Beginner,"Automation Testing, Script Writing; API Testing, Performance Testing"
+EMP-189,Software Engineer,Java; Spring Boot (basic); SQL,Intermediate,"Playwright, Cypress; Performance Testing, Security Testing"
+EMP-190,Frontend Developer,JavaScript; Playwright (basic); SQL,Beginner,"Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+EMP-191,Backend Developer,Java; SQL; JIRA,Beginner,"Automation Testing (Playwright); API Testing, Performance Testing"
+EMP-192,Java Developer,Python; SQL; API Testing (basic),Intermediate,"Automation Testing; CI/CD Integration, Test Framework Design"
+EMP-193,QA Engineer,Java; Postman; SQL,Beginner,"Automation Testing, Script Writing; API Testing, Performance Testing"
+EMP-194,Software Developer,JavaScript; Cypress (basic); SQL,Beginner,"Playwright, Cypress; Performance Testing, Security Testing"
+EMP-195,Software Engineer,Python; Robot Framework (basic); SQL,Intermediate,"Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+EMP-196,Frontend Developer,Java; SQL; JMeter (basic),Beginner,"Automation Testing (Playwright); API Testing, Performance Testing"
+EMP-197,Backend Developer,TypeScript; Postman; SQL,Beginner,"Automation Testing; CI/CD Integration, Test Framework Design"
+EMP-198,Java Developer,Java; SQL; Selenium IDE,Intermediate,"Automation Testing, Script Writing; API Testing, Performance Testing"
+EMP-199,QA Engineer,JavaScript; SQL; Manual QA,Beginner,"Playwright, Cypress; Performance Testing, Security Testing"
+EMP-200,Software Developer,Python; SQL; API Testing,Beginner,"Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
+EMP-201,Software Engineer,Java; SQL; JUnit,Intermediate,"Automation Testing (Playwright); API Testing, Performance Testing"
+EMP-202,Frontend Developer,TypeScript; Playwright (basic); SQL,Beginner,"Automation Testing; CI/CD Integration, Test Framework Design"
+EMP-203,Backend Developer,Python; SQL; Automation (basic),Beginner,"Automation Testing, Script Writing; API Testing, Performance Testing"
+EMP-204,Java Developer,Java; SQL; TestNG (basic),Intermediate,"Playwright, Cypress; Performance Testing, Security Testing"
+EMP-205,QA Engineer,JavaScript; SQL; Cypress (basic),Beginner,"Automation Testing (Selenium/Playwright); CI/CD Pipeline, Test Reporting"
