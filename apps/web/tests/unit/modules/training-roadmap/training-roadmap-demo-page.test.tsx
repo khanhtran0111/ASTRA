@@ -46,6 +46,8 @@ describe('TrainingRoadmapDemoPage', () => {
 
     expect(await screen.findByText('Stable demo fallback')).toBeInTheDocument();
     expect(screen.getByText('Kubernetes Enablement')).toBeInTheDocument();
+    expect(screen.getByText('QA score 86/100 · MEDIUM risk')).toBeInTheDocument();
+    expect(screen.getByText('TRAINER_GAP (3)')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Approve' }));
 

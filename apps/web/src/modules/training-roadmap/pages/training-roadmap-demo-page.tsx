@@ -198,7 +198,12 @@ export function TrainingRoadmapDemoPage() {
                 </div>
                 <ExecutionLogPanel logs={result.executionLog} />
                 <RoadmapTable initiatives={result.initiatives} />
-                <QaFindingsPanel findings={result.qaFindings} />
+                <QaFindingsPanel
+                  findings={result.qaFindings}
+                  score={result.qaScore}
+                  riskLevel={result.riskLevel}
+                  riskReason={result.riskReason}
+                />
                 <div className="grid gap-4 xl:grid-cols-2">
                   <HitlApprovalCard
                     runId={result.runId}

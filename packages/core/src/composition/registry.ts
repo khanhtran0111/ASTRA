@@ -11,13 +11,40 @@ import type { Hono } from 'hono';
 import type { Pool } from 'pg';
 import type { z } from 'zod';
 import type { WorkerHandle } from '../runtime/workers/index.ts';
+import type { SessionScope } from '../session/scope.ts';
 
 export type JobHandler = Task;
+
+export interface StructuredAgentRuntime {
+  generate<T>(args: {
+    agentId: string;
+    prompt: string;
+    schema: z.ZodType<T>;
+    abortSignal?: AbortSignal;
+    maxSteps?: number;
+    session?: SessionScope;
+    toolChoice?: 'auto' | 'none' | 'required' | { type: 'tool'; toolName: string };
+  }): Promise<T>;
+  callTool(args: {
+    agentId: string;
+    toolName: string;
+    prompt: string;
+    abortSignal?: AbortSignal;
+    session?: SessionScope;
+  }): Promise<void>;
+  callTools(args: {
+    agentId: string;
+    prompt: string;
+    abortSignal?: AbortSignal;
+    session?: SessionScope;
+  }): Promise<void>;
+}
 
 export interface RouteBuildDeps {
   pool: Pool;
   workers: WorkerHandle;
   streams: ReadonlyMap<string, unknown>;
+  agents: StructuredAgentRuntime;
   log?: {
     error: (obj: unknown, msg?: string) => void;
     warn: (obj: unknown, msg?: string) => void;

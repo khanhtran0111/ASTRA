@@ -17,9 +17,16 @@ export type TrainingInitiative = {
 };
 
 export type QaFinding = {
-  id: string;
-  risk: QaRisk;
+  type:
+    | 'INVALID_TRAINEE'
+    | 'TRAINER_GAP'
+    | 'MISSING_EVIDENCE'
+    | 'TIMELINE_RISK'
+    | 'BOD_ALIGNMENT_RISK'
+    | 'TRACEABILITY_GAP';
+  severity: QaRisk;
   message: string;
+  skill?: string;
   relatedInitiativeId?: string;
 };
 
@@ -29,6 +36,9 @@ export type RoadmapResult = {
   executionLog: string[];
   initiatives: TrainingInitiative[];
   qaFindings: QaFinding[];
+  qaScore: number;
+  riskLevel: QaRisk;
+  riskReason: string;
 };
 
 export type ApprovalDecision = Exclude<ReviewStatus, 'pending'>;

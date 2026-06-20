@@ -73,16 +73,33 @@ const bundledRoadmapResult: RoadmapResult = {
   ],
   qaFindings: [
     {
-      id: 'DEMO-QA-001',
-      risk: 'MEDIUM',
-      message: 'Three P1 initiatives still require a trainer assignment or external fallback.',
+      type: 'TRAINER_GAP',
+      severity: 'MEDIUM',
+      message:
+        'No qualified internal trainer is available; external delivery remains a budget risk.',
+      skill: 'CI/CD Delivery Practices',
+      relatedInitiativeId: 'DEMO-CICD',
     },
     {
-      id: 'DEMO-QA-002',
-      risk: 'LOW',
-      message: 'All displayed priorities retain BOD, project, or survey evidence.',
+      type: 'TRAINER_GAP',
+      severity: 'MEDIUM',
+      message:
+        'No qualified internal trainer is available; external delivery remains a budget risk.',
+      skill: 'System Design Foundations',
+      relatedInitiativeId: 'DEMO-SYSTEM-DESIGN',
+    },
+    {
+      type: 'TRAINER_GAP',
+      severity: 'MEDIUM',
+      message:
+        'No qualified internal trainer is available; self-study delivery needs owner capacity.',
+      skill: 'Practical AI Tools',
+      relatedInitiativeId: 'DEMO-AI-TOOLS',
     },
   ],
+  qaScore: 86,
+  riskLevel: 'MEDIUM',
+  riskReason: '3 unresolved MEDIUM findings across 1 category; no HIGH findings detected.',
 };
 
 async function parseJsonOrThrow<T>(response: Response, fallbackMessage: string): Promise<T> {
