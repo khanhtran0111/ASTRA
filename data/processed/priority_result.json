@@ -1,0 +1,2365 @@
+{
+  "generated_at": "2026-06-18T14:32:43",
+  "run_date": "2026-06-18",
+  "pipeline_version": "2.0-realdata",
+  "summary": {
+    "P1": [
+      "Kubernetes",
+      "CI/CD",
+      "System Design",
+      "AI Tools"
+    ],
+    "P2": [
+      "Leadership",
+      "Communication",
+      "Cloud",
+      "DevOps",
+      "LLM/GenAI",
+      "AI Agent",
+      "Backend",
+      "Interview Skills",
+      "Automation Testing",
+      "IaC",
+      "Python",
+      "MLOps",
+      "GCP",
+      "Go",
+      "AWS",
+      "React",
+      "Docker",
+      "TensorFlow",
+      "LangChain",
+      "OpenAI API",
+      "Vector DB"
+    ],
+    "P3": [
+      "Data Engineering",
+      "Node.js",
+      "gRPC",
+      "Azure",
+      "Container Security",
+      "DevSecOps",
+      "Java",
+      "Terraform",
+      ".NET",
+      "FastAPI",
+      "AI Agent Development",
+      "AI Services",
+      "AWS Lambda",
+      "Airflow",
+      "Android",
+      "Angular",
+      "AutoGen",
+      "BigQuery",
+      "Claude API",
+      "Cognito",
+      "Computer Vision",
+      "Cost Optimization",
+      "CrewAI",
+      "Cybersecurity",
+      "Databricks",
+      "Delta Lake",
+      "DynamoDB",
+      "Edge AI",
+      "FinOps",
+      "Firebase",
+      "GraphQL",
+      "IAM",
+      "IoT",
+      "Kafka",
+      "LLM Fine-tuning",
+      "MongoDB",
+      "Multi-cloud (AWS/Azure/GCP)",
+      "Penetration Testing",
+      "PostgreSQL",
+      "Power Platform",
+      "Prompt Engineering",
+      "PyTorch",
+      "RAG",
+      "React Native",
+      "Redis",
+      "SIEM",
+      "SOC",
+      "SQL Server",
+      "Security (OWASP)",
+      "Spark",
+      "Spring Boot",
+      "Vault",
+      "Vertex AI",
+      "iOS"
+    ]
+  },
+  "initiatives": [
+    {
+      "skill": "Kubernetes",
+      "priority_tier": "P1",
+      "total_score": 98,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 8
+      },
+      "target_employees": [
+        "EMP-117",
+        "EMP-164",
+        "EMP-165",
+        "EMP-167",
+        "EMP-168",
+        "EMP-170",
+        "EMP-171",
+        "EMP-173",
+        "EMP-174",
+        "EMP-176",
+        "EMP-177",
+        "EMP-178"
+      ],
+      "target_employee_count": 12,
+      "supporting_projects": [
+        "PRJ-002",
+        "PRJ-005",
+        "PRJ-007",
+        "PRJ-009"
+      ],
+      "supporting_bod_goals": [
+        "GOAL-2026-07"
+      ],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004",
+        "TRN-009"
+      ],
+      "current_holder_count": 6,
+      "evidence_summary": "GOAL-2026-07 (weight=8); projects PRJ-002, PRJ-005, PRJ-007; survey signal (score 10); 12 trainee(s)."
+    },
+    {
+      "skill": "CI/CD",
+      "priority_tier": "P1",
+      "total_score": 90,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 2,
+        "bod_strategic_weight_bonus": 8
+      },
+      "target_employees": [
+        "EMP-053",
+        "EMP-094",
+        "EMP-177",
+        "EMP-179",
+        "EMP-182",
+        "EMP-185",
+        "EMP-187",
+        "EMP-190",
+        "EMP-192",
+        "EMP-195",
+        "EMP-197",
+        "EMP-200",
+        "EMP-202",
+        "EMP-205"
+      ],
+      "target_employee_count": 14,
+      "supporting_projects": [
+        "PRJ-005",
+        "PRJ-009"
+      ],
+      "supporting_bod_goals": [
+        "GOAL-2026-07"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-07 (weight=8); projects PRJ-005, PRJ-009; survey signal (score 2); 14 trainee(s).",
+      "trainer_gap": "14 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "System Design",
+      "priority_tier": "P1",
+      "total_score": 80,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 10,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 10
+      },
+      "target_employees": [
+        "EMP-003",
+        "EMP-010",
+        "EMP-016",
+        "EMP-031",
+        "EMP-042",
+        "EMP-048",
+        "EMP-049",
+        "EMP-064",
+        "EMP-069",
+        "EMP-078",
+        "EMP-088",
+        "EMP-098",
+        "EMP-105",
+        "EMP-111",
+        "EMP-119",
+        "EMP-123",
+        "EMP-135",
+        "EMP-139",
+        "EMP-140",
+        "EMP-160",
+        "EMP-165",
+        "EMP-168",
+        "EMP-171",
+        "EMP-174"
+      ],
+      "target_employee_count": 24,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08",
+        "GOAL-2026-04"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-04 (weight=10); deadline 2026-06-30 (urgent<=90d); survey signal (score 10); 24 trainee(s).",
+      "trainer_gap": "24 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "AI Tools",
+      "priority_tier": "P1",
+      "total_score": 80,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 10,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 10
+      },
+      "target_employees": [
+        "EMP-004",
+        "EMP-009",
+        "EMP-019",
+        "EMP-023",
+        "EMP-027",
+        "EMP-031",
+        "EMP-040",
+        "EMP-048",
+        "EMP-050",
+        "EMP-067",
+        "EMP-071",
+        "EMP-074",
+        "EMP-084",
+        "EMP-089",
+        "EMP-102",
+        "EMP-114",
+        "EMP-115",
+        "EMP-116",
+        "EMP-134",
+        "EMP-137",
+        "EMP-159"
+      ],
+      "target_employee_count": 21,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2026-04",
+        "GOAL-2026-10"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-04 (weight=10); deadline 2026-06-30 (urgent<=90d); survey signal (score 10); 21 trainee(s).",
+      "trainer_gap": "21 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Leadership",
+      "priority_tier": "P2",
+      "total_score": 69,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 9
+      },
+      "target_employees": [
+        "EMP-001",
+        "EMP-004",
+        "EMP-019",
+        "EMP-025",
+        "EMP-029",
+        "EMP-045",
+        "EMP-047",
+        "EMP-054",
+        "EMP-060",
+        "EMP-073",
+        "EMP-093",
+        "EMP-102",
+        "EMP-106",
+        "EMP-124",
+        "EMP-131",
+        "EMP-132",
+        "EMP-135",
+        "EMP-136",
+        "EMP-159",
+        "EMP-167"
+      ],
+      "target_employee_count": 20,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08",
+        "GOAL-2026-01"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-01 (weight=9); survey signal (score 10); 20 trainee(s).",
+      "trainer_gap": "20 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Communication",
+      "priority_tier": "P2",
+      "total_score": 69,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 9
+      },
+      "target_employees": [
+        "EMP-025",
+        "EMP-035",
+        "EMP-040",
+        "EMP-042",
+        "EMP-045",
+        "EMP-054",
+        "EMP-058",
+        "EMP-073"
+      ],
+      "target_employee_count": 8,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08",
+        "GOAL-2026-01"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-01 (weight=9); survey signal (score 10); 8 trainee(s).",
+      "trainer_gap": "8 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Cloud",
+      "priority_tier": "P2",
+      "total_score": 68,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 8
+      },
+      "target_employees": [
+        "EMP-001",
+        "EMP-010",
+        "EMP-011",
+        "EMP-012",
+        "EMP-014",
+        "EMP-021",
+        "EMP-028",
+        "EMP-031",
+        "EMP-034",
+        "EMP-038",
+        "EMP-040",
+        "EMP-042",
+        "EMP-045",
+        "EMP-048",
+        "EMP-049",
+        "EMP-050",
+        "EMP-051",
+        "EMP-055",
+        "EMP-056",
+        "EMP-064",
+        "EMP-065",
+        "EMP-066",
+        "EMP-069",
+        "EMP-070",
+        "EMP-071",
+        "EMP-074",
+        "EMP-075",
+        "EMP-080",
+        "EMP-082",
+        "EMP-084",
+        "EMP-087",
+        "EMP-088",
+        "EMP-091",
+        "EMP-092",
+        "EMP-111",
+        "EMP-113",
+        "EMP-114",
+        "EMP-115",
+        "EMP-116",
+        "EMP-123",
+        "EMP-129",
+        "EMP-139",
+        "EMP-145",
+        "EMP-147",
+        "EMP-151",
+        "EMP-160",
+        "EMP-161",
+        "EMP-163",
+        "EMP-165",
+        "EMP-166",
+        "EMP-168",
+        "EMP-169",
+        "EMP-171",
+        "EMP-172",
+        "EMP-174",
+        "EMP-175",
+        "EMP-177",
+        "EMP-179"
+      ],
+      "target_employee_count": 58,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08",
+        "GOAL-2026-07"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-07 (weight=8); survey signal (score 10); 58 trainee(s).",
+      "trainer_gap": "58 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "DevOps",
+      "priority_tier": "P2",
+      "total_score": 67,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 7
+      },
+      "target_employees": [
+        "EMP-010",
+        "EMP-021",
+        "EMP-024",
+        "EMP-026",
+        "EMP-028",
+        "EMP-037",
+        "EMP-039",
+        "EMP-057",
+        "EMP-058",
+        "EMP-059",
+        "EMP-060",
+        "EMP-062",
+        "EMP-066",
+        "EMP-068",
+        "EMP-075",
+        "EMP-081",
+        "EMP-085",
+        "EMP-086",
+        "EMP-090",
+        "EMP-092",
+        "EMP-095",
+        "EMP-097",
+        "EMP-098",
+        "EMP-100",
+        "EMP-101",
+        "EMP-105",
+        "EMP-112",
+        "EMP-113",
+        "EMP-124",
+        "EMP-126",
+        "EMP-127",
+        "EMP-128",
+        "EMP-129",
+        "EMP-131",
+        "EMP-132",
+        "EMP-133",
+        "EMP-141",
+        "EMP-148",
+        "EMP-149",
+        "EMP-150",
+        "EMP-152",
+        "EMP-153",
+        "EMP-157"
+      ],
+      "target_employee_count": 43,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-11"
+      ],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-006"
+      ],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2025-11 (weight=7); survey signal (score 10); 43 trainee(s)."
+    },
+    {
+      "skill": "LLM/GenAI",
+      "priority_tier": "P2",
+      "total_score": 67,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 7
+      },
+      "target_employees": [
+        "EMP-022",
+        "EMP-041",
+        "EMP-044",
+        "EMP-061",
+        "EMP-098",
+        "EMP-127"
+      ],
+      "target_employee_count": 6,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-11"
+      ],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-007"
+      ],
+      "current_holder_count": 1,
+      "evidence_summary": "GOAL-2025-11 (weight=7); survey signal (score 10); 6 trainee(s)."
+    },
+    {
+      "skill": "AI Agent",
+      "priority_tier": "P2",
+      "total_score": 66,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 6
+      },
+      "target_employees": [
+        "EMP-013",
+        "EMP-016",
+        "EMP-065",
+        "EMP-098",
+        "EMP-149"
+      ],
+      "target_employee_count": 5,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2026-10"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-10 (weight=6); survey signal (score 10); 5 trainee(s).",
+      "trainer_gap": "5 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Backend",
+      "priority_tier": "P2",
+      "total_score": 65,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 5
+      },
+      "target_employees": [
+        "EMP-018",
+        "EMP-021",
+        "EMP-039",
+        "EMP-054",
+        "EMP-064",
+        "EMP-101",
+        "EMP-109",
+        "EMP-118",
+        "EMP-125",
+        "EMP-138",
+        "EMP-144"
+      ],
+      "target_employee_count": 11,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2025-08 (weight=5); survey signal (score 10); 11 trainee(s).",
+      "trainer_gap": "11 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Interview Skills",
+      "priority_tier": "P2",
+      "total_score": 65,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 5
+      },
+      "target_employees": [
+        "EMP-007"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-08"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2025-08 (weight=5); survey signal (score 10); 1 trainee(s).",
+      "trainer_gap": "1 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Automation Testing",
+      "priority_tier": "P2",
+      "total_score": 64,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 4
+      },
+      "target_employees": [
+        "EMP-003",
+        "EMP-006",
+        "EMP-007",
+        "EMP-012",
+        "EMP-016",
+        "EMP-017",
+        "EMP-020",
+        "EMP-027",
+        "EMP-028",
+        "EMP-030",
+        "EMP-033",
+        "EMP-046",
+        "EMP-051",
+        "EMP-053",
+        "EMP-063",
+        "EMP-069",
+        "EMP-089",
+        "EMP-096",
+        "EMP-099",
+        "EMP-103",
+        "EMP-108",
+        "EMP-118",
+        "EMP-121",
+        "EMP-138",
+        "EMP-142",
+        "EMP-143",
+        "EMP-145",
+        "EMP-148",
+        "EMP-149",
+        "EMP-181",
+        "EMP-182",
+        "EMP-183",
+        "EMP-185",
+        "EMP-186",
+        "EMP-187",
+        "EMP-188",
+        "EMP-190",
+        "EMP-191",
+        "EMP-192",
+        "EMP-193",
+        "EMP-195",
+        "EMP-196",
+        "EMP-197",
+        "EMP-198",
+        "EMP-200",
+        "EMP-201",
+        "EMP-202",
+        "EMP-203",
+        "EMP-205"
+      ],
+      "target_employee_count": 49,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2025-09"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2025-09 (weight=4); survey signal (score 10); 49 trainee(s).",
+      "trainer_gap": "49 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "IaC",
+      "priority_tier": "P2",
+      "total_score": 58,
+      "score_breakdown": {
+        "bod_alignment": 50,
+        "project_alignment": 0,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 8
+      },
+      "target_employees": [
+        "EMP-179"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [],
+      "supporting_bod_goals": [
+        "GOAL-2026-07"
+      ],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "GOAL-2026-07 (weight=8); 1 trainee(s).",
+      "trainer_gap": "1 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Python",
+      "priority_tier": "P2",
+      "total_score": 50,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-014",
+        "EMP-018",
+        "EMP-043",
+        "EMP-045",
+        "EMP-068",
+        "EMP-075",
+        "EMP-083",
+        "EMP-095",
+        "EMP-109"
+      ],
+      "target_employee_count": 9,
+      "supporting_projects": [
+        "PRJ-001",
+        "PRJ-004",
+        "PRJ-008",
+        "PRJ-011",
+        "PRJ-017"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-003",
+        "TRN-004",
+        "TRN-006",
+        "TRN-007",
+        "TRN-008",
+        "TRN-009",
+        "TRN-010"
+      ],
+      "current_holder_count": 66,
+      "evidence_summary": "projects PRJ-001, PRJ-004, PRJ-008; deadline 2026-06-30 (urgent<=90d); survey signal (score 10); 9 trainee(s)."
+    },
+    {
+      "skill": "MLOps",
+      "priority_tier": "P2",
+      "total_score": 50,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-013",
+        "EMP-022",
+        "EMP-041",
+        "EMP-044",
+        "EMP-062",
+        "EMP-119",
+        "EMP-162"
+      ],
+      "target_employee_count": 7,
+      "supporting_projects": [
+        "PRJ-004",
+        "PRJ-011"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 1,
+      "evidence_summary": "projects PRJ-004, PRJ-011; deadline 2026-06-30 (urgent<=90d); survey signal (score 10); 7 trainee(s).",
+      "trainer_gap": "7 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "GCP",
+      "priority_tier": "P2",
+      "total_score": 50,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-018",
+        "EMP-092"
+      ],
+      "target_employee_count": 2,
+      "supporting_projects": [
+        "PRJ-004",
+        "PRJ-011"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004",
+        "TRN-009"
+      ],
+      "current_holder_count": 7,
+      "evidence_summary": "projects PRJ-004, PRJ-011; deadline 2026-06-30 (urgent<=90d); survey signal (score 10); 2 trainee(s)."
+    },
+    {
+      "skill": "Go",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-045",
+        "EMP-129",
+        "EMP-163",
+        "EMP-164",
+        "EMP-165",
+        "EMP-166",
+        "EMP-167",
+        "EMP-168",
+        "EMP-169",
+        "EMP-170",
+        "EMP-171",
+        "EMP-172",
+        "EMP-173",
+        "EMP-174",
+        "EMP-175",
+        "EMP-176"
+      ],
+      "target_employee_count": 16,
+      "supporting_projects": [
+        "PRJ-007"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004"
+      ],
+      "current_holder_count": 17,
+      "evidence_summary": "projects PRJ-007; survey signal (score 10); 16 trainee(s)."
+    },
+    {
+      "skill": "AWS",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-028",
+        "EMP-048",
+        "EMP-066",
+        "EMP-092",
+        "EMP-100"
+      ],
+      "target_employee_count": 5,
+      "supporting_projects": [
+        "PRJ-002",
+        "PRJ-009"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004",
+        "TRN-009"
+      ],
+      "current_holder_count": 16,
+      "evidence_summary": "projects PRJ-002, PRJ-009; survey signal (score 10); 5 trainee(s)."
+    },
+    {
+      "skill": "React",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 10,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-030"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [
+        "PRJ-003",
+        "PRJ-013"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-002",
+        "TRN-003",
+        "TRN-005",
+        "TRN-008"
+      ],
+      "current_holder_count": 71,
+      "evidence_summary": "projects PRJ-003, PRJ-013; survey signal (score 10); 1 trainee(s)."
+    },
+    {
+      "skill": "Docker",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-001",
+        "PRJ-005",
+        "PRJ-008"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004",
+        "TRN-008",
+        "TRN-009"
+      ],
+      "current_holder_count": 14,
+      "evidence_summary": "projects PRJ-001, PRJ-005, PRJ-008; deadline 2026-06-30 (urgent<=90d); no internal trainee pool.",
+      "warning": "High-priority demand with zero internal trainee signal — likely a hiring / external-sourcing gap, not an internal training task."
+    },
+    {
+      "skill": "TensorFlow",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-004",
+        "PRJ-020"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-009"
+      ],
+      "current_holder_count": 2,
+      "evidence_summary": "projects PRJ-004, PRJ-020; deadline 2026-06-30 (urgent<=90d); no internal trainee pool.",
+      "warning": "High-priority demand with zero internal trainee signal — likely a hiring / external-sourcing gap, not an internal training task."
+    },
+    {
+      "skill": "LangChain",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-008"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-009"
+      ],
+      "current_holder_count": 2,
+      "evidence_summary": "projects PRJ-008; deadline 2026-06-30 (urgent<=90d); no internal trainee pool.",
+      "warning": "High-priority demand with zero internal trainee signal — likely a hiring / external-sourcing gap, not an internal training task."
+    },
+    {
+      "skill": "OpenAI API",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-008"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-008; deadline 2026-06-30 (urgent<=90d); no internal trainee pool.",
+      "warning": "High-priority demand with zero internal trainee signal — likely a hiring / external-sourcing gap, not an internal training task."
+    },
+    {
+      "skill": "Vector DB",
+      "priority_tier": "P2",
+      "total_score": 40,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 10,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-008"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-008; deadline 2026-06-30 (urgent<=90d); no internal trainee pool.",
+      "warning": "High-priority demand with zero internal trainee signal — likely a hiring / external-sourcing gap, not an internal training task."
+    },
+    {
+      "skill": "Data Engineering",
+      "priority_tier": "P3",
+      "total_score": 35,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 5,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-005",
+        "EMP-015",
+        "EMP-044",
+        "EMP-058",
+        "EMP-060",
+        "EMP-077",
+        "EMP-081",
+        "EMP-090",
+        "EMP-109",
+        "EMP-111",
+        "EMP-119",
+        "EMP-125",
+        "EMP-132",
+        "EMP-151",
+        "EMP-157"
+      ],
+      "target_employee_count": 15,
+      "supporting_projects": [
+        "PRJ-019"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 1,
+      "evidence_summary": "projects PRJ-019; survey signal (score 5); 15 trainee(s).",
+      "trainer_gap": "15 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Node.js",
+      "priority_tier": "P3",
+      "total_score": 32,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 2,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-054",
+        "EMP-073"
+      ],
+      "target_employee_count": 2,
+      "supporting_projects": [
+        "PRJ-003",
+        "PRJ-013"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-002"
+      ],
+      "current_holder_count": 44,
+      "evidence_summary": "projects PRJ-003, PRJ-013; survey signal (score 2); 2 trainee(s)."
+    },
+    {
+      "skill": "gRPC",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-163",
+        "EMP-166",
+        "EMP-169",
+        "EMP-172",
+        "EMP-175"
+      ],
+      "target_employee_count": 5,
+      "supporting_projects": [
+        "PRJ-007"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-007; 5 trainee(s).",
+      "trainer_gap": "5 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Azure",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-066",
+        "EMP-145"
+      ],
+      "target_employee_count": 2,
+      "supporting_projects": [
+        "PRJ-006",
+        "PRJ-010"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-009"
+      ],
+      "current_holder_count": 5,
+      "evidence_summary": "projects PRJ-006, PRJ-010; 2 trainee(s)."
+    },
+    {
+      "skill": "Container Security",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-178"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [
+        "PRJ-015"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-015; 1 trainee(s).",
+      "trainer_gap": "1 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "DevSecOps",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-037"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [
+        "PRJ-015"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-015; 1 trainee(s).",
+      "trainer_gap": "1 trainee(s) need this but NO internal trainer covers it — schedule external trainer / online course."
+    },
+    {
+      "skill": "Java",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-083"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [
+        "PRJ-002"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-001",
+        "TRN-002",
+        "TRN-004",
+        "TRN-005",
+        "TRN-010"
+      ],
+      "current_holder_count": 69,
+      "evidence_summary": "projects PRJ-002; 1 trainee(s)."
+    },
+    {
+      "skill": "Terraform",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [
+        "EMP-100"
+      ],
+      "target_employee_count": 1,
+      "supporting_projects": [
+        "PRJ-009"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004",
+        "TRN-009"
+      ],
+      "current_holder_count": 6,
+      "evidence_summary": "projects PRJ-009; 1 trainee(s)."
+    },
+    {
+      "skill": ".NET",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-006",
+        "PRJ-010"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 13,
+      "evidence_summary": "projects PRJ-006, PRJ-010; no internal trainee pool."
+    },
+    {
+      "skill": "FastAPI",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-001",
+        "PRJ-005"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004"
+      ],
+      "current_holder_count": 14,
+      "evidence_summary": "projects PRJ-001, PRJ-005; no internal trainee pool."
+    },
+    {
+      "skill": "AI Agent Development",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-017"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-017; no internal trainee pool."
+    },
+    {
+      "skill": "AI Services",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-010"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-010; no internal trainee pool."
+    },
+    {
+      "skill": "AWS Lambda",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-013"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-013; no internal trainee pool."
+    },
+    {
+      "skill": "Airflow",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-019"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 2,
+      "evidence_summary": "projects PRJ-019; no internal trainee pool."
+    },
+    {
+      "skill": "Android",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-018"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-018; no internal trainee pool."
+    },
+    {
+      "skill": "Angular",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-006"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-002",
+        "TRN-003"
+      ],
+      "current_holder_count": 11,
+      "evidence_summary": "projects PRJ-006; no internal trainee pool."
+    },
+    {
+      "skill": "AutoGen",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-017"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-017; no internal trainee pool."
+    },
+    {
+      "skill": "BigQuery",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-011"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-009"
+      ],
+      "current_holder_count": 3,
+      "evidence_summary": "projects PRJ-011; no internal trainee pool."
+    },
+    {
+      "skill": "Claude API",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-014"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-014; no internal trainee pool."
+    },
+    {
+      "skill": "Cognito",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-013"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-013; no internal trainee pool."
+    },
+    {
+      "skill": "Computer Vision",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-020"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-020; no internal trainee pool."
+    },
+    {
+      "skill": "Cost Optimization",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-016"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-016; no internal trainee pool."
+    },
+    {
+      "skill": "CrewAI",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-017"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-017; no internal trainee pool."
+    },
+    {
+      "skill": "Cybersecurity",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-012"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-012; no internal trainee pool."
+    },
+    {
+      "skill": "Databricks",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-019"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-019; no internal trainee pool."
+    },
+    {
+      "skill": "Delta Lake",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-019"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-019; no internal trainee pool."
+    },
+    {
+      "skill": "DynamoDB",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-013"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 1,
+      "evidence_summary": "projects PRJ-013; no internal trainee pool."
+    },
+    {
+      "skill": "Edge AI",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-020"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-020; no internal trainee pool."
+    },
+    {
+      "skill": "FinOps",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-016"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-016; no internal trainee pool."
+    },
+    {
+      "skill": "Firebase",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-018"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 1,
+      "evidence_summary": "projects PRJ-018; no internal trainee pool."
+    },
+    {
+      "skill": "GraphQL",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-018"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-018; no internal trainee pool."
+    },
+    {
+      "skill": "IAM",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-015"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-015; no internal trainee pool."
+    },
+    {
+      "skill": "IoT",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-020"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-020; no internal trainee pool."
+    },
+    {
+      "skill": "Kafka",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-007"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 5,
+      "evidence_summary": "projects PRJ-007; no internal trainee pool."
+    },
+    {
+      "skill": "LLM Fine-tuning",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-014"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-014; no internal trainee pool."
+    },
+    {
+      "skill": "MongoDB",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-003"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 12,
+      "evidence_summary": "projects PRJ-003; no internal trainee pool."
+    },
+    {
+      "skill": "Multi-cloud (AWS/Azure/GCP)",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-016"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-016; no internal trainee pool."
+    },
+    {
+      "skill": "Penetration Testing",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-012"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-012; no internal trainee pool."
+    },
+    {
+      "skill": "PostgreSQL",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-001"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-004"
+      ],
+      "current_holder_count": 56,
+      "evidence_summary": "projects PRJ-001; no internal trainee pool."
+    },
+    {
+      "skill": "Power Platform",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-010"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-010; no internal trainee pool."
+    },
+    {
+      "skill": "Prompt Engineering",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-014"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-014; no internal trainee pool."
+    },
+    {
+      "skill": "PyTorch",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-020"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-009"
+      ],
+      "current_holder_count": 4,
+      "evidence_summary": "projects PRJ-020; no internal trainee pool."
+    },
+    {
+      "skill": "RAG",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-014"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-014; no internal trainee pool."
+    },
+    {
+      "skill": "React Native",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-018"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-018; no internal trainee pool."
+    },
+    {
+      "skill": "Redis",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-003"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 9,
+      "evidence_summary": "projects PRJ-003; no internal trainee pool."
+    },
+    {
+      "skill": "SIEM",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-012"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-012; no internal trainee pool."
+    },
+    {
+      "skill": "SOC",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-012"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-012; no internal trainee pool."
+    },
+    {
+      "skill": "SQL Server",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-006"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 11,
+      "evidence_summary": "projects PRJ-006; no internal trainee pool."
+    },
+    {
+      "skill": "Security (OWASP)",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-009"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-009; no internal trainee pool."
+    },
+    {
+      "skill": "Spark",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-019"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 2,
+      "evidence_summary": "projects PRJ-019; no internal trainee pool."
+    },
+    {
+      "skill": "Spring Boot",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-002"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": true,
+      "internal_trainers": [
+        "TRN-002",
+        "TRN-004",
+        "TRN-005",
+        "TRN-010"
+      ],
+      "current_holder_count": 36,
+      "evidence_summary": "projects PRJ-002; no internal trainee pool."
+    },
+    {
+      "skill": "Vault",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-015"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-015; no internal trainee pool."
+    },
+    {
+      "skill": "Vertex AI",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-011"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-011; no internal trainee pool."
+    },
+    {
+      "skill": "iOS",
+      "priority_tier": "P3",
+      "total_score": 30,
+      "score_breakdown": {
+        "bod_alignment": 0,
+        "project_alignment": 30,
+        "urgency_bonus": 0,
+        "survey_score": 0,
+        "bod_strategic_weight_bonus": 0
+      },
+      "target_employees": [],
+      "target_employee_count": 0,
+      "supporting_projects": [
+        "PRJ-018"
+      ],
+      "supporting_bod_goals": [],
+      "internal_trainer_available": false,
+      "internal_trainers": [],
+      "current_holder_count": 0,
+      "evidence_summary": "projects PRJ-018; no internal trainee pool."
+    }
+  ],
+  "metadata": {
+    "total_employees_analyzed": 205,
+    "employees_with_target_gaps": 180,
+    "unique_skills_in_target_gap": 28,
+    "total_initiatives_scored": 79,
+    "high_priority_sourcing_flags": [
+      "Docker",
+      "TensorFlow",
+      "LangChain",
+      "OpenAI API",
+      "Vector DB"
+    ],
+    "data_sources": [
+      "DS01",
+      "DS02",
+      "DS03",
+      "DS04",
+      "DS05"
+    ],
+    "source_status": {
+      "DS01": "ok",
+      "DS02": "ok",
+      "DS03": "ok",
+      "DS04": "ok",
+      "DS05": "ok"
+    },
+    "scoring_formula": "bod(50)+project(30)+urgency(10)+survey(max10)+bod_weight(max10)",
+    "tier_interpretation": {
+      "P1": "High demand + strategic BOD alignment — train internally now.",
+      "P2": "Moderate demand — queue after P1.",
+      "P3": "Low/no internal trainee signal — may indicate a hiring/outsourcing gap rather than a training gap, NOT simply 'low priority'."
+    },
+    "cross_reference": {
+      "insights_report": "insights_report.json",
+      "field_links": {
+        "internal_trainer_available / internal_trainers": "F-02_trainer_supply_demand",
+        "current_holder_count": "F-04_skill_supply_index",
+        "supporting_bod_goals": "F-03_goal_coverage",
+        "(org-level high-frequency self-reported gaps)": "F-01_declared_gap_frequency"
+      },
+      "note": "Read insights_report.json alongside this file. Trainer/holder counts here are the same numbers detailed there; do not recompute from raw data."
+    },
+    "assumptions": [
+      "BOD strategic_weight derived from |target_quarter - run_date| (DS05 has no weight column); nearest/active goal = highest.",
+      "Urgency computed from run_date; a supporting deadline in the future and <=90 days adds +10.",
+      "Skills in BOD goals (DS05) and survey topics (DS03) are extracted from free text by a hardcoded keyword table, not an LLM (see _skill_extraction audit).",
+      "Individual training need = employee-signalled (DS03 survey or DS01 Skill_Gap), because the data has no project->person assignment. Demanded skills nobody signalled are still scored but list no internal trainees.",
+      "When an employee was surveyed in multiple waves, only the latest wave counts as current signal (older waves kept in _superseded_surveys)."
+    ]
+  }
+}

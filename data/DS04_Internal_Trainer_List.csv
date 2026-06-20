@@ -1,0 +1,11 @@
+Trainer_ID,Expertise,Availability_Hours_Per_Month
+TRN-001,"Java, Management skills",4
+TRN-002,Java; Spring Boot; ReactJS; MySQL; Angular; JavaScript; NodeJS; Revit; Project Management,8
+TRN-003,C#; Python; ReactJS; Angular; SQL,8
+TRN-004,Java; Spring Boot; Python; FastAPI; Golang; Bash; PostgreSQL; MySQL; Terraform; Ansible; AWS; GCP; Jenkins; Docker; Kubernetes; Nginx; Prometheus; Grafana,8
+TRN-005,Project Management; Java; Spring Boot; ReactJS; AI; DBA; Cloud Platform,4
+TRN-006,Python; DevOps; Project Management; UI/UX Design,4
+TRN-007,Python; Agentic AI; LLM; Machine Learning,4
+TRN-008,Python; Docker; ReactJS; C/C++,4
+TRN-009,Python; BigQuery; SQL; Shell Script; C++; Rust; dbt; Scikit-learn; TensorFlow; PyTorch; LangChain; Kubernetes; Docker; Jenkins; Terraform; GitHub Actions; GCP; Azure; AWS,4
+TRN-010,Python; Spring Boot; MySQL; Java,4
