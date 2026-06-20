@@ -9,7 +9,7 @@
  * around rule-based domain functions.
  */
 
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createTool } from '@mastra/core/tools';
@@ -17,6 +17,10 @@ import { z } from 'zod';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const SCRATCH_DIR = resolve(__dirname, '../../../../../scratch');
+// scratch/ is gitignored (debug working dir) — a fresh checkout (CI, new
+// clone) won't have it on disk, and writeFileSync does not create parent
+// directories on its own.
+mkdirSync(SCRATCH_DIR, { recursive: true });
 
 import { loadRealData, loadTrainersFromCSV } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';

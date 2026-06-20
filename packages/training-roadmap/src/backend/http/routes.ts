@@ -19,6 +19,7 @@ import type { DraftRoadmapOutput, MatchedTrainingClass } from '../domain/types.t
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const SCRATCH_DIR = path.resolve(__dirname, '../../../../../scratch');
+fs.mkdirSync(SCRATCH_DIR, { recursive: true });
 
 export const trainingRoadmapRoutes = new Hono();
 
