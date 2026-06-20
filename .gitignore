@@ -77,3 +77,6 @@ logs/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# Judge feedback (internal, not for the shared repo)
+KADA_LnD6_Feedback*.csv
