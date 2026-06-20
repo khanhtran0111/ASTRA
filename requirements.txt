@@ -1,0 +1,6 @@
+# ASTRA data pipeline (Person 1 data layer) — Python deps.
+# Run-from-scratch:
+#   pip install -r requirements.txt
+#   python run_pipeline.py --today 2026-06-18
+pandas>=2.0
+pytest>=8.0

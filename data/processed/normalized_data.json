@@ -1780,9 +1780,10 @@
       ],
       "proficiency_level": "Intermediate",
       "self_reported_gaps": [
-        "DevOps (AWS",
+        "DevOps",
+        "AWS",
         "Terraform",
-        "K8s)",
+        "Kubernetes",
         "API Testing",
         "Performance Testing"
       ],
