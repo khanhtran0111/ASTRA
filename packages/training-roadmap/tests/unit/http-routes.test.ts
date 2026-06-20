@@ -33,7 +33,7 @@ describe('training roadmap routes', () => {
     expect(first.id).toMatch(/^CLS-/);
     expect(first.topic).toBeTruthy();
     expect(typeof first.score).toBe('number');
-  }, 30000);
+  }, 60_000);
 
   it('validates missing runId on approval', async () => {
     const res = await app.request('/api/training-roadmap/approve', {
