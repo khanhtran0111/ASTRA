@@ -20,7 +20,7 @@
       "dependsOn": ["^build", "^typecheck"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": [],
-      "env": ["DATABASE_URL", "CI"]
+      "env": ["DATABASE_URL", "CI", "OPENAI_API_KEY"]
     },
     "test:watch": {
       "cache": false,
