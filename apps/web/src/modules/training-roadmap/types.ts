@@ -38,3 +38,54 @@ export type ApprovalResponse = {
   reviewStatus: ApprovalDecision;
   approvalToken: string | null;
 };
+
+export type DatasetSourceSummary = {
+  id: 'DS01' | 'DS02' | 'DS03' | 'DS04' | 'DS05';
+  label: string;
+  fileName: string;
+  recordCount: number;
+  detail: string;
+  status: 'ready';
+};
+
+export type SkillGapSummary = {
+  skill: string;
+  employeeCount: number;
+  percentOfWorkforce: number;
+};
+
+export type PriorityAnalysisItem = {
+  skill: string;
+  priority: Priority;
+  score: number;
+  targetEmployeeCount: number;
+  supportingProjects: string[];
+  supportingGoals: string[];
+  internalTrainers: string[];
+  evidenceSummary: string;
+};
+
+export type TrainerCoverageGap = {
+  skill: string;
+  priority: Priority;
+  targetEmployeeCount: number;
+};
+
+export type TrainingAnalysisSnapshot = {
+  pipelineVersion: string;
+  runDate: string;
+  scoringFormula: string;
+  datasets: DatasetSourceSummary[];
+  metrics: {
+    employeesAnalyzed: number;
+    employeesWithTargetGaps: number;
+    uniqueTargetGapSkills: number;
+    initiativesScored: number;
+    internalTrainers: number;
+    uncoveredSkills: number;
+  };
+  priorityCounts: Record<Priority, number>;
+  skillGaps: SkillGapSummary[];
+  priorities: PriorityAnalysisItem[];
+  trainerCoverageGaps: TrainerCoverageGap[];
+};
