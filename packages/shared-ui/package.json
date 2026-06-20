@@ -11,7 +11,7 @@
     "./styles/globals.css": "./src/styles/globals.css"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . --no-error-on-unmatched-pattern",
     "typecheck": "tsc --noEmit",
     "test": "cross-env NODE_OPTIONS='--no-experimental-webstorage' vitest run",
     "test:watch": "cross-env NODE_OPTIONS='--no-experimental-webstorage' vitest",

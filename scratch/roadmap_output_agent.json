@@ -1,13 +1,13 @@
 {
-  "agentReasoning": "```json\n{\n  \"skills\": {\n    \"Kubernetes\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded, requiring external training.\",\n      \"evaluationCriteria\": \"Successful deployment and management of containerized applications\",\n      \"durationWeeks\": 10\n    },\n    \"CI/CD\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"No internal trainers available, leveraging online resources for flexibility.\",\n      \"evaluationCriteria\": \"Effective implementation of CI/CD pipelines\",\n      \"durationWeeks\": 8\n    },\n    \"IaC\": {\n      \"estimatedHours\": 25,\n      \"learningFormat\": \"GROUP_STUDY\",\n      \"formatExplanation\": \"Skill not found internally; group study enables practical learning at lower costs.\",\n      \"evaluationCriteria\": \"Correct use of infrastructure as code in real scenarios\",\n      \"durationWeeks\": 7\n    },\n    \"Python\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Ability to write efficient and functional Python scripts\",\n      \"durationWeeks\": 8\n    },\n    \"MLOps\": {\n      \"estimatedHours\": 35,\n      \"learningFormat\": \"ON_JOB_TRAINING\",\n      \"formatExplanation\": \"Focus on practical implementation during ongoing projects.\",\n      \"evaluationCriteria\": \"Integration of MLOps practices in existing workflows\",\n      \"durationWeeks\": 9\n    },\n    \"GCP\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Efficient utilization of Google Cloud Platform services\",\n      \"durationWeeks\": 10\n    },\n    \"Go\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"Skill not found internally, hence online self-paced courses are recommended.\",\n      \"evaluationCriteria\": \"Proficiency in building applications using Go\",\n      \"durationWeeks\": 8\n    },\n    \"AWS\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Effective AWS service implementation\",\n      \"durationWeeks\": 10\n    },\n    \"React\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"Skill not found internally; suitable online courses are available.\",\n      \"evaluationCriteria\": \"Development of performant React applications\",\n      \"durationWeeks\": 8\n    },\n    \"Docker\": {\n      \"estimatedHours\": 25,\n      \"learningFormat\": \"GROUP_STUDY\",\n      \"formatExplanation\": \"Internal capacity exceeded, allowing for collaborative self-paced learning.\",\n      \"evaluationCriteria\": \"Efficient use of Docker for container deployments\",\n      \"durationWeeks\": 7\n    },\n    \"TensorFlow\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Competence in developing TensorFlow-based models\",\n      \"durationWeeks\": 10\n    },\n    \"LangChain\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"SEMINAR_SHARING\",\n      \"formatExplanation\": \"Internal capacity exceeded, simple knowledge sharing sessions are appropriate.\",\n      \"evaluationCriteria\": \"Successful chain creation and execution\",\n      \"durationWeeks\": 8\n    },\n    \"OpenAI API\": {\n      \"estimatedHours\": 25,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"Skill not found internally; online learning is cost-effective.\",\n      \"evaluationCriteria\": \"Effective utilization of OpenAI API in applications\",\n      \"durationWeeks\": 7\n    },\n    \"Vector DB\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"SEMINAR_SHARING\",\n      \"formatExplanation\": \"Skill not found internally; enables peer-to-peer learning and idea exchanges.\",\n      \"evaluationCriteria\": \"Correct implementation and querying of vector databases\",\n      \"durationWeeks\": 8\n    },\n    \"Data Engineering\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Skill not found internally.\",\n      \"evaluationCriteria\": \"Establish pipelines for data processing and storage\",\n      \"durationWeeks\": 10\n    },\n    \"Node.js\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"Skill not found internally; multiple online tutorials available.\",\n      \"evaluationCriteria\": \"Construction of efficient Node.js server-side solutions\",\n      \"durationWeeks\": 8\n    },\n    \"gRPC\": {\n      \"estimatedHours\": 25,\n      \"learningFormat\": \"GROUP_STUDY\",\n      \"formatExplanation\": \"Skill not found internally; group study proposed to facilitate peer learning.\",\n      \"evaluationCriteria\": \"Implementation of gRPC communication between microservices\",\n      \"durationWeeks\": 7\n    },\n    \"Azure\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Proficiency in utilizing Azure cloud services\",\n      \"durationWeeks\": 10\n    },\n    \"Container Security\": {\n      \"estimatedHours\": 35,\n      \"learningFormat\": \"ON_JOB_TRAINING\",\n      \"formatExplanation\": \"Learning integrated within current security projects.\",\n      \"evaluationCriteria\": \"Implementation of security policies and tools for containers\",\n      \"durationWeeks\": 9\n    },\n    \"DevSecOps\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"ON_JOB_TRAINING\",\n      \"formatExplanation\": \"Integrated learning within development and security operations.\",\n      \"evaluationCriteria\": \"Successful incorporation of security in DevOps processes\",\n      \"durationWeeks\": 10\n    },\n    \"Java\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Internal capacity exceeded.\",\n      \"evaluationCriteria\": \"Development of robust Java applications\",\n      \"durationWeeks\": 8\n    },\n    \"Terraform\": {\n      \"estimatedHours\": 25,\n      \"learningFormat\": \"GROUP_STUDY\",\n      \"formatExplanation\": \"Skill not found internally; promotes practical experimentation.\",\n      \"evaluationCriteria\": \"Correct infrastructure provisioning using Terraform\",\n      \"durationWeeks\": 7\n    }\n  }\n}\n```",
-  "runId": "b0eea0fb-18ed-420d-af3f-f08d1c2f6a90",
+  "agentReasoning": "```json\n{\n  \"skills\": {\n    \"Kubernetes\": {\n      \"estimatedHours\": 40,\n      \"learningFormat\": \"ONLINE_COURSE\",\n      \"formatExplanation\": \"Capacity exceeded with internal trainers; opting for a comprehensive online course.\",\n      \"evaluationCriteria\": \"Completion of course and project implementation\",\n      \"durationWeeks\": 8\n    },\n    \"CI/CD\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"EXTERNAL_TRAINER\",\n      \"formatExplanation\": \"Skill not found internally; hiring an external trainer for hands-on workshop.\",\n      \"evaluationCriteria\": \"Successful deployment of CI/CD pipelines\",\n      \"durationWeeks\": 6\n    },\n    \"IaC\": {\n      \"estimatedHours\": 30,\n      \"learningFormat\": \"GROUP_STUDY\",\n      \"formatExplanation\": \"Skill not found internally; using group study to leverage self-paced learning.\",\n      \"evaluationCriteria\": \"Integration of IaC practices into current projects\",\n      \"durationWeeks\": 6\n    }\n  }\n}\n``` \n\n### Summary:\n\n- **Matched Needs**: 0 internally, 3 externally.\n- **Capacity Issues**: Kubernetes trainer capacity exceeded.\n- **External Formats**:\n  - *Kubernetes*: Online course due to capacity issues.\n  - *CI/CD*: External trainer needed for structured learning.\n  - *IaC*: Group study chosen to save costs and promote peer learning.",
+  "runId": "2e82547f-6fec-456f-ab3f-fbfc12703f6c",
   "reviewStatus": "pending",
   "executionLog": [
     "Loaded internal trainer pool.",
     "Loaded scored training needs.",
-    "Matched 22 training needs to trainers.",
+    "Matched 3 training needs to trainers.",
     "0 assigned internally.",
-    "22 flagged for external resource.",
+    "3 flagged for external resource.",
     "Generated draft roadmap.",
     "Paused at Human Review Gate."
   ],
@@ -34,19 +34,12 @@
         "EMP-178"
       ],
       "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded, requiring external training.",
-      "evaluationCriteria": "Successful deployment and management of containerized applications",
-      "durationWeeks": 10,
+      "format": "ONLINE_COURSE",
+      "formatExplanation": "Capacity exceeded with internal trainers; opting for a comprehensive online course.",
+      "evaluationCriteria": "Completion of course and project implementation",
+      "durationWeeks": 8,
       "estimatedHours": 40,
-      "evidence": [
-        "GOAL-2026-07",
-        "PRJ-002",
-        "PRJ-005",
-        "PRJ-007",
-        "PRJ-009",
-        "SUR_2025_Q4"
-      ],
+      "evidence": ["GOAL-2026-07", "PRJ-002", "PRJ-005", "PRJ-007", "PRJ-009", "SUR_2025_Q4"],
       "fallbackReason": "CAPACITY_EXCEEDED"
     },
     {
@@ -72,17 +65,12 @@
         "EMP-205"
       ],
       "trainerName": null,
-      "format": "ONLINE_COURSE",
-      "formatExplanation": "No internal trainers available, leveraging online resources for flexibility.",
-      "evaluationCriteria": "Effective implementation of CI/CD pipelines",
-      "durationWeeks": 8,
+      "format": "EXTERNAL_TRAINER",
+      "formatExplanation": "Skill not found internally; hiring an external trainer for hands-on workshop.",
+      "evaluationCriteria": "Successful deployment of CI/CD pipelines",
+      "durationWeeks": 6,
       "estimatedHours": 30,
-      "evidence": [
-        "GOAL-2026-07",
-        "PRJ-005",
-        "PRJ-009",
-        "SUR_2025_Q4"
-      ],
+      "evidence": ["GOAL-2026-07", "PRJ-005", "PRJ-009", "SUR_2025_Q4"],
       "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
     },
     {
@@ -91,464 +79,15 @@
       "priority": "P3",
       "score": 58,
       "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-179"
-      ],
+      "targetTrainees": ["EMP-179"],
       "trainerName": null,
       "format": "GROUP_STUDY",
-      "formatExplanation": "Skill not found internally; group study enables practical learning at lower costs.",
-      "evaluationCriteria": "Correct use of infrastructure as code in real scenarios",
-      "durationWeeks": 7,
-      "estimatedHours": 25,
-      "evidence": [
-        "GOAL-2026-07"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-004",
-      "topic": "Python",
-      "priority": "P3",
-      "score": 50,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-014",
-        "EMP-018",
-        "EMP-043",
-        "EMP-045",
-        "EMP-068",
-        "EMP-075",
-        "EMP-083",
-        "EMP-095",
-        "EMP-109"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Ability to write efficient and functional Python scripts",
-      "durationWeeks": 8,
+      "formatExplanation": "Skill not found internally; using group study to leverage self-paced learning.",
+      "evaluationCriteria": "Integration of IaC practices into current projects",
+      "durationWeeks": 6,
       "estimatedHours": 30,
-      "evidence": [
-        "PRJ-001",
-        "PRJ-004",
-        "PRJ-008",
-        "PRJ-011",
-        "PRJ-017",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-005",
-      "topic": "MLOps",
-      "priority": "P3",
-      "score": 50,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-013",
-        "EMP-022",
-        "EMP-041",
-        "EMP-044",
-        "EMP-062",
-        "EMP-119",
-        "EMP-162"
-      ],
-      "trainerName": null,
-      "format": "ON_JOB_TRAINING",
-      "formatExplanation": "Focus on practical implementation during ongoing projects.",
-      "evaluationCriteria": "Integration of MLOps practices in existing workflows",
-      "durationWeeks": 9,
-      "estimatedHours": 35,
-      "evidence": [
-        "PRJ-004",
-        "PRJ-011",
-        "SUR_2025_Q4"
-      ],
+      "evidence": ["GOAL-2026-07"],
       "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-006",
-      "topic": "GCP",
-      "priority": "P3",
-      "score": 50,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-018",
-        "EMP-092"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Efficient utilization of Google Cloud Platform services",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-004",
-        "PRJ-011",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-007",
-      "topic": "Go",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-045",
-        "EMP-129",
-        "EMP-163",
-        "EMP-164",
-        "EMP-165",
-        "EMP-166",
-        "EMP-167",
-        "EMP-168",
-        "EMP-169",
-        "EMP-170",
-        "EMP-171",
-        "EMP-172",
-        "EMP-173",
-        "EMP-174",
-        "EMP-175",
-        "EMP-176"
-      ],
-      "trainerName": null,
-      "format": "ONLINE_COURSE",
-      "formatExplanation": "Skill not found internally, hence online self-paced courses are recommended.",
-      "evaluationCriteria": "Proficiency in building applications using Go",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-007",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-008",
-      "topic": "AWS",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-028",
-        "EMP-048",
-        "EMP-066",
-        "EMP-092",
-        "EMP-100"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Effective AWS service implementation",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-002",
-        "PRJ-009",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-009",
-      "topic": "React",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-030"
-      ],
-      "trainerName": null,
-      "format": "ONLINE_COURSE",
-      "formatExplanation": "Skill not found internally; suitable online courses are available.",
-      "evaluationCriteria": "Development of performant React applications",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-003",
-        "PRJ-013",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-010",
-      "topic": "Docker",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [],
-      "trainerName": null,
-      "format": "GROUP_STUDY",
-      "formatExplanation": "Internal capacity exceeded, allowing for collaborative self-paced learning.",
-      "evaluationCriteria": "Efficient use of Docker for container deployments",
-      "durationWeeks": 7,
-      "estimatedHours": 25,
-      "evidence": [
-        "PRJ-001",
-        "PRJ-005",
-        "PRJ-008"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-011",
-      "topic": "TensorFlow",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Competence in developing TensorFlow-based models",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-004",
-        "PRJ-020"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-012",
-      "topic": "LangChain",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [],
-      "trainerName": null,
-      "format": "SEMINAR_SHARING",
-      "formatExplanation": "Internal capacity exceeded, simple knowledge sharing sessions are appropriate.",
-      "evaluationCriteria": "Successful chain creation and execution",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-008"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-013",
-      "topic": "OpenAI API",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [],
-      "trainerName": null,
-      "format": "ONLINE_COURSE",
-      "formatExplanation": "Skill not found internally; online learning is cost-effective.",
-      "evaluationCriteria": "Effective utilization of OpenAI API in applications",
-      "durationWeeks": 7,
-      "estimatedHours": 25,
-      "evidence": [
-        "PRJ-008"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-014",
-      "topic": "Vector DB",
-      "priority": "P3",
-      "score": 40,
-      "quarter": "Q3 2026",
-      "targetTrainees": [],
-      "trainerName": null,
-      "format": "SEMINAR_SHARING",
-      "formatExplanation": "Skill not found internally; enables peer-to-peer learning and idea exchanges.",
-      "evaluationCriteria": "Correct implementation and querying of vector databases",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-008"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-015",
-      "topic": "Data Engineering",
-      "priority": "P3",
-      "score": 35,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-005",
-        "EMP-015",
-        "EMP-044",
-        "EMP-058",
-        "EMP-060",
-        "EMP-077",
-        "EMP-081",
-        "EMP-090",
-        "EMP-109",
-        "EMP-111",
-        "EMP-119",
-        "EMP-125",
-        "EMP-132",
-        "EMP-151",
-        "EMP-157"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Skill not found internally.",
-      "evaluationCriteria": "Establish pipelines for data processing and storage",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-019",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-016",
-      "topic": "Node.js",
-      "priority": "P3",
-      "score": 32,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-054",
-        "EMP-073"
-      ],
-      "trainerName": null,
-      "format": "ONLINE_COURSE",
-      "formatExplanation": "Skill not found internally; multiple online tutorials available.",
-      "evaluationCriteria": "Construction of efficient Node.js server-side solutions",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-003",
-        "PRJ-013",
-        "SUR_2025_Q4"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-017",
-      "topic": "gRPC",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-163",
-        "EMP-166",
-        "EMP-169",
-        "EMP-172",
-        "EMP-175"
-      ],
-      "trainerName": null,
-      "format": "GROUP_STUDY",
-      "formatExplanation": "Skill not found internally; group study proposed to facilitate peer learning.",
-      "evaluationCriteria": "Implementation of gRPC communication between microservices",
-      "durationWeeks": 7,
-      "estimatedHours": 25,
-      "evidence": [
-        "PRJ-007"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-018",
-      "topic": "Azure",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-066",
-        "EMP-145"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Proficiency in utilizing Azure cloud services",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-006",
-        "PRJ-010"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-019",
-      "topic": "Container Security",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-178"
-      ],
-      "trainerName": null,
-      "format": "ON_JOB_TRAINING",
-      "formatExplanation": "Learning integrated within current security projects.",
-      "evaluationCriteria": "Implementation of security policies and tools for containers",
-      "durationWeeks": 9,
-      "estimatedHours": 35,
-      "evidence": [
-        "PRJ-015"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-020",
-      "topic": "DevSecOps",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-037"
-      ],
-      "trainerName": null,
-      "format": "ON_JOB_TRAINING",
-      "formatExplanation": "Integrated learning within development and security operations.",
-      "evaluationCriteria": "Successful incorporation of security in DevOps processes",
-      "durationWeeks": 10,
-      "estimatedHours": 40,
-      "evidence": [
-        "PRJ-015"
-      ],
-      "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-    },
-    {
-      "id": "CLS-021",
-      "topic": "Java",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-083"
-      ],
-      "trainerName": null,
-      "format": "EXTERNAL_TRAINER",
-      "formatExplanation": "Internal capacity exceeded.",
-      "evaluationCriteria": "Development of robust Java applications",
-      "durationWeeks": 8,
-      "estimatedHours": 30,
-      "evidence": [
-        "PRJ-002"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
-    },
-    {
-      "id": "CLS-022",
-      "topic": "Terraform",
-      "priority": "P3",
-      "score": 30,
-      "quarter": "Q3 2026",
-      "targetTrainees": [
-        "EMP-100"
-      ],
-      "trainerName": null,
-      "format": "GROUP_STUDY",
-      "formatExplanation": "Skill not found internally; promotes practical experimentation.",
-      "evaluationCriteria": "Correct infrastructure provisioning using Terraform",
-      "durationWeeks": 7,
-      "estimatedHours": 25,
-      "evidence": [
-        "PRJ-009"
-      ],
-      "fallbackReason": "CAPACITY_EXCEEDED"
     }
   ],
   "qaFindings": [
@@ -569,126 +108,12 @@
       "risk": "MEDIUM",
       "message": "IaC: No internal trainer found — external resource required.",
       "relatedInitiativeId": "CLS-003"
-    },
-    {
-      "id": "QA-004",
-      "risk": "MEDIUM",
-      "message": "Python: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-004"
-    },
-    {
-      "id": "QA-005",
-      "risk": "MEDIUM",
-      "message": "MLOps: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-005"
-    },
-    {
-      "id": "QA-006",
-      "risk": "MEDIUM",
-      "message": "GCP: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-006"
-    },
-    {
-      "id": "QA-007",
-      "risk": "MEDIUM",
-      "message": "Go: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-007"
-    },
-    {
-      "id": "QA-008",
-      "risk": "MEDIUM",
-      "message": "AWS: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-008"
-    },
-    {
-      "id": "QA-009",
-      "risk": "MEDIUM",
-      "message": "React: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-009"
-    },
-    {
-      "id": "QA-010",
-      "risk": "MEDIUM",
-      "message": "Docker: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-010"
-    },
-    {
-      "id": "QA-011",
-      "risk": "MEDIUM",
-      "message": "TensorFlow: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-011"
-    },
-    {
-      "id": "QA-012",
-      "risk": "MEDIUM",
-      "message": "LangChain: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-012"
-    },
-    {
-      "id": "QA-013",
-      "risk": "MEDIUM",
-      "message": "OpenAI API: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-013"
-    },
-    {
-      "id": "QA-014",
-      "risk": "MEDIUM",
-      "message": "Vector DB: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-014"
-    },
-    {
-      "id": "QA-015",
-      "risk": "MEDIUM",
-      "message": "Data Engineering: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-015"
-    },
-    {
-      "id": "QA-016",
-      "risk": "MEDIUM",
-      "message": "Node.js: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-016"
-    },
-    {
-      "id": "QA-017",
-      "risk": "MEDIUM",
-      "message": "gRPC: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-017"
-    },
-    {
-      "id": "QA-018",
-      "risk": "MEDIUM",
-      "message": "Azure: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-018"
-    },
-    {
-      "id": "QA-019",
-      "risk": "MEDIUM",
-      "message": "Container Security: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-019"
-    },
-    {
-      "id": "QA-020",
-      "risk": "MEDIUM",
-      "message": "DevSecOps: No internal trainer found — external resource required.",
-      "relatedInitiativeId": "CLS-020"
-    },
-    {
-      "id": "QA-021",
-      "risk": "MEDIUM",
-      "message": "Java: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-021"
-    },
-    {
-      "id": "QA-022",
-      "risk": "MEDIUM",
-      "message": "Terraform: Internal trainer capacity exceeded — external resource required.",
-      "relatedInitiativeId": "CLS-022"
     }
   ],
   "draftRoadmap": {
     "roadmapId": "RM-2026-V1",
     "status": "DRAFT",
-    "generatedAt": "2026-06-20T12:10:51.939Z",
+    "generatedAt": "2026-06-20T13:01:48.303Z",
     "quarters": {
       "Q3_2026": [
         {
@@ -696,15 +121,8 @@
           "topic": "Kubernetes",
           "priorityScore": 98,
           "alignmentEvidence": {
-            "bodGoals": [
-              "GOAL-2026-07"
-            ],
-            "projects": [
-              "PRJ-002",
-              "PRJ-005",
-              "PRJ-007",
-              "PRJ-009"
-            ]
+            "bodGoals": ["GOAL-2026-07"],
+            "projects": ["PRJ-002", "PRJ-005", "PRJ-007", "PRJ-009"]
           },
           "traineeCount": 13,
           "trainees": [
@@ -723,10 +141,10 @@
             "EMP-178"
           ],
           "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded, requiring external training.",
-          "evaluationCriteria": "Successful deployment and management of containerized applications",
-          "durationWeeks": 10,
+          "learningFormat": "ONLINE_COURSE",
+          "formatExplanation": "Capacity exceeded with internal trainers; opting for a comprehensive online course.",
+          "evaluationCriteria": "Completion of course and project implementation",
+          "durationWeeks": 8,
           "resource": {
             "trainerId": null,
             "isExternalRequired": true,
@@ -738,13 +156,8 @@
           "topic": "CI/CD",
           "priorityScore": 90,
           "alignmentEvidence": {
-            "bodGoals": [
-              "GOAL-2026-07"
-            ],
-            "projects": [
-              "PRJ-005",
-              "PRJ-009"
-            ]
+            "bodGoals": ["GOAL-2026-07"],
+            "projects": ["PRJ-005", "PRJ-009"]
           },
           "traineeCount": 14,
           "trainees": [
@@ -764,10 +177,10 @@
             "EMP-205"
           ],
           "estimatedHours": 30,
-          "learningFormat": "ONLINE_COURSE",
-          "formatExplanation": "No internal trainers available, leveraging online resources for flexibility.",
-          "evaluationCriteria": "Effective implementation of CI/CD pipelines",
-          "durationWeeks": 8,
+          "learningFormat": "EXTERNAL_TRAINER",
+          "formatExplanation": "Skill not found internally; hiring an external trainer for hands-on workshop.",
+          "evaluationCriteria": "Successful deployment of CI/CD pipelines",
+          "durationWeeks": 6,
           "resource": {
             "trainerId": null,
             "isExternalRequired": true,
@@ -779,556 +192,20 @@
           "topic": "IaC",
           "priorityScore": 58,
           "alignmentEvidence": {
-            "bodGoals": [
-              "GOAL-2026-07"
-            ],
+            "bodGoals": ["GOAL-2026-07"],
             "projects": []
           },
           "traineeCount": 1,
-          "trainees": [
-            "EMP-179"
-          ],
-          "estimatedHours": 25,
+          "trainees": ["EMP-179"],
+          "estimatedHours": 30,
           "learningFormat": "GROUP_STUDY",
-          "formatExplanation": "Skill not found internally; group study enables practical learning at lower costs.",
-          "evaluationCriteria": "Correct use of infrastructure as code in real scenarios",
-          "durationWeeks": 7,
+          "formatExplanation": "Skill not found internally; using group study to leverage self-paced learning.",
+          "evaluationCriteria": "Integration of IaC practices into current projects",
+          "durationWeeks": 6,
           "resource": {
             "trainerId": null,
             "isExternalRequired": true,
             "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-004",
-          "topic": "Python",
-          "priorityScore": 50,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-001",
-              "PRJ-004",
-              "PRJ-008",
-              "PRJ-011",
-              "PRJ-017"
-            ]
-          },
-          "traineeCount": 9,
-          "trainees": [
-            "EMP-014",
-            "EMP-018",
-            "EMP-043",
-            "EMP-045",
-            "EMP-068",
-            "EMP-075",
-            "EMP-083",
-            "EMP-095",
-            "EMP-109"
-          ],
-          "estimatedHours": 30,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Ability to write efficient and functional Python scripts",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-005",
-          "topic": "MLOps",
-          "priorityScore": 50,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-004",
-              "PRJ-011"
-            ]
-          },
-          "traineeCount": 7,
-          "trainees": [
-            "EMP-013",
-            "EMP-022",
-            "EMP-041",
-            "EMP-044",
-            "EMP-062",
-            "EMP-119",
-            "EMP-162"
-          ],
-          "estimatedHours": 35,
-          "learningFormat": "ON_JOB_TRAINING",
-          "formatExplanation": "Focus on practical implementation during ongoing projects.",
-          "evaluationCriteria": "Integration of MLOps practices in existing workflows",
-          "durationWeeks": 9,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-006",
-          "topic": "GCP",
-          "priorityScore": 50,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-004",
-              "PRJ-011"
-            ]
-          },
-          "traineeCount": 2,
-          "trainees": [
-            "EMP-018",
-            "EMP-092"
-          ],
-          "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Efficient utilization of Google Cloud Platform services",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-007",
-          "topic": "Go",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-007"
-            ]
-          },
-          "traineeCount": 16,
-          "trainees": [
-            "EMP-045",
-            "EMP-129",
-            "EMP-163",
-            "EMP-164",
-            "EMP-165",
-            "EMP-166",
-            "EMP-167",
-            "EMP-168",
-            "EMP-169",
-            "EMP-170",
-            "EMP-171",
-            "EMP-172",
-            "EMP-173",
-            "EMP-174",
-            "EMP-175",
-            "EMP-176"
-          ],
-          "estimatedHours": 30,
-          "learningFormat": "ONLINE_COURSE",
-          "formatExplanation": "Skill not found internally, hence online self-paced courses are recommended.",
-          "evaluationCriteria": "Proficiency in building applications using Go",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-008",
-          "topic": "AWS",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-002",
-              "PRJ-009"
-            ]
-          },
-          "traineeCount": 5,
-          "trainees": [
-            "EMP-028",
-            "EMP-048",
-            "EMP-066",
-            "EMP-092",
-            "EMP-100"
-          ],
-          "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Effective AWS service implementation",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-009",
-          "topic": "React",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-003",
-              "PRJ-013"
-            ]
-          },
-          "traineeCount": 1,
-          "trainees": [
-            "EMP-030"
-          ],
-          "estimatedHours": 30,
-          "learningFormat": "ONLINE_COURSE",
-          "formatExplanation": "Skill not found internally; suitable online courses are available.",
-          "evaluationCriteria": "Development of performant React applications",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-010",
-          "topic": "Docker",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-001",
-              "PRJ-005",
-              "PRJ-008"
-            ]
-          },
-          "traineeCount": 0,
-          "trainees": [],
-          "estimatedHours": 25,
-          "learningFormat": "GROUP_STUDY",
-          "formatExplanation": "Internal capacity exceeded, allowing for collaborative self-paced learning.",
-          "evaluationCriteria": "Efficient use of Docker for container deployments",
-          "durationWeeks": 7,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-011",
-          "topic": "TensorFlow",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-004",
-              "PRJ-020"
-            ]
-          },
-          "traineeCount": 0,
-          "trainees": [],
-          "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Competence in developing TensorFlow-based models",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-012",
-          "topic": "LangChain",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-008"
-            ]
-          },
-          "traineeCount": 0,
-          "trainees": [],
-          "estimatedHours": 30,
-          "learningFormat": "SEMINAR_SHARING",
-          "formatExplanation": "Internal capacity exceeded, simple knowledge sharing sessions are appropriate.",
-          "evaluationCriteria": "Successful chain creation and execution",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-013",
-          "topic": "OpenAI API",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-008"
-            ]
-          },
-          "traineeCount": 0,
-          "trainees": [],
-          "estimatedHours": 25,
-          "learningFormat": "ONLINE_COURSE",
-          "formatExplanation": "Skill not found internally; online learning is cost-effective.",
-          "evaluationCriteria": "Effective utilization of OpenAI API in applications",
-          "durationWeeks": 7,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-014",
-          "topic": "Vector DB",
-          "priorityScore": 40,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-008"
-            ]
-          },
-          "traineeCount": 0,
-          "trainees": [],
-          "estimatedHours": 30,
-          "learningFormat": "SEMINAR_SHARING",
-          "formatExplanation": "Skill not found internally; enables peer-to-peer learning and idea exchanges.",
-          "evaluationCriteria": "Correct implementation and querying of vector databases",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-015",
-          "topic": "Data Engineering",
-          "priorityScore": 35,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-019"
-            ]
-          },
-          "traineeCount": 15,
-          "trainees": [
-            "EMP-005",
-            "EMP-015",
-            "EMP-044",
-            "EMP-058",
-            "EMP-060",
-            "EMP-077",
-            "EMP-081",
-            "EMP-090",
-            "EMP-109",
-            "EMP-111",
-            "EMP-119",
-            "EMP-125",
-            "EMP-132",
-            "EMP-151",
-            "EMP-157"
-          ],
-          "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Skill not found internally.",
-          "evaluationCriteria": "Establish pipelines for data processing and storage",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-016",
-          "topic": "Node.js",
-          "priorityScore": 32,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-003",
-              "PRJ-013"
-            ]
-          },
-          "traineeCount": 2,
-          "trainees": [
-            "EMP-054",
-            "EMP-073"
-          ],
-          "estimatedHours": 30,
-          "learningFormat": "ONLINE_COURSE",
-          "formatExplanation": "Skill not found internally; multiple online tutorials available.",
-          "evaluationCriteria": "Construction of efficient Node.js server-side solutions",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-017",
-          "topic": "gRPC",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-007"
-            ]
-          },
-          "traineeCount": 5,
-          "trainees": [
-            "EMP-163",
-            "EMP-166",
-            "EMP-169",
-            "EMP-172",
-            "EMP-175"
-          ],
-          "estimatedHours": 25,
-          "learningFormat": "GROUP_STUDY",
-          "formatExplanation": "Skill not found internally; group study proposed to facilitate peer learning.",
-          "evaluationCriteria": "Implementation of gRPC communication between microservices",
-          "durationWeeks": 7,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-018",
-          "topic": "Azure",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-006",
-              "PRJ-010"
-            ]
-          },
-          "traineeCount": 2,
-          "trainees": [
-            "EMP-066",
-            "EMP-145"
-          ],
-          "estimatedHours": 40,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Proficiency in utilizing Azure cloud services",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-019",
-          "topic": "Container Security",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-015"
-            ]
-          },
-          "traineeCount": 1,
-          "trainees": [
-            "EMP-178"
-          ],
-          "estimatedHours": 35,
-          "learningFormat": "ON_JOB_TRAINING",
-          "formatExplanation": "Learning integrated within current security projects.",
-          "evaluationCriteria": "Implementation of security policies and tools for containers",
-          "durationWeeks": 9,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-020",
-          "topic": "DevSecOps",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-015"
-            ]
-          },
-          "traineeCount": 1,
-          "trainees": [
-            "EMP-037"
-          ],
-          "estimatedHours": 40,
-          "learningFormat": "ON_JOB_TRAINING",
-          "formatExplanation": "Integrated learning within development and security operations.",
-          "evaluationCriteria": "Successful incorporation of security in DevOps processes",
-          "durationWeeks": 10,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "SKILL_NOT_FOUND_INTERNAL"
-          }
-        },
-        {
-          "classId": "CLS-021",
-          "topic": "Java",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-002"
-            ]
-          },
-          "traineeCount": 1,
-          "trainees": [
-            "EMP-083"
-          ],
-          "estimatedHours": 30,
-          "learningFormat": "EXTERNAL_TRAINER",
-          "formatExplanation": "Internal capacity exceeded.",
-          "evaluationCriteria": "Development of robust Java applications",
-          "durationWeeks": 8,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
-          }
-        },
-        {
-          "classId": "CLS-022",
-          "topic": "Terraform",
-          "priorityScore": 30,
-          "alignmentEvidence": {
-            "bodGoals": [],
-            "projects": [
-              "PRJ-009"
-            ]
-          },
-          "traineeCount": 1,
-          "trainees": [
-            "EMP-100"
-          ],
-          "estimatedHours": 25,
-          "learningFormat": "GROUP_STUDY",
-          "formatExplanation": "Skill not found internally; promotes practical experimentation.",
-          "evaluationCriteria": "Correct infrastructure provisioning using Terraform",
-          "durationWeeks": 7,
-          "resource": {
-            "trainerId": null,
-            "isExternalRequired": true,
-            "fallbackReason": "CAPACITY_EXCEEDED"
           }
         }
       ]

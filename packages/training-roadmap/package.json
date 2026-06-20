@@ -22,14 +22,15 @@
   "devDependencies": {
     "@seta/shared-config": "workspace:^",
     "@seta/shared-testing": "workspace:^",
-    "@types/pg": "^8.20.0",
-    "drizzle-kit": "^0.31.10",
     "@types/node": "^22.10.2",
+    "@types/pg": "^8.20.0",
     "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.31.10",
     "typescript": "^6.0.3",
     "vitest": "^4.1.8"
   },
   "dependencies": {
+    "@mastra/core": "1.42.0",
     "@seta/agent-sdk": "workspace:^",
     "@seta/core": "workspace:^",
     "@seta/shared-db": "workspace:^",
