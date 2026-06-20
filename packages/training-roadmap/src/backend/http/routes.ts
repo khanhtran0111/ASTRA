@@ -1,6 +1,4 @@
 import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { Agent } from '@mastra/core/agent';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
@@ -16,10 +14,10 @@ import {
 } from '../agent-tools/roadmap-tools.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import type { DraftRoadmapOutput, MatchedTrainingClass } from '../domain/types.ts';
+import { getScratchPath, readJsonFileOrDefault } from '../scratch-storage.ts';
 
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const SCRATCH_DIR = path.resolve(__dirname, '../../../../../scratch');
-fs.mkdirSync(SCRATCH_DIR, { recursive: true });
+const MATCHED_CLASSES_PATH = getScratchPath('matched_classes.json');
+const ROADMAP_OUTPUT_PATH = getScratchPath('roadmap_output_agent.json');
 
 export const trainingRoadmapRoutes = new Hono();
 
@@ -208,52 +206,47 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     }
 
     // Apply to matched_classes.json
-    const scratchPath = path.resolve(SCRATCH_DIR, 'matched_classes.json');
-    if (fs.existsSync(scratchPath)) {
-      const raw = fs.readFileSync(scratchPath, 'utf-8');
-      const parsed: unknown = JSON.parse(raw);
-      let matchedClasses: MatchedTrainingClass[] = MatchedTrainingClassesSchema.parse(parsed);
+    const parsedMatchedClasses = readJsonFileOrDefault(MATCHED_CLASSES_PATH, []);
+    let matchedClasses: MatchedTrainingClass[] =
+      MatchedTrainingClassesSchema.parse(parsedMatchedClasses);
 
-      // Filter out skills that the LLM dropped (semantic filtering)
-      if (userPrompt && Object.keys(extractedMap).length > 0) {
-        matchedClasses = matchedClasses.filter((cls) => {
-          // Fallback fuzzy matching in case LLM shortens the name
-          return (
-            extractedMap[cls.skillName] !== undefined ||
-            Object.keys(extractedMap).some(
-              (k) => cls.skillName.includes(k) || k.includes(cls.skillName),
-            )
-          );
-        });
-      }
-
-      for (const cls of matchedClasses) {
-        // Find exact or fuzzy match
-        const key = Object.keys(extractedMap).find(
-          (k) => k === cls.skillName || cls.skillName.includes(k) || k.includes(cls.skillName),
+    // Filter out skills that the LLM dropped (semantic filtering)
+    if (userPrompt && Object.keys(extractedMap).length > 0) {
+      matchedClasses = matchedClasses.filter((cls) => {
+        // Fallback fuzzy matching in case LLM shortens the name
+        return (
+          extractedMap[cls.skillName] !== undefined ||
+          Object.keys(extractedMap).some(
+            (k) => cls.skillName.includes(k) || k.includes(cls.skillName),
+          )
         );
-        const updates = key ? extractedMap[key] : undefined;
-        if (updates) {
-          if (updates.estimatedHours) cls.estimatedHours = updates.estimatedHours;
-          if (updates.learningFormat) cls.learningFormat = updates.learningFormat;
-          if (updates.formatExplanation) cls.formatExplanation = updates.formatExplanation;
-          if (updates.evaluationCriteria) cls.evaluationCriteria = updates.evaluationCriteria;
-          if (updates.durationWeeks) cls.durationWeeks = updates.durationWeeks;
-        }
-        if (!cls.learningFormat) {
-          cls.learningFormat = cls.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
-        }
-      }
-      fs.writeFileSync(scratchPath, JSON.stringify(matchedClasses, null, 2));
+      });
     }
 
-    // Directly call the compilation tool to guarantee the JSON is captured correctly
+    for (const cls of matchedClasses) {
+      // Find exact or fuzzy match
+      const key = Object.keys(extractedMap).find(
+        (k) => k === cls.skillName || cls.skillName.includes(k) || k.includes(cls.skillName),
+      );
+      const updates = key ? extractedMap[key] : undefined;
+      if (updates) {
+        if (updates.estimatedHours) cls.estimatedHours = updates.estimatedHours;
+        if (updates.learningFormat) cls.learningFormat = updates.learningFormat;
+        if (updates.formatExplanation) cls.formatExplanation = updates.formatExplanation;
+        if (updates.evaluationCriteria) cls.evaluationCriteria = updates.evaluationCriteria;
+        if (updates.durationWeeks) cls.durationWeeks = updates.durationWeeks;
+      }
+      if (!cls.learningFormat) {
+        cls.learningFormat = cls.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
+      }
+    }
+
+    fs.writeFileSync(MATCHED_CLASSES_PATH, JSON.stringify(matchedClasses, null, 2));
+
+    // Directly compile the roadmap from the shared scratch data.
     let draftRoadmap: DraftRoadmapOutput | null = null;
-    let matchedClasses: MatchedTrainingClass[] = [];
     try {
-      // Read matchedClasses for legacy support
-      const raw = fs.readFileSync(path.resolve(SCRATCH_DIR, 'matched_classes.json'), 'utf-8');
-      const parsed: unknown = JSON.parse(raw);
+      const parsed = readJsonFileOrDefault(MATCHED_CLASSES_PATH, []);
       matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 
       // Generate draft roadmap directly using the domain function
@@ -274,10 +267,7 @@ trainingRoadmapRoutes.post('/run', async (c) => {
     };
 
     // Write full result to file for debugging
-    fs.writeFileSync(
-      path.resolve(SCRATCH_DIR, 'roadmap_output_agent.json'),
-      JSON.stringify(responseJson, null, 2),
-    );
+    fs.writeFileSync(ROADMAP_OUTPUT_PATH, JSON.stringify(responseJson, null, 2));
 
     return c.json(responseJson);
   } catch (err) {

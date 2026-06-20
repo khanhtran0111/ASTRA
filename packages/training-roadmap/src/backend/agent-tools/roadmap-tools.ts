@@ -9,9 +9,7 @@
  * around rule-based domain functions.
  */
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { resolve } from 'node:path';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 
@@ -19,26 +17,7 @@ import { loadRealData, loadTrainersFromCSV } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { matchTrainers } from '../domain/match-trainers.ts';
 import type { InternalTrainer } from '../domain/types.ts';
-
-/**
- * Runtime scratch directory.
- *
- * Do NOT resolve this from import.meta.url / __dirname.
- * In Docker + pnpm workspace, this package may be executed from:
- * /app/apps/cli/node_modules/.pnpm/.../node_modules/@seta/training-roadmap
- *
- * If we walk up from __dirname, scratch may accidentally be created inside
- * node_modules/.pnpm, which can fail during deploy/migrations.
- *
- * Default to /tmp/astra/scratch, or override with ASTRA_SCRATCH_DIR.
- */
-const SCRATCH_DIR = process.env.ASTRA_SCRATCH_DIR
-  ? resolve(process.env.ASTRA_SCRATCH_DIR)
-  : resolve(tmpdir(), 'astra', 'scratch');
-
-mkdirSync(SCRATCH_DIR, { recursive: true });
-
-const scratchPath = (...segments: string[]) => resolve(SCRATCH_DIR, ...segments);
+import { getScratchPath } from '../scratch-storage.ts';
 
 // ---------------------------------------------------------------------------
 // Zod Schemas for tool input / output validation
@@ -228,7 +207,7 @@ export const lndFindAndAssignTrainer = createTool({
       const matched = matchTrainers(resolvedNeeds, trainerPool);
 
       // Save matched classes to runtime scratch for the next tool to use.
-      writeFileSync(scratchPath('matched_classes.json'), JSON.stringify(matched, null, 2));
+      writeFileSync(getScratchPath('matched_classes.json'), JSON.stringify(matched, null, 2));
 
       const assigned = matched.filter((m) => !m.isExternalRequired).length;
 
@@ -270,7 +249,7 @@ export const lndAssignLearningFormats = createTool({
 
       console.log('Tool lndAssignLearningFormats called by LLM with map:', formatMap);
 
-      const filePath = scratchPath('matched_classes.json');
+      const filePath = getScratchPath('matched_classes.json');
 
       const raw = readFileSync(filePath, 'utf-8');
       const parsed: unknown = JSON.parse(raw);
@@ -322,7 +301,7 @@ export const lndCompileQuarterlyRoadmap = createTool({
   execute: async (args) => {
     const { roadmapId } = args;
 
-    const raw = readFileSync(scratchPath('matched_classes.json'), 'utf-8');
+    const raw = readFileSync(getScratchPath('matched_classes.json'), 'utf-8');
     const parsed: unknown = JSON.parse(raw);
     const matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 
