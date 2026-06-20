@@ -43,3 +43,4 @@ jobs:
         env:
           # testcontainers needs to find Docker; default socket on ubuntu-latest.
           TESTCONTAINERS_RYUK_DISABLED: 'true'
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
