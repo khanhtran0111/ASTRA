@@ -5,7 +5,7 @@ import { Agent } from '@mastra/core/agent';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
 import type { ApprovalDecision, ApprovalResponse, Priority, RoadmapResult } from '../../types.ts';
-import { lndCoordinatorSpec } from '../agent-specs/lnd-orchestrator.spec.ts';
+import { lndCoordinatorSpec } from '../agent-specs/lnd-orchestrator-spec.ts';
 import {
   lndAssignLearningFormats,
   lndCompileQuarterlyRoadmap,
