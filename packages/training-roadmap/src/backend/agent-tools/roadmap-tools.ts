@@ -10,22 +10,35 @@
  */
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
-
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-const SCRATCH_DIR = resolve(__dirname, '../../../../../scratch');
-// scratch/ is gitignored (debug working dir) — a fresh checkout (CI, new
-// clone) won't have it on disk, and writeFileSync does not create parent
-// directories on its own.
-mkdirSync(SCRATCH_DIR, { recursive: true });
 
 import { loadRealData, loadTrainersFromCSV } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { matchTrainers } from '../domain/match-trainers.ts';
 import type { InternalTrainer, ScoredTrainingNeed } from '../domain/types.ts';
+
+/**
+ * Runtime scratch directory.
+ *
+ * Do NOT resolve this from import.meta.url / __dirname.
+ * In Docker + pnpm workspace, this package may be executed from:
+ * /app/apps/cli/node_modules/.pnpm/.../node_modules/@seta/training-roadmap
+ *
+ * If we walk up from __dirname, scratch may accidentally be created inside
+ * node_modules/.pnpm, which can fail during deploy/migrations.
+ *
+ * Default to /tmp/astra/scratch, or override with ASTRA_SCRATCH_DIR.
+ */
+const SCRATCH_DIR = process.env.ASTRA_SCRATCH_DIR
+  ? resolve(process.env.ASTRA_SCRATCH_DIR)
+  : resolve(tmpdir(), 'astra', 'scratch');
+
+mkdirSync(SCRATCH_DIR, { recursive: true });
+
+const scratchPath = (...segments: string[]) => resolve(SCRATCH_DIR, ...segments);
 
 // ---------------------------------------------------------------------------
 // Zod Schemas for tool input / output validation
@@ -93,6 +106,12 @@ const DraftRoadmapOutputSchema = z.object({
   quarters: z.record(z.string(), z.array(RoadmapClassEntrySchema)),
 });
 
+// Keep schemas referenced so strict TS/Biome configs do not treat them as accidental dead code.
+void ScoredTrainingNeedSchema;
+void InternalTrainerSchema;
+void MatchedTrainingClassSchema;
+void DraftRoadmapOutputSchema;
+
 // ---------------------------------------------------------------------------
 // Tool 1: Get Pending Skills
 // ---------------------------------------------------------------------------
@@ -107,8 +126,11 @@ export const lndGetPendingSkills = createTool({
   outputSchema: z.any(),
   execute: async (args: any) => {
     const { targetTeam } = args;
+
     console.log(`Tool lndGetPendingSkills called by LLM with targetTeam: ${targetTeam || 'None'}`);
+
     const needs = loadRealData(targetTeam).trainingNeeds;
+
     return needs.map((n) => ({
       skillName: n.skillName,
       traineeCount: n.traineeIds.length,
@@ -153,22 +175,25 @@ export const lndFindAndAssignTrainer = createTool({
   execute: async (args: any) => {
     try {
       console.log('ARGS lndFindAndAssignTrainer:', JSON.stringify(args, null, 2));
+
       const { estimatedHoursMap, targetTeam, relevantSkills } = args as any;
+
       console.log(
         `Tool lndFindAndAssignTrainer called with targetTeam=${targetTeam}, relevantSkills=${relevantSkills?.length}`,
       );
+
       const trainerPool: InternalTrainer[] = loadTrainersFromCSV();
 
       let resolvedNeeds = loadRealData(targetTeam).trainingNeeds.sort(
         (a, b) => b.priorityScore - a.priorityScore,
       );
 
-      // Filter out irrelevant P1/P2 skills before matching to save trainer capacity
+      // Filter out irrelevant P1/P2 skills before matching to save trainer capacity.
       if (relevantSkills && Array.isArray(relevantSkills) && relevantSkills.length > 0) {
         resolvedNeeds = resolvedNeeds.filter((need) => relevantSkills.includes(need.skillName));
       }
 
-      // Override estimated hours with LLM's estimations
+      // Override estimated hours with LLM's estimations.
       if (estimatedHoursMap) {
         for (const need of resolvedNeeds) {
           if (estimatedHoursMap[need.skillName]) {
@@ -180,8 +205,8 @@ export const lndFindAndAssignTrainer = createTool({
       const typedNeeds = resolvedNeeds as ScoredTrainingNeed[];
       const matched = matchTrainers(typedNeeds, trainerPool);
 
-      // Save matched classes to scratch for the next tool to use
-      writeFileSync(resolve(SCRATCH_DIR, 'matched_classes.json'), JSON.stringify(matched, null, 2));
+      // Save matched classes to runtime scratch for the next tool to use.
+      writeFileSync(scratchPath('matched_classes.json'), JSON.stringify(matched, null, 2));
 
       const assigned = matched.filter((m) => !m.isExternalRequired).length;
 
@@ -190,7 +215,7 @@ export const lndFindAndAssignTrainer = createTool({
         totalNeeds: typedNeeds.length,
         internallyAssigned: assigned,
         externalRequired: matched.length - assigned,
-        matchedClasses: matched, // Returning this so LLM can read unassigned classes
+        matchedClasses: matched,
       };
     } catch (error: any) {
       console.error('Error in lndFindAndAssignTrainer:', error);
@@ -218,11 +243,14 @@ export const lndAssignLearningFormats = createTool({
   execute: async (args: any) => {
     try {
       console.log('ARGS lndAssignLearningFormats:', JSON.stringify(args, null, 2));
-      const { formatMap } = args as any;
-      console.log('Tool lndAssignLearningFormats called by LLM with map:', formatMap);
-      const map = formatMap || {};
 
-      const filePath = resolve(SCRATCH_DIR, 'matched_classes.json');
+      const { formatMap } = args as any;
+
+      console.log('Tool lndAssignLearningFormats called by LLM with map:', formatMap);
+
+      const map = formatMap || {};
+      const filePath = scratchPath('matched_classes.json');
+
       const raw = readFileSync(filePath, 'utf-8');
       const matchedClasses = JSON.parse(raw);
 
@@ -230,7 +258,6 @@ export const lndAssignLearningFormats = createTool({
         if (map[cls.skillName]) {
           cls.learningFormat = map[cls.skillName];
         } else {
-          // Default fallback
           cls.learningFormat = cls.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
         }
       }
@@ -271,8 +298,8 @@ export const lndCompileQuarterlyRoadmap = createTool({
   outputSchema: z.any(),
   execute: async (args: any) => {
     const { roadmapId } = args;
-    // Read matched classes from previous tool's output
-    const raw = readFileSync(resolve(SCRATCH_DIR, 'matched_classes.json'), 'utf-8');
+
+    const raw = readFileSync(scratchPath('matched_classes.json'), 'utf-8');
     const matchedClasses = JSON.parse(raw);
 
     return generateDraftRoadmap(matchedClasses, roadmapId);
