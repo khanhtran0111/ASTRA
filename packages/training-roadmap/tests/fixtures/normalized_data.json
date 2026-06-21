@@ -1,0 +1,115 @@
+{
+  "employees": [
+    {
+      "employee_id": "EMP-001",
+      "self_reported_gaps": [
+        "Kubernetes",
+        "Docker",
+        "AWS",
+        "Terraform",
+        "System Design",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "React",
+        "TypeScript",
+        "Node.js",
+        "CI/CD",
+        "DevOps",
+        "Microservices",
+        "API Testing",
+        "Performance Testing",
+        "Security",
+        "Leadership",
+        "Communication",
+        "Interview Skills",
+        "LLM/GenAI",
+        "MLOps"
+      ]
+    }
+  ],
+  "trainers": [
+    {
+      "trainer_id": "TRN-001",
+      "skills": [
+        "Kubernetes",
+        "Docker",
+        "System Design",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "TypeScript",
+        "Node.js",
+        "CI/CD",
+        "Microservices",
+        "API Testing",
+        "Security",
+        "Leadership",
+        "Communication",
+        "Interview Skills"
+      ],
+      "available_hours_per_month": 40
+    }
+  ],
+  "projects": [
+    {
+      "project_id": "PRJ-001",
+      "required_skills": [
+        "Kubernetes",
+        "Docker",
+        "AWS",
+        "Terraform",
+        "System Design",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "React",
+        "TypeScript",
+        "Node.js",
+        "CI/CD",
+        "DevOps",
+        "Microservices",
+        "API Testing",
+        "Performance Testing",
+        "Security",
+        "Leadership",
+        "Communication",
+        "Interview Skills",
+        "LLM/GenAI",
+        "MLOps"
+      ],
+      "_raw_timeline": "Q3 2026",
+      "deadline": "2026-09-30"
+    }
+  ],
+  "goals": [
+    {
+      "goal_id": "GOAL-001",
+      "required_skills": [
+        "Kubernetes",
+        "Docker",
+        "AWS",
+        "Terraform",
+        "System Design",
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "React",
+        "TypeScript",
+        "Node.js",
+        "CI/CD",
+        "DevOps",
+        "Microservices",
+        "API Testing",
+        "Performance Testing",
+        "Security",
+        "Leadership",
+        "Communication",
+        "Interview Skills",
+        "LLM/GenAI",
+        "MLOps"
+      ],
+      "_raw_description": "Build the engineering capabilities required for the 2026 roadmap."
+    }
+  ]
+}
