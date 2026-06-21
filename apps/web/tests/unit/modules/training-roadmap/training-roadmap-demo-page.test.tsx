@@ -43,6 +43,13 @@ describe('TrainingRoadmapDemoPage', () => {
             riskLevel: 'LOW',
             riskReason: 'No findings.',
             evidencePack: {},
+            reviewPack: {
+              request: { userPrompt: 'React testing in Q3' },
+              generatedAt: '2026-06-21T00:00:00.000Z',
+              initiativeCount: 0,
+              semanticSummary: [],
+              findings: [],
+            },
           }),
           { status: 200, headers: { 'content-type': 'application/json' } },
         ),
@@ -55,6 +62,7 @@ describe('TrainingRoadmapDemoPage', () => {
     await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
 
     expect(await screen.findByText('API connected')).toBeInTheDocument();
+    expect(screen.getByText('Review Pack')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/training-roadmap/run',
@@ -63,7 +71,10 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
       '/api/training-roadmap/qa',
-      expect.objectContaining({ method: 'POST' }),
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ runId: 'agent-1-run' }),
+      }),
     );
   });
 
@@ -83,22 +94,17 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it('uses the stable bundled flow when the backend is unavailable', async () => {
+  it('surfaces backend failures and never substitutes an approvable demo roadmap', async () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new TypeError('Failed to fetch')));
     const user = userEvent.setup();
     render(<TrainingRoadmapDemoPage />);
 
     await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
 
-    expect(await screen.findByText('Stable demo fallback')).toBeInTheDocument();
-    expect(screen.getByText('Kubernetes Enablement')).toBeInTheDocument();
-    expect(screen.getByText('QA score 86/100 · MEDIUM risk')).toBeInTheDocument();
-    expect(screen.getByText('TRAINER_GAP (3)')).toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'Approve' }));
-
-    expect(await screen.findByText('DEMO-APPROVAL-demo-member1-snapshot')).toBeInTheDocument();
-    expect(screen.getByText('Approved')).toBeInTheDocument();
+    expect(await screen.findByText('Failed to fetch')).toBeInTheDocument();
+    expect(screen.queryByText('Stable demo fallback')).not.toBeInTheDocument();
+    expect(screen.queryByText('Kubernetes Enablement')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument();
   });
 
   it('surfaces contract errors instead of hiding them behind the demo fallback', async () => {

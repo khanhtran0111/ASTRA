@@ -48,6 +48,7 @@ const findingSchema = z.object({
     'TRAINEE_MISMATCH',
     'TIMELINE_RISK',
     'TRACEABILITY_GAP',
+    'REQUEST_SCOPE_MISMATCH',
   ]),
   severity: z.enum(['HIGH', 'MEDIUM', 'LOW']),
   message: z.string(),

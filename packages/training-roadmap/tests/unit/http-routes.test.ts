@@ -25,11 +25,33 @@ afterAll(() => {
 
 const calls: string[] = [];
 const toolCalls: string[] = [];
+const generatedPrompts: string[] = [];
 const agents: StructuredAgentRuntime = {
-  async generate<T>({ agentId, schema }: { agentId: string; schema: z.ZodType<T> }): Promise<T> {
+  async generate<T>({
+    agentId,
+    prompt,
+    schema,
+  }: {
+    agentId: string;
+    prompt: string;
+    schema: z.ZodType<T>;
+  }): Promise<T> {
     calls.push(agentId);
+    generatedPrompts.push(prompt);
     if (!agentId.endsWith('qa-reviewer')) throw new Error(`Unexpected agent: ${agentId}`);
-    return schema.parse({ findings: [], semanticSummary: [] });
+    const payload = JSON.parse(prompt.split('\n').at(-1) ?? '{}') as {
+      roadmapInitiatives?: Array<{ id: string; topic: string; evidence: string[] }>;
+    };
+    return schema.parse({
+      findings: [],
+      semanticSummary: (payload.roadmapInitiatives ?? []).map((initiative) => ({
+        initiativeId: initiative.id,
+        skill: initiative.topic,
+        decision: 'ALIGNED',
+        rationale: 'The fixture request intentionally covers the supplied engineering roadmap.',
+        evidenceIds: initiative.evidence,
+      })),
+    });
   },
   async callTool({ toolName, prompt }) {
     toolCalls.push(toolName);
@@ -69,8 +91,13 @@ describe('training roadmap routes', () => {
   it('passes the Agent 1 artifact through the QA agent pipeline', async () => {
     calls.length = 0;
     toolCalls.length = 0;
+    generatedPrompts.length = 0;
 
-    const res = await app.request('/api/training-roadmap/qa', { method: 'POST' });
+    const res = await app.request('/api/training-roadmap/qa', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
     const body = await res.json();
 
     expect(res.status).toBe(200);
@@ -81,23 +108,40 @@ describe('training roadmap routes', () => {
     expect(body.qaScore).toBeLessThanOrEqual(100);
     expect(calls).toEqual(['training-roadmap.qa-reviewer']);
     expect(toolCalls).toEqual(Object.values(QA_TOOL_IDS));
+    expect(generatedPrompts[0]).toContain(
+      'Create a Q3 2026 engineering roadmap backed by the supplied evidence.',
+    );
+    expect(generatedPrompts[0]).toContain('"position":"Software Engineer"');
+    expect(generatedPrompts[0]).toContain('"proficiency":"Intermediate"');
+    expect(body.reviewPack).toMatchObject({
+      request: {
+        userPrompt: 'Create a Q3 2026 engineering roadmap backed by the supplied evidence.',
+      },
+    });
   });
 
-  it('ignores request-body roadmap data and reads the Agent 1 artifact', async () => {
-    calls.length = 0;
-    toolCalls.length = 0;
-
+  it('requires the Agent 1 runId for QA handoff', async () => {
     const res = await app.request('/api/training-roadmap/qa', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ employees: [] }),
     });
 
-    expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.initiatives).toHaveLength(22);
-    expect(calls).toEqual(['training-roadmap.qa-reviewer']);
-    expect(toolCalls).toEqual(Object.values(QA_TOOL_IDS));
+    expect(res.status).toBe(400);
+    await expect(res.json()).resolves.toEqual({ error: 'runId is required' });
+  });
+
+  it('rejects a QA request whose runId does not match the Agent 1 artifact', async () => {
+    const res = await app.request('/api/training-roadmap/qa', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'another-run' }),
+    });
+
+    expect(res.status).toBe(409);
+    await expect(res.json()).resolves.toEqual({
+      error: 'Agent 1 artifact belongs to run fixture-roadmap-run, not another-run',
+    });
   });
 
   it('validates missing runId on approval', async () => {
@@ -123,23 +167,46 @@ describe('training roadmap routes', () => {
   });
 
   it('returns a token only for approved decisions', async () => {
+    await app.request('/api/training-roadmap/qa', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
+
     const approved = await app.request('/api/training-roadmap/approve', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'run-1', decision: 'approved' }),
+      body: JSON.stringify({ runId: 'fixture-roadmap-run', decision: 'approved' }),
     });
     const approvedBody = await approved.json();
 
     expect(approved.status).toBe(200);
-    expect(approvedBody.approvalToken).toMatch(/^APPROVAL-/);
+    expect(approvedBody.approvalToken).toMatch(/^APPROVAL-fixture-roadmap-run-/);
+
+    await app.request('/api/training-roadmap/qa', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
 
     const rejected = await app.request('/api/training-roadmap/approve', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'run-1', decision: 'rejected' }),
+      body: JSON.stringify({ runId: 'fixture-roadmap-run', decision: 'rejected' }),
     });
 
     expect(rejected.status).toBe(200);
     await expect(rejected.json()).resolves.toMatchObject({ approvalToken: null });
+  });
+
+  it('does not approve an unknown or demo run', async () => {
+    const res = await app.request('/api/training-roadmap/approve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'demo-member1-snapshot', decision: 'approved' }),
+    });
+
+    expect(res.status).toBe(404);
+    await expect(res.json()).resolves.toEqual({ error: 'QA run not found' });
   });
 });

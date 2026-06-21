@@ -18,30 +18,38 @@ import { runTrainingRoadmapPipeline } from '../domain/pipeline.ts';
 import type { RoadmapOutputAgent } from '../domain/qa/roadmap-output-loader.ts';
 import { loadQaInputFromRoadmapOutput } from '../domain/qa/roadmap-output-loader.ts';
 import type { DraftRoadmapOutput, MatchedTrainingClass } from '../domain/types.ts';
-import { getScratchPath, readJsonFileOrDefault } from '../scratch-storage.ts';
-
-const MATCHED_CLASSES_PATH = getScratchPath('matched_classes.json');
-const ROADMAP_OUTPUT_PATH = getScratchPath('roadmap_output_agent.json');
+import {
+  getActiveRunScratchPath,
+  getRunScratchPath,
+  readJsonFileOrDefault,
+  withTrainingRoadmapRun,
+} from '../scratch-storage.ts';
 
 const AgentSkillUpdatesSchema = z.object({
-  estimatedHours: z.number().optional(),
-  learningFormat: z
-    .enum([
-      'INTERNAL_TRAINING',
-      'ON_JOB_TRAINING',
-      'GROUP_STUDY',
-      'EXTERNAL_TRAINER',
-      'ONLINE_COURSE',
-      'SEMINAR_SHARING',
-    ])
-    .optional(),
-  formatExplanation: z.string().optional(),
-  evaluationCriteria: z.string().optional(),
-  durationWeeks: z.number().optional(),
+  objective: z.string().min(1),
+  prerequisites: z.array(z.string()),
+  estimatedHours: z.number().positive(),
+  learningFormat: z.enum([
+    'INTERNAL_TRAINING',
+    'ON_JOB_TRAINING',
+    'GROUP_STUDY',
+    'EXTERNAL_TRAINER',
+    'ONLINE_COURSE',
+    'SEMINAR_SHARING',
+  ]),
+  formatExplanation: z.string().min(1),
+  evaluationCriteria: z.string().min(1),
+  durationWeeks: z.number().int().positive(),
+  startWeek: z.number().int().min(1).max(13),
+  endWeek: z.number().int().min(1).max(13),
 });
 
 const AgentSkillsResponseSchema = z.object({
-  skills: z.record(z.string(), AgentSkillUpdatesSchema),
+  skills: z.array(
+    AgentSkillUpdatesSchema.extend({
+      skillName: z.string().min(1),
+    }),
+  ),
 });
 
 type AgentSkillUpdates = z.infer<typeof AgentSkillUpdatesSchema>;
@@ -68,9 +76,14 @@ function scoreToPriority(score: number): Priority {
   return 'P3';
 }
 
-function toAgentOneResult(classes: MatchedTrainingClass[]): RoadmapOutputAgent {
+function toAgentOneResult(
+  classes: MatchedTrainingClass[],
+  runId: string,
+  userPrompt: string,
+): RoadmapOutputAgent {
   return {
-    runId: createRunId(),
+    runId,
+    request: { userPrompt },
     executionLog: [
       'Loaded internal trainer pool.',
       'Loaded scored training needs.',
@@ -92,11 +105,17 @@ function toAgentOneResult(classes: MatchedTrainingClass[]): RoadmapOutputAgent {
         quarter: item.targetQuarter.replace('_', ' '),
         targetTrainees: item.trainees,
         trainerName: item.assignedTrainer,
+        objective: item.objective,
+        prerequisites: item.prerequisites,
         format,
         formatExplanation:
           item.formatExplanation ?? `Selected ${format} based on trainer availability.`,
         evaluationCriteria: item.evaluationCriteria,
         durationWeeks: item.durationWeeks,
+        timeline:
+          item.startWeek && item.endWeek
+            ? { startWeek: item.startWeek, endWeek: item.endWeek }
+            : undefined,
         estimatedHours: item.estimatedHours,
         evidence: [
           ...item.evidence.bodGoals,
@@ -114,108 +133,149 @@ async function runCoordinator(userPrompt: string): Promise<{
   agentReasoning: string;
   draftRoadmap: DraftRoadmapOutput;
 }> {
-  const agent = new Agent({
-    id: 'lnd-coordinator',
-    name: 'L&D Coordinator',
-    instructions: lndCoordinatorSpec.instructions,
-    model: {
-      providerId: 'openai',
-      modelId: 'gpt-4o',
-    },
-    tools: {
-      lnd_getPendingSkills: lndGetPendingSkills,
-      lnd_findAndAssignTrainer: lndFindAndAssignTrainer,
-      lnd_assignLearningFormats: lndAssignLearningFormats,
-      lnd_compileQuarterlyRoadmap: lndCompileQuarterlyRoadmap,
-    } as never,
-  });
+  const runId = createRunId();
 
-  const prompt = `Please retrieve the pending skills. If the user specifies a target team or role, pass that as 'targetTeam' to lnd_getPendingSkills. This will filter P3 skills at the data level to only include those requested by the target team.
-However, P1 and P2 skills (priorityScore >= 65) will NOT be filtered by the tool.
+  return withTrainingRoadmapRun(runId, async () => {
+    const agent = new Agent({
+      id: 'lnd-coordinator',
+      name: 'L&D Coordinator',
+      instructions: lndCoordinatorSpec.instructions,
+      model: {
+        providerId: 'openai',
+        modelId: 'gpt-4o',
+      },
+      tools: {
+        lnd_getPendingSkills: lndGetPendingSkills,
+        lnd_findAndAssignTrainer: lndFindAndAssignTrainer,
+        lnd_assignLearningFormats: lndAssignLearningFormats,
+        lnd_compileQuarterlyRoadmap: lndCompileQuarterlyRoadmap,
+      } as never,
+    });
+
+    const prompt = `Please retrieve the pending skills. Extract and pass every scope constraint supplied by the user:
+- target team or role as "targetTeam"
+- proficiency such as Mid-level/Intermediate as "targetProficiency"
+- requested quarter such as Q3/2026 as "targetQuarter" using Q3_2026 format
+
+These filters apply to every priority tier and every trainee. Never add employees merely to reach a requested headcount.
 
 CRITICAL SEMANTIC FILTERING: You MUST semantically evaluate EVERY returned skill (P1, P2, AND P3) against the user's specific goal. If a skill is NOT DIRECTLY related to the user's stated goal or constraints, you MUST drop it. Only keep skills that are strictly and explicitly relevant.
+
+CAPABILITY COVERAGE: Account for every capability explicitly requested by the user and keep every returned skill that is a direct match or clear synonym, not only the highest-scoring match. For example, "frontend testing" is covered by "Automation Testing". If no returned skill has evidence for a requested capability, omit that capability rather than inventing a skill.
 
 CRITICAL TIMELINE FILTERING: If the user specifies a timeline constraint, you MUST drop ALL skills that do not match the requested timeframe.
 
 CRITICAL KEY NAMING: The keys in your "skills" JSON output MUST be EXACTLY the original "skillName" string from lnd_getPendingSkills.
 
-Once you have your final list of relevant skills, call lnd_findAndAssignTrainer with relevantSkills, targetTeam, and estimatedHoursMap. Estimate hours from intrinsic difficulty, not trainee count.
+Once you have your final list of relevant skills, call lnd_findAndAssignTrainer with relevantSkills, targetTeam, targetProficiency, targetQuarter, and estimatedHoursMap. Estimate hours from intrinsic difficulty, not trainee count.
 
 USER CONSTRAINTS AND PREFERENCES:
 "${userPrompt || 'None specified'}"
 
-Respect every user constraint. Return one complete markdown JSON code block with this shape:
+Respect every user constraint. Return structured data with this shape:
 {
-  "skills": {
-    "SkillName": {
+  "skills": [
+    {
+      "skillName": "SkillName",
       "estimatedHours": 40,
+      "objective": "Observable capability gained by the cohort",
+      "prerequisites": ["Required baseline skill"],
       "learningFormat": "ONLINE_COURSE",
       "formatExplanation": "Reasoning based on user constraints",
       "evaluationCriteria": "Criteria to evaluate success",
-      "durationWeeks": 10
+      "durationWeeks": 10,
+      "startWeek": 1,
+      "endWeek": 10
     }
-  }
+  ]
 }
-Do not use comments, ellipses, or truncated JSON. Do not call lnd_assignLearningFormats; output the JSON block.`;
+Do not call lnd_assignLearningFormats.`;
 
-  const response = await agent.generate(prompt);
-  let extractedMap: Record<string, AgentSkillUpdates> = {};
-  const jsonMatch = response.text.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
-  let rawJson = jsonMatch?.[1] ?? response.text ?? '';
-
-  if (!jsonMatch && rawJson.includes('```')) {
-    rawJson = rawJson.replace(/```(?:json)?/g, '').replace(/```/g, '');
-  }
-
-  try {
-    const parsed: unknown = JSON.parse(rawJson.trim());
-    const result = AgentSkillsResponseSchema.safeParse(parsed);
-    if (result.success) extractedMap = result.data.skills;
-  } catch (error) {
-    console.error('Failed to parse coordinator JSON output', error);
-  }
-
-  const parsedMatchedClasses = readJsonFileOrDefault(MATCHED_CLASSES_PATH, []);
-  let matchedClasses: MatchedTrainingClass[] =
-    MatchedTrainingClassesSchema.parse(parsedMatchedClasses);
-
-  if (userPrompt && Object.keys(extractedMap).length > 0) {
-    matchedClasses = matchedClasses.filter((item) =>
-      Object.keys(extractedMap).some(
-        (key) =>
-          key === item.skillName || item.skillName.includes(key) || key.includes(item.skillName),
-      ),
-    );
-  }
-
-  for (const item of matchedClasses) {
-    const key = Object.keys(extractedMap).find(
-      (candidate) =>
-        candidate === item.skillName ||
-        item.skillName.includes(candidate) ||
-        candidate.includes(item.skillName),
-    );
-    const updates = key ? extractedMap[key] : undefined;
-    if (updates?.estimatedHours) item.estimatedHours = updates.estimatedHours;
-    if (updates?.learningFormat) item.learningFormat = updates.learningFormat;
-    if (updates?.formatExplanation) item.formatExplanation = updates.formatExplanation;
-    if (updates?.evaluationCriteria) item.evaluationCriteria = updates.evaluationCriteria;
-    if (updates?.durationWeeks) item.durationWeeks = updates.durationWeeks;
-    if (!item.learningFormat) {
-      item.learningFormat = item.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
+    const response = await agent.generate(prompt, {
+      maxSteps: 8,
+      structuredOutput: { schema: AgentSkillsResponseSchema },
+    });
+    const structuredResponse = AgentSkillsResponseSchema.parse(response.object);
+    const extractedMap: Record<string, AgentSkillUpdates> = {};
+    for (const selection of structuredResponse.skills) {
+      if (extractedMap[selection.skillName]) {
+        throw new Error(`Coordinator returned duplicate skill ${selection.skillName}`);
+      }
+      const { skillName, ...updates } = selection;
+      extractedMap[skillName] = updates;
     }
-  }
+    for (const [skill, updates] of Object.entries(extractedMap)) {
+      if (updates.endWeek < updates.startWeek) {
+        throw new Error(`Coordinator returned an invalid week range for ${skill}`);
+      }
+    }
+    const agentReasoning = response.text || JSON.stringify(structuredResponse, null, 2);
 
-  fs.writeFileSync(MATCHED_CLASSES_PATH, JSON.stringify(matchedClasses, null, 2));
-  const draftRoadmap = generateDraftRoadmap(matchedClasses, 'RM-2026-V1');
-  const source = toAgentOneResult(matchedClasses);
+    fs.writeFileSync(
+      getActiveRunScratchPath('coordinator_response.json'),
+      JSON.stringify({ text: response.text, object: structuredResponse }, null, 2),
+    );
 
-  fs.writeFileSync(
-    ROADMAP_OUTPUT_PATH,
-    JSON.stringify({ ...source, agentReasoning: response.text, draftRoadmap }, null, 2),
-  );
+    const parsedMatchedClasses = readJsonFileOrDefault(
+      getActiveRunScratchPath('matched_classes.json'),
+      [],
+    );
+    let matchedClasses: MatchedTrainingClass[] =
+      MatchedTrainingClassesSchema.parse(parsedMatchedClasses);
 
-  return { source, agentReasoning: response.text, draftRoadmap };
+    const relevantSkills = new Set(Object.keys(extractedMap));
+    if (userPrompt.trim() && relevantSkills.size === 0) {
+      throw new Error('Coordinator returned no valid scope-aligned skills for the user prompt');
+    }
+
+    const matchedSkillNames = new Set(matchedClasses.map((item) => item.skillName));
+    const matchingWasOutOfScope = matchedClasses.some(
+      (item) => !relevantSkills.has(item.skillName),
+    );
+    const requestedSkillWasNotMatched = [...relevantSkills].some(
+      (skill) => !matchedSkillNames.has(skill),
+    );
+    if (matchingWasOutOfScope || requestedSkillWasNotMatched) {
+      throw new Error(
+        'Coordinator trainer matching did not use the exact scope-aligned skill selection',
+      );
+    }
+
+    matchedClasses = matchedClasses.filter((item) => relevantSkills.has(item.skillName));
+    if (matchedClasses.length === 0) {
+      throw new Error('Coordinator produced no evidence-backed training initiatives');
+    }
+
+    for (const item of matchedClasses) {
+      const updates = extractedMap[item.skillName];
+      if (updates?.objective) item.objective = updates.objective;
+      if (updates?.prerequisites) item.prerequisites = updates.prerequisites;
+      if (updates?.estimatedHours) item.estimatedHours = updates.estimatedHours;
+      if (updates?.learningFormat) item.learningFormat = updates.learningFormat;
+      if (updates?.formatExplanation) item.formatExplanation = updates.formatExplanation;
+      if (updates?.evaluationCriteria) item.evaluationCriteria = updates.evaluationCriteria;
+      if (updates?.durationWeeks) item.durationWeeks = updates.durationWeeks;
+      if (updates?.startWeek) item.startWeek = updates.startWeek;
+      if (updates?.endWeek) item.endWeek = updates.endWeek;
+      if (!item.learningFormat) {
+        item.learningFormat = item.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
+      }
+    }
+
+    fs.writeFileSync(
+      getActiveRunScratchPath('matched_classes.json'),
+      JSON.stringify(matchedClasses, null, 2),
+    );
+    const draftRoadmap = generateDraftRoadmap(matchedClasses, 'RM-2026-V1');
+    const source = toAgentOneResult(matchedClasses, runId, userPrompt);
+
+    fs.writeFileSync(
+      getActiveRunScratchPath('roadmap_output_agent.json'),
+      JSON.stringify({ ...source, agentReasoning, draftRoadmap }, null, 2),
+    );
+
+    return { source, agentReasoning, draftRoadmap };
+  });
 }
 
 export function buildTrainingRoadmapRouteHandlers(deps: {
@@ -238,13 +298,26 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
       });
     } catch (error) {
       console.error('Coordinator agent execution error', error);
+      if (
+        error instanceof Error &&
+        (error.message.startsWith('Coordinator returned no valid scope-aligned skills') ||
+          error.message.startsWith('Coordinator produced no evidence-backed') ||
+          error.message.startsWith('Coordinator trainer matching did not use'))
+      ) {
+        return c.json({ error: error.message }, 422);
+      }
       return c.json({ error: String(error) }, 500);
     }
   });
 
   routes.post('/qa', async (c) => {
+    const body = await readJsonBody(c);
+    if (typeof body.runId !== 'string' || body.runId.trim().length === 0) {
+      return c.json({ error: 'runId is required' }, 400);
+    }
+
     try {
-      const { source, qaInput } = await loadQaInputFromRoadmapOutput();
+      const { source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId);
       const result = await runTrainingRoadmapPipeline({
         source,
         qaInput,
@@ -252,9 +325,19 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
         abortSignal: c.req.raw.signal,
         session: c.get('user'),
       });
+      fs.writeFileSync(
+        getRunScratchPath(result.runId, 'qa_result.json'),
+        JSON.stringify(result, null, 2),
+      );
       return c.json(result);
     } catch (error) {
       console.error('QA agent execution error', error);
+      if (error instanceof Error && error.message.startsWith('Agent 1 artifact belongs to run ')) {
+        return c.json({ error: error.message }, 409);
+      }
+      if (error instanceof Error && error.message.startsWith('QA input file not found.')) {
+        return c.json({ error: 'Agent 1 run not found' }, 404);
+      }
       return c.json({ error: String(error) }, 500);
     }
   });
@@ -270,11 +353,34 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
       return c.json({ error: 'Invalid decision' }, 400);
     }
 
+    const qaResultPath = getRunScratchPath(body.runId, 'qa_result.json');
+    const qaResult = readJsonFileOrDefault(qaResultPath, null);
+    if (!qaResult || typeof qaResult !== 'object') {
+      return c.json({ error: 'QA run not found' }, 404);
+    }
+    if (!('reviewPack' in qaResult)) {
+      return c.json({ error: 'Review Pack is required before approval' }, 409);
+    }
+    if (!('runId' in qaResult) || qaResult.runId !== body.runId) {
+      return c.json({ error: 'QA runId does not match the approval request' }, 409);
+    }
+    if (!('reviewStatus' in qaResult) || qaResult.reviewStatus !== 'pending') {
+      return c.json({ error: 'QA run is no longer pending review' }, 409);
+    }
+
+    const approvalToken =
+      body.decision === 'approved' ? `APPROVAL-${body.runId}-${Date.now()}` : null;
+
     const response: ApprovalResponse = {
       runId: body.runId,
       reviewStatus: body.decision,
-      approvalToken: body.decision === 'approved' ? `APPROVAL-${Date.now()}` : null,
+      approvalToken,
     };
+
+    fs.writeFileSync(
+      qaResultPath,
+      JSON.stringify({ ...qaResult, reviewStatus: body.decision, approvalToken }, null, 2),
+    );
 
     return c.json(response);
   });

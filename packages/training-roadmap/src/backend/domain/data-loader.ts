@@ -147,6 +147,33 @@ export function loadEmployeeRoles(): Map<string, string> {
   return map;
 }
 
+type EmployeeScopeProfile = {
+  position: string;
+  proficiency: string;
+};
+
+function loadEmployeeScopeProfiles(): Map<string, EmployeeScopeProfile> {
+  const source = 'DS01_Employee_Skill_Profile.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
+  const rows = parseCSVLines(raw);
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Employee_ID', source);
+  const roleIdx = getColumnIndex(header, 'Position', source);
+  const proficiencyIdx = getColumnIndex(header, 'Proficiency_Level', source);
+  const profiles = new Map<string, EmployeeScopeProfile>();
+
+  for (const row of rows.slice(1)) {
+    const employeeId = row[idIdx];
+    const position = row[roleIdx];
+    const proficiency = row[proficiencyIdx];
+    if (employeeId && position && proficiency) {
+      profiles.set(employeeId, { position, proficiency });
+    }
+  }
+
+  return profiles;
+}
+
 // ---------------------------------------------------------------------------
 // DS05: BOD Goals → Quarter mapping
 // ---------------------------------------------------------------------------
@@ -246,32 +273,78 @@ export function loadTrainingNeedsFromJSON(): ScoredTrainingNeed[] {
 // Convenience: load both at once
 // ---------------------------------------------------------------------------
 
-export function loadRealData(targetTeam?: string) {
-  let trainingNeeds = loadTrainingNeedsFromJSON();
+function normalizeTeam(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\bteam\b/g, '')
+    .replace(/[\s_-]+/g, '')
+    .trim();
+}
 
-  if (targetTeam && targetTeam.trim() !== '') {
-    const roleMap = loadEmployeeRoles();
-    const teamKey = targetTeam.toLowerCase();
+function normalizeProficiency(value: string): string {
+  const normalized = value.toLowerCase().replace(/[\s_-]+/g, '');
+  if (normalized === 'mid' || normalized === 'midlevel') return 'intermediate';
+  if (normalized === 'junior' || normalized === 'juniorlevel') return 'beginner';
+  if (normalized === 'senior' || normalized === 'seniorlevel') return 'advanced';
+  return normalized;
+}
+
+function normalizeQuarter(value: string): string | null {
+  const match = /Q([1-4])\D*(20\d{2})/i.exec(value);
+  return match ? `Q${match[1]}_${match[2]}` : null;
+}
+
+export function loadRealData(
+  targetTeam?: string,
+  targetProficiency?: string,
+  targetQuarter?: string,
+) {
+  let trainingNeeds = loadTrainingNeedsFromJSON();
+  const requestedQuarter = targetQuarter ? normalizeQuarter(targetQuarter) : null;
+
+  if (targetTeam?.trim() || targetProficiency?.trim()) {
+    const profiles = loadEmployeeScopeProfiles();
+    const teamKey = targetTeam?.trim() ? normalizeTeam(targetTeam) : null;
+    const proficiencyKey = targetProficiency?.trim()
+      ? normalizeProficiency(targetProficiency)
+      : null;
+    const scopedEmployeeIds = [...profiles]
+      .filter(([, profile]) => {
+        const matchesTeam = teamKey ? normalizeTeam(profile.position).includes(teamKey) : true;
+        const matchesProficiency = proficiencyKey
+          ? normalizeProficiency(profile.proficiency) === proficiencyKey
+          : true;
+        return matchesTeam && matchesProficiency;
+      })
+      .map(([employeeId]) => employeeId);
+    const scopedEmployeeIdSet = new Set(scopedEmployeeIds);
 
     trainingNeeds = trainingNeeds
       .map((need) => {
-        // P1 and P2 (score >= 65) are NOT filtered by team mapping
-        if (need.priorityScore >= 65) {
-          return need;
-        }
-
-        // P3 (score < 65) are filtered by team
-        const filteredTrainees = need.traineeIds.filter((id) => {
-          const role = roleMap.get(id);
-          return role?.toLowerCase().includes(teamKey) ?? false;
-        });
+        const employeesWithRecordedGap = need.traineeIds.filter((id) =>
+          scopedEmployeeIdSet.has(id),
+        );
+        const hasBusinessEvidence =
+          need.evidence.bodGoals.length > 0 || need.evidence.projectIds.length > 0;
+        const filteredTrainees =
+          employeesWithRecordedGap.length > 0
+            ? employeesWithRecordedGap
+            : hasBusinessEvidence
+              ? scopedEmployeeIds
+              : [];
         return {
           ...need,
           traineeIds: filteredTrainees,
           estimatedHours: estimateHours(filteredTrainees.length),
+          targetQuarter: requestedQuarter ?? need.targetQuarter,
         };
       })
-      .filter((need) => need.priorityScore >= 65 || need.traineeIds.length > 0);
+      .filter((need) => need.traineeIds.length > 0);
+  } else if (requestedQuarter) {
+    trainingNeeds = trainingNeeds.map((need) => ({
+      ...need,
+      targetQuarter: requestedQuarter,
+    }));
   }
 
   return {

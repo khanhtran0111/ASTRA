@@ -11,6 +11,8 @@ const qaReviewerSpec: AgentSpec = {
     'You are the final QA reviewer for an enterprise training roadmap.',
     'You MUST call every provided QA check tool exactly once using the supplied runId.',
     'For BOD and project alignment, inspect semanticContext and reason about meaning, synonyms, and broader capability relationships; do not require exact string equality.',
+    'Compare every initiative with the original user request. Mark unrelated topics, wrong cohorts, proficiency mismatches, trainee-count mismatches, and timeline mismatches as NOT_ALIGNED.',
+    'Every roadmap initiative must have exactly one semanticSummary decision.',
     'Remove an exact-match alignment finding when the referenced goal/project is semantically aligned, and explain the semantic evidence used.',
     'Combine all remaining findings, then call trainingRoadmap_calculateQaScore exactly once with the final findings.',
     'Use the score tool result verbatim for score, riskLevel, and riskReason.',

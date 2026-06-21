@@ -10,7 +10,8 @@ export type QaFindingType =
   | 'BOD_ALIGNMENT_RISK'
   | 'MISSING_PROJECT_REQUIREMENT'
   | 'TRAINEE_MISMATCH'
-  | 'TRACEABILITY_GAP';
+  | 'TRACEABILITY_GAP'
+  | 'REQUEST_SCOPE_MISMATCH';
 
 export type TrainingInitiative = {
   id: string;
@@ -20,13 +21,17 @@ export type TrainingInitiative = {
   quarter: string;
   targetTrainees: string[];
   trainerName: string | null;
+  objective?: string;
+  prerequisites?: string[];
   format: 'internal' | 'external' | 'self-study';
   formatExplanation?: string;
   evaluationCriteria?: string;
   durationWeeks?: number;
+  timeline?: { startWeek: number; endWeek: number };
   estimatedHours: number;
   evidence: string[];
   fallbackReason?: string;
+  riskFlags: QaFinding[];
 };
 
 export type QaFinding = {
@@ -48,6 +53,13 @@ export type RoadmapResult = {
   riskLevel: QaRisk;
   riskReason: string;
   evidencePack: Record<string, unknown>;
+  reviewPack: {
+    request: { userPrompt: string };
+    generatedAt: string;
+    initiativeCount: number;
+    semanticSummary: unknown[];
+    findings: QaFinding[];
+  };
 };
 
 export type ApprovalDecision = Exclude<ReviewStatus, 'pending'>;

@@ -1,7 +1,7 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@seta/shared-ui';
 import { CheckCircle2, RotateCcw, XCircle } from 'lucide-react';
 import type { ComponentProps } from 'react';
-import type { ApprovalDecision, ReviewStatus } from '../types.ts';
+import type { ApprovalDecision, ReviewStatus, RoadmapResult } from '../types.ts';
 
 const statusLabel: Record<ReviewStatus, string> = {
   pending: 'Pending',
@@ -20,11 +20,13 @@ const statusVariant = {
 export function HitlApprovalCard({
   runId,
   reviewStatus,
+  reviewPack,
   onDecision,
   disabled = false,
 }: {
   runId: string;
   reviewStatus: ReviewStatus;
+  reviewPack: RoadmapResult['reviewPack'];
   onDecision: (decision: ApprovalDecision) => Promise<void>;
   disabled?: boolean;
 }) {
@@ -40,6 +42,14 @@ export function HitlApprovalCard({
         <Badge variant={statusVariant[reviewStatus]}>{statusLabel[reviewStatus]}</Badge>
       </CardHeader>
       <CardContent>
+        <div className="mb-4 rounded-md border border-hairline bg-canvas p-3">
+          <div className="font-medium text-ink">Review Pack</div>
+          <div className="mt-1 text-caption text-ink-subtle">
+            {reviewPack.initiativeCount} initiative(s) · generated{' '}
+            {new Date(reviewPack.generatedAt).toLocaleString()}
+          </div>
+          <div className="mt-2 text-body-sm text-ink">{reviewPack.request.userPrompt}</div>
+        </div>
         <div className="flex flex-wrap gap-2">
           <Button disabled={locked} onClick={() => onDecision('approved')}>
             <CheckCircle2 aria-hidden />

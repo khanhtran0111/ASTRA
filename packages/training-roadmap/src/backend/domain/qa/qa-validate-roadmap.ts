@@ -16,6 +16,9 @@ import { checkTraineeMismatch } from './rules/trainee-mismatch.rule.ts';
 import { checkTrainerGap } from './rules/trainer-gap.rule.ts';
 
 export interface QaInput {
+  request?: {
+    userPrompt: string;
+  };
   roadmap?: QaRoadmap;
   priorityResult: QaPriorityResult;
   normalizedData: QaNormalizedData;

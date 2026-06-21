@@ -14,6 +14,7 @@ import {
   recordQaFinalFindings,
 } from './qa/qa-tool-context.ts';
 import type { QaInput } from './qa/qa-validate-roadmap.ts';
+import { buildRequestScopeFindings } from './qa/request-scope.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
 
 const qaFindingSchema = z.object({
@@ -26,6 +27,7 @@ const qaFindingSchema = z.object({
     'TRAINEE_MISMATCH',
     'TIMELINE_RISK',
     'TRACEABILITY_GAP',
+    'REQUEST_SCOPE_MISMATCH',
   ]),
   severity: z.enum(['HIGH', 'MEDIUM', 'LOW']),
   message: z.string().min(1),
@@ -96,14 +98,21 @@ export async function runTrainingRoadmapPipeline(args: {
       prompt: [
         'Synthesize the final QA findings from these completed tool results.',
         'Use semantic reasoning for BOD and project alignment. Remove exact-match alignment findings only when semanticContext proves alignment.',
+        'Audit every initiative against the original user request, including topic, target cohort, proficiency, trainee count, and timeline.',
         'Preserve evidence from retained findings. Do not call any tool in this synthesis step.',
         JSON.stringify({
+          request: args.qaInput.request ?? { userPrompt: '' },
           roadmapInitiatives: args.source.initiatives.map((initiative) => ({
             id: initiative.id,
             topic: initiative.topic,
             quarter: initiative.quarter,
             evidence: initiative.evidence,
           })),
+          traineeProfiles: (args.qaInput.normalizedData.employees ?? []).filter((employee) =>
+            args.source.initiatives.some((initiative) =>
+              initiative.targetTrainees.includes(employee.id),
+            ),
+          ),
           toolResults,
         }),
       ].join('\n'),
@@ -113,6 +122,23 @@ export async function runTrainingRoadmapPipeline(args: {
       session: args.session,
       toolChoice: 'none',
     });
+    const existingScopeFindings = new Set(
+      reviewed.findings
+        .filter((finding) => finding.type === 'REQUEST_SCOPE_MISMATCH')
+        .map((finding) => finding.relatedInitiativeId ?? finding.skill ?? 'request'),
+    );
+    const scopeFindings = buildRequestScopeFindings({
+      userPrompt: args.qaInput.request?.userPrompt ?? '',
+      initiatives: args.source.initiatives.map((initiative) => ({
+        id: initiative.id,
+        topic: initiative.topic,
+      })),
+      decisions: reviewed.semanticSummary,
+    }).filter(
+      (finding) =>
+        !existingScopeFindings.has(finding.relatedInitiativeId ?? finding.skill ?? 'request'),
+    );
+    reviewed.findings.push(...scopeFindings);
     recordQaFinalFindings(toolRunId, reviewed.findings);
     await args.agents.callTool({
       agentId: TRAINING_QA_AGENT_ID,
@@ -150,12 +176,18 @@ export async function runTrainingRoadmapPipeline(args: {
       quarter: initiative.quarter,
       targetTrainees: initiative.targetTrainees,
       trainerName: initiative.trainerName,
+      objective: initiative.objective,
+      prerequisites: initiative.prerequisites,
       format: mapFormat(initiative.format),
       formatExplanation: initiative.formatExplanation,
       evaluationCriteria: initiative.evaluationCriteria,
       durationWeeks: initiative.durationWeeks,
+      timeline: initiative.timeline,
       estimatedHours: initiative.estimatedHours,
       evidence: initiative.evidence,
+      riskFlags: reviewed.findings.filter(
+        (finding) => finding.relatedInitiativeId === initiative.id,
+      ),
       ...(initiative.fallbackReason ? { fallbackReason: initiative.fallbackReason } : {}),
     })),
     qaFindings: reviewed.findings,
@@ -169,6 +201,13 @@ export async function runTrainingRoadmapPipeline(args: {
         relatedInitiativeId: finding.relatedInitiativeId,
         evidence: finding.evidence,
       })),
+    },
+    reviewPack: {
+      request: args.qaInput.request ?? { userPrompt: '' },
+      generatedAt: new Date().toISOString(),
+      initiativeCount: args.source.initiatives.length,
+      semanticSummary: reviewed.semanticSummary,
+      findings: reviewed.findings,
     },
   };
 }

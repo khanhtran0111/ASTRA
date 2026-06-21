@@ -1,5 +1,8 @@
 {
   "runId": "fixture-roadmap-run",
+  "request": {
+    "userPrompt": "Create a Q3 2026 engineering roadmap backed by the supplied evidence."
+  },
   "executionLog": [
     "Loaded scored training needs.",
     "Generated draft roadmap.",

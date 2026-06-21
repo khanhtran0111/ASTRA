@@ -10,7 +10,8 @@ export type QaFindingType =
   | 'MISSING_PROJECT_REQUIREMENT'
   | 'TRAINEE_MISMATCH'
   | 'TIMELINE_RISK'
-  | 'TRACEABILITY_GAP';
+  | 'TRACEABILITY_GAP'
+  | 'REQUEST_SCOPE_MISMATCH';
 
 export interface QaEvidence {
   path: string;
@@ -50,6 +51,9 @@ export interface QaRoadmap {
 export interface QaNormalizedData {
   employees?: Array<{
     id: string;
+    position?: string;
+    proficiency?: string;
+    currentSkills?: string[];
     targetSkills: string[];
   }>;
   trainers?: Array<{

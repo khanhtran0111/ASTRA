@@ -2,6 +2,8 @@
   "employees": [
     {
       "employee_id": "EMP-001",
+      "position": "Software Engineer",
+      "proficiency_level": "Intermediate",
       "self_reported_gaps": [
         "Kubernetes",
         "Docker",

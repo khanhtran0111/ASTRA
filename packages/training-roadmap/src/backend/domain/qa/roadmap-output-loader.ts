@@ -2,7 +2,7 @@ import { access, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
-import { getScratchPath } from '../../scratch-storage.ts';
+import { getRunScratchPath, getScratchPath } from '../../scratch-storage.ts';
 import type { QaInput } from '../qa/qa-validate-roadmap.ts';
 
 const initiativeSchema = z.object({
@@ -13,6 +13,8 @@ const initiativeSchema = z.object({
   quarter: z.string().min(1),
   targetTrainees: z.array(z.string()),
   trainerName: z.string().nullable(),
+  objective: z.string().min(1).optional(),
+  prerequisites: z.array(z.string()).optional(),
   format: z.enum([
     'INTERNAL_TRAINING',
     'EXTERNAL_TRAINER',
@@ -24,6 +26,12 @@ const initiativeSchema = z.object({
   formatExplanation: z.string().min(1),
   evaluationCriteria: z.string().optional(),
   durationWeeks: z.number().positive().optional(),
+  timeline: z
+    .object({
+      startWeek: z.number().int().min(1).max(13),
+      endWeek: z.number().int().min(1).max(13),
+    })
+    .optional(),
   estimatedHours: z.number().positive(),
   evidence: z.array(z.string()),
   fallbackReason: z.string().optional(),
@@ -31,6 +39,11 @@ const initiativeSchema = z.object({
 
 const roadmapOutputAgentSchema = z.object({
   runId: z.string().min(1),
+  request: z
+    .object({
+      userPrompt: z.string(),
+    })
+    .optional(),
   executionLog: z.array(z.string()),
   initiatives: z.array(initiativeSchema).min(1),
 });
@@ -41,6 +54,9 @@ const normalizedDataSchema = z.object({
   employees: z.array(
     z.object({
       employee_id: z.string(),
+      position: z.string().optional(),
+      proficiency_level: z.string().optional(),
+      current_skills: z.array(z.string()).optional(),
       self_reported_gaps: z.array(z.string()),
     }),
   ),
@@ -84,9 +100,16 @@ async function readJson(path: string): Promise<unknown> {
   return JSON.parse(await readFile(path, 'utf8')) as unknown;
 }
 
-function roadmapCandidates(): string[] {
+function roadmapCandidates(runId?: string): string[] {
+  const configured = process.env.TRAINING_ROADMAP_OUTPUT_FILE;
+  if (runId) {
+    return [configured, getRunScratchPath(runId, 'roadmap_output_agent.json')].filter(
+      (value): value is string => Boolean(value),
+    );
+  }
+
   return [
-    process.env.TRAINING_ROADMAP_OUTPUT_FILE,
+    configured,
     getScratchPath('roadmap_output_agent.json'),
     resolve(process.cwd(), 'scratch/roadmap_output_agent.json'),
     resolve(process.cwd(), 'roadmap_output_agent.json'),
@@ -117,12 +140,12 @@ function trainerType(format: RoadmapOutputAgent['initiatives'][number]['format']
       : ('external' as const);
 }
 
-export async function loadQaInputFromRoadmapOutput(): Promise<{
+export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
   source: RoadmapOutputAgent;
   qaInput: QaInput;
 }> {
   const [roadmapPath, normalizedPath] = await Promise.all([
-    firstExisting(roadmapCandidates()),
+    firstExisting(roadmapCandidates(runId)),
     firstExisting(normalizedDataCandidates()),
   ]);
   const [sourceRaw, normalizedRaw] = await Promise.all([
@@ -130,10 +153,14 @@ export async function loadQaInputFromRoadmapOutput(): Promise<{
     readJson(normalizedPath),
   ]);
   const source = roadmapOutputAgentSchema.parse(sourceRaw);
+  if (runId && source.runId !== runId) {
+    throw new Error(`Agent 1 artifact belongs to run ${source.runId}, not ${runId}`);
+  }
   const normalized = normalizedDataSchema.parse(normalizedRaw);
   const quarters = [...new Set(source.initiatives.map((initiative) => initiative.quarter))];
 
   const qaInput: QaInput = {
+    ...(source.request ? { request: source.request } : {}),
     roadmap: {
       items: source.initiatives.map((initiative) => ({
         initiativeId: initiative.id,
@@ -161,6 +188,9 @@ export async function loadQaInputFromRoadmapOutput(): Promise<{
     normalizedData: {
       employees: normalized.employees.map((employee) => ({
         id: employee.employee_id,
+        position: employee.position,
+        proficiency: employee.proficiency_level,
+        currentSkills: employee.current_skills,
         targetSkills: employee.self_reported_gaps,
       })),
       trainers: normalized.trainers.map((trainer) => ({
