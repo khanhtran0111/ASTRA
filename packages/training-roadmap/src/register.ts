@@ -15,8 +15,8 @@ export function registerTrainingRoadmapContributions(reg: ContributionRegistry):
     schema,
     migrationsDir: resolve(__dirname, '../drizzle/migrations'),
     events: TRAINING_ROADMAP_EVENTS,
-    routes: { mountAt: '/', build: buildTrainingRoadmapRoutes },
-    agentTools: trainingRoadmapAgentTools,
     agentSpecs: trainingRoadmapAgentSpecs,
+    agentTools: trainingRoadmapAgentTools,
+    routes: { mountAt: '/', build: buildTrainingRoadmapRoutes },
   });
 }

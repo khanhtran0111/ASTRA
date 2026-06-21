@@ -242,6 +242,7 @@ export function buildServerApp(
       pool: deps.pool,
       workers: deps.workers,
       streams: streamsView,
+      agents: agent.structured,
       log: deps.log,
     });
     app.route(route.mountAt, subApp as unknown as Hono<SessionEnv>);

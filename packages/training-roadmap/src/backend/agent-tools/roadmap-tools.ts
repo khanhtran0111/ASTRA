@@ -17,7 +17,7 @@ import { loadRealData, loadTrainersFromCSV } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { matchTrainers } from '../domain/match-trainers.ts';
 import type { InternalTrainer } from '../domain/types.ts';
-import { getScratchPath } from '../scratch-storage.ts';
+import { getActiveRunScratchPath } from '../scratch-storage.ts';
 
 // ---------------------------------------------------------------------------
 // Zod Schemas for tool input / output validation
@@ -51,9 +51,13 @@ const MatchedTrainingClassSchema = z.object({
   evidence: EvidenceSchema,
   priorityScore: z.number(),
   estimatedHours: z.number(),
+  objective: z.string().optional(),
+  prerequisites: z.array(z.string()).optional(),
   formatExplanation: z.string().optional(),
   evaluationCriteria: z.string().optional(),
   durationWeeks: z.number().optional(),
+  startWeek: z.number().optional(),
+  endWeek: z.number().optional(),
 });
 
 export const MatchedTrainingClassesSchema = z.array(MatchedTrainingClassSchema);
@@ -69,10 +73,14 @@ const RoadmapClassEntrySchema = z.object({
   traineeCount: z.number(),
   trainees: z.array(z.string()),
   estimatedHours: z.number(),
+  objective: z.string().optional(),
+  prerequisites: z.array(z.string()).optional(),
   learningFormat: LearningFormatSchema.optional(),
   formatExplanation: z.string().optional(),
   evaluationCriteria: z.string().optional(),
   durationWeeks: z.number().optional(),
+  startWeek: z.number().optional(),
+  endWeek: z.number().optional(),
   resource: z.object({
     trainerId: z.string().nullable(),
     isExternalRequired: z.boolean(),
@@ -123,14 +131,16 @@ export const lndGetPendingSkills = createTool({
     'Retrieve the list of pending training needs/skills to estimate required hours. You can optionally filter by targetTeam if the user requested a specific team.',
   inputSchema: z.object({
     targetTeam: z.string().optional(),
+    targetProficiency: z.string().optional(),
+    targetQuarter: z.string().optional(),
   }),
   outputSchema: PendingSkillsOutputSchema,
   execute: async (args) => {
-    const { targetTeam } = args;
+    const { targetTeam, targetProficiency, targetQuarter } = args;
 
     console.log(`Tool lndGetPendingSkills called by LLM with targetTeam: ${targetTeam || 'None'}`);
 
-    const needs = loadRealData(targetTeam).trainingNeeds;
+    const needs = loadRealData(targetTeam, targetProficiency, targetQuarter).trainingNeeds;
 
     return needs.map((n) => ({
       skillName: n.skillName,
@@ -160,6 +170,8 @@ export const lndFindAndAssignTrainer = createTool({
   ].join('\n'),
   inputSchema: z.object({
     targetTeam: z.string().optional(),
+    targetProficiency: z.string().optional(),
+    targetQuarter: z.string().optional(),
     relevantSkills: z
       .array(z.string())
       .optional()
@@ -177,7 +189,8 @@ export const lndFindAndAssignTrainer = createTool({
     try {
       console.log('ARGS lndFindAndAssignTrainer:', JSON.stringify(args, null, 2));
 
-      const { estimatedHoursMap, targetTeam, relevantSkills } = args;
+      const { estimatedHoursMap, targetTeam, targetProficiency, targetQuarter, relevantSkills } =
+        args;
 
       console.log(
         `Tool lndFindAndAssignTrainer called with targetTeam=${targetTeam}, relevantSkills=${relevantSkills?.length}`,
@@ -185,9 +198,11 @@ export const lndFindAndAssignTrainer = createTool({
 
       const trainerPool: InternalTrainer[] = loadTrainersFromCSV();
 
-      let resolvedNeeds = loadRealData(targetTeam).trainingNeeds.sort(
-        (a, b) => b.priorityScore - a.priorityScore,
-      );
+      let resolvedNeeds = loadRealData(
+        targetTeam,
+        targetProficiency,
+        targetQuarter,
+      ).trainingNeeds.sort((a, b) => b.priorityScore - a.priorityScore);
 
       // Filter out irrelevant P1/P2 skills before matching to save trainer capacity.
       if (relevantSkills && Array.isArray(relevantSkills) && relevantSkills.length > 0) {
@@ -207,7 +222,10 @@ export const lndFindAndAssignTrainer = createTool({
       const matched = matchTrainers(resolvedNeeds, trainerPool);
 
       // Save matched classes to runtime scratch for the next tool to use.
-      writeFileSync(getScratchPath('matched_classes.json'), JSON.stringify(matched, null, 2));
+      writeFileSync(
+        getActiveRunScratchPath('matched_classes.json'),
+        JSON.stringify(matched, null, 2),
+      );
 
       const assigned = matched.filter((m) => !m.isExternalRequired).length;
 
@@ -249,7 +267,7 @@ export const lndAssignLearningFormats = createTool({
 
       console.log('Tool lndAssignLearningFormats called by LLM with map:', formatMap);
 
-      const filePath = getScratchPath('matched_classes.json');
+      const filePath = getActiveRunScratchPath('matched_classes.json');
 
       const raw = readFileSync(filePath, 'utf-8');
       const parsed: unknown = JSON.parse(raw);
@@ -301,7 +319,7 @@ export const lndCompileQuarterlyRoadmap = createTool({
   execute: async (args) => {
     const { roadmapId } = args;
 
-    const raw = readFileSync(getScratchPath('matched_classes.json'), 'utf-8');
+    const raw = readFileSync(getActiveRunScratchPath('matched_classes.json'), 'utf-8');
     const parsed: unknown = JSON.parse(raw);
     const matchedClasses = MatchedTrainingClassesSchema.parse(parsed);
 

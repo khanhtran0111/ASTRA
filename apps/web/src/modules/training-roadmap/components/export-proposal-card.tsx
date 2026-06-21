@@ -9,7 +9,7 @@ export function ExportProposalCard({
   result: RoadmapResult;
   approvalToken?: string | null;
 }) {
-  const canExport = result.reviewStatus === 'approved';
+  const canExport = result.reviewStatus === 'approved' && Boolean(approvalToken);
 
   const exportJson = () => {
     if (!canExport) return;
