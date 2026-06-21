@@ -53,6 +53,11 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                   <div className="mt-1 text-caption text-ink-subtle">
                     {initiative.id} · Score {initiative.score}
                   </div>
+                  {initiative.evaluationCriteria && (
+                    <div className="mt-1 text-caption text-ink-subtle text-green-700">
+                      <strong>Eval:</strong> {initiative.evaluationCriteria}
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell>{initiative.quarter}</TableCell>
                 <TableCell className="min-w-44">{initiative.targetTrainees.join(', ')}</TableCell>
@@ -64,8 +69,24 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                     </div>
                   )}
                 </TableCell>
-                <TableCell className="capitalize">{initiative.format}</TableCell>
-                <TableCell>{initiative.estimatedHours}</TableCell>
+                <TableCell>
+                  <div className="capitalize">
+                    {initiative.format.replace(/_/g, ' ').toLowerCase()}
+                  </div>
+                  {initiative.formatExplanation && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      {initiative.formatExplanation}
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <div>{initiative.estimatedHours}h</div>
+                  {initiative.durationWeeks && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      {initiative.durationWeeks} weeks
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell>
                   <div className="flex min-w-48 flex-wrap gap-1">
                     {initiative.evidence.map((item) => (

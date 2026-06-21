@@ -1,5 +1,11 @@
 import { type AgentTool, defineAgentTool } from '@seta/agent-sdk';
 import { z } from 'zod';
+import {
+  lndAssignLearningFormats,
+  lndCompileQuarterlyRoadmap,
+  lndFindAndAssignTrainer,
+  lndGetPendingSkills,
+} from './agent-tools/roadmap-tools.ts';
 import { calculateQaScore } from './domain/qa/qa-score.ts';
 import {
   getQaFinalFindings,
@@ -271,4 +277,8 @@ export const trainingRoadmapAgentTools: AgentTool[] = [
   timelineTool,
   traceabilityTool,
   scoreTool,
+  lndGetPendingSkills as unknown as AgentTool,
+  lndFindAndAssignTrainer as unknown as AgentTool,
+  lndAssignLearningFormats as unknown as AgentTool,
+  lndCompileQuarterlyRoadmap as unknown as AgentTool,
 ];

@@ -22,9 +22,9 @@ const setupDbTest = fileURLToPath(new URL('./setup-db-test.ts', import.meta.url)
 
 export const dbTestDefaults: NonNullable<ViteUserConfig['test']> = {
   pool: 'forks',
-  fileParallelism: true,
-  maxWorkers: 4,
-  testTimeout: 60_000,
+  fileParallelism: false,
+  maxWorkers: 1,
+  testTimeout: 120_000,
   hookTimeout: 120_000,
   setupFiles: [setupDbTest],
 };

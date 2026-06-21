@@ -1,5 +1,20 @@
-import { describe, expect, it } from 'vitest';
+import { fileURLToPath } from 'node:url';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { loadQaInputFromRoadmapOutput } from '../../src/backend/domain/qa/roadmap-output-loader.ts';
+
+const fixturesDir = fileURLToPath(new URL('../helpers/fixtures', import.meta.url));
+const roadmapFixture = fileURLToPath(
+  new URL('../helpers/fixtures/roadmap_output_agent.json', import.meta.url),
+);
+
+beforeAll(() => {
+  vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', roadmapFixture);
+  vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+});
+
+afterAll(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('roadmap_output_agent.json QA loader', () => {
   it('maps the Agent 1 roadmap into the deterministic QA contract', async () => {

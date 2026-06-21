@@ -2,6 +2,7 @@ import { access, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import { getScratchPath } from '../../scratch-storage.ts';
 import type { QaInput } from '../qa/qa-validate-roadmap.ts';
 
 const initiativeSchema = z.object({
@@ -13,6 +14,7 @@ const initiativeSchema = z.object({
   targetTrainees: z.array(z.string()),
   trainerName: z.string().nullable(),
   format: z.enum([
+    'INTERNAL_TRAINING',
     'EXTERNAL_TRAINER',
     'GROUP_STUDY',
     'ON_JOB_TRAINING',
@@ -20,6 +22,8 @@ const initiativeSchema = z.object({
     'SEMINAR_SHARING',
   ]),
   formatExplanation: z.string().min(1),
+  evaluationCriteria: z.string().optional(),
+  durationWeeks: z.number().positive().optional(),
   estimatedHours: z.number().positive(),
   evidence: z.array(z.string()),
   fallbackReason: z.string().optional(),
@@ -83,6 +87,8 @@ async function readJson(path: string): Promise<unknown> {
 function roadmapCandidates(): string[] {
   return [
     process.env.TRAINING_ROADMAP_OUTPUT_FILE,
+    getScratchPath('roadmap_output_agent.json'),
+    resolve(process.cwd(), 'scratch/roadmap_output_agent.json'),
     resolve(process.cwd(), 'roadmap_output_agent.json'),
     resolve(process.cwd(), '../../roadmap_output_agent.json'),
     fileURLToPath(new URL('../../../../../../roadmap_output_agent.json', import.meta.url)),
@@ -102,7 +108,9 @@ function normalizedDataCandidates(): string[] {
 }
 
 function trainerType(format: RoadmapOutputAgent['initiatives'][number]['format']) {
-  return format === 'ON_JOB_TRAINING' || format === 'SEMINAR_SHARING'
+  return format === 'INTERNAL_TRAINING' ||
+    format === 'ON_JOB_TRAINING' ||
+    format === 'SEMINAR_SHARING'
     ? ('internal' as const)
     : format === 'GROUP_STUDY' || format === 'ONLINE_COURSE'
       ? ('self-study' as const)

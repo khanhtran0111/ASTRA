@@ -48,6 +48,7 @@ export function TrainingRoadmapDemoPage() {
   const [loading, setLoading] = useState(false);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userPrompt, setUserPrompt] = useState<string>('');
 
   const handleRun = useCallback(async () => {
     setLoading(true);
@@ -56,7 +57,7 @@ export function TrainingRoadmapDemoPage() {
     setView('roadmap');
 
     try {
-      const response = await runTrainingRoadmap();
+      const response = await runTrainingRoadmap(userPrompt);
       setResult(response.data);
       setDataSource(response.source);
     } catch (err) {
@@ -64,7 +65,7 @@ export function TrainingRoadmapDemoPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [userPrompt]);
 
   const handleDecision = useCallback(
     async (decision: ApprovalDecision) => {
@@ -108,6 +109,19 @@ export function TrainingRoadmapDemoPage() {
       }
     >
       <div className="space-y-4 p-6">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="userPrompt" className="text-sm font-medium">
+            Constraints Prompt
+          </label>
+          <textarea
+            id="userPrompt"
+            value={userPrompt}
+            onChange={(e) => setUserPrompt(e.target.value)}
+            placeholder="Hãy tạo lộ trình đào tạo Q3 cho team Frontend gồm 12 nhân sự Mid-level. Mục tiêu là nâng cao React..."
+            className="w-full rounded-md border p-2 text-sm"
+            rows={3}
+          />
+        </div>
         <Alert variant="info">
           <ShieldCheck aria-hidden className="size-4" />
           <AlertTitle>Member 1 snapshot is ready</AlertTitle>

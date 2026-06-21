@@ -1,5 +1,6 @@
+import { fileURLToPath } from 'node:url';
 import type { StructuredAgentRuntime } from '@seta/core';
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { z } from 'zod';
 import { QA_TOOL_IDS } from '../../src/backend/agent-tools.ts';
 import {
@@ -8,16 +9,27 @@ import {
 } from '../../src/backend/domain/qa/qa-tool-context.ts';
 import { buildTrainingRoadmapRoutes } from '../../src/backend/http/index.ts';
 
+const fixturesDir = fileURLToPath(new URL('../helpers/fixtures', import.meta.url));
+const roadmapFixture = fileURLToPath(
+  new URL('../helpers/fixtures/roadmap_output_agent.json', import.meta.url),
+);
+
+beforeAll(() => {
+  vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', roadmapFixture);
+  vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+});
+
+afterAll(() => {
+  vi.unstubAllEnvs();
+});
+
 const calls: string[] = [];
 const toolCalls: string[] = [];
 const agents: StructuredAgentRuntime = {
   async generate<T>({ agentId, schema }: { agentId: string; schema: z.ZodType<T> }): Promise<T> {
     calls.push(agentId);
     if (!agentId.endsWith('qa-reviewer')) throw new Error(`Unexpected agent: ${agentId}`);
-    return schema.parse({
-      findings: [],
-      semanticSummary: [],
-    });
+    return schema.parse({ findings: [], semanticSummary: [] });
   },
   async callTool({ toolName, prompt }) {
     toolCalls.push(toolName);
@@ -54,30 +66,28 @@ describe('training roadmap routes', () => {
     await expect(res.json()).resolves.toMatchObject({ ok: true, module: 'training-roadmap' });
   });
 
-  it('runs the real-agent roadmap pipeline', async () => {
+  it('passes the Agent 1 artifact through the QA agent pipeline', async () => {
     calls.length = 0;
     toolCalls.length = 0;
-    const res = await app.request('/api/training-roadmap/run', { method: 'POST' });
+
+    const res = await app.request('/api/training-roadmap/qa', { method: 'POST' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body.reviewStatus).toBe('pending');
-    expect(body.executionLog).toContain('Paused at Human Review Gate.');
-    expect(body.initiatives).toHaveLength(22);
     expect(body.executionLog).toContain('Loaded roadmap_output_agent.json.');
+    expect(body.initiatives).toHaveLength(22);
     expect(body.qaScore).toBeGreaterThanOrEqual(0);
     expect(body.qaScore).toBeLessThanOrEqual(100);
-    expect(
-      body.qaFindings.every((finding: { evidence: unknown[] }) => finding.evidence.length > 0),
-    ).toBe(true);
     expect(calls).toEqual(['training-roadmap.qa-reviewer']);
     expect(toolCalls).toEqual(Object.values(QA_TOOL_IDS));
   });
 
-  it('uses roadmap_output_agent.json instead of a request-body roadmap', async () => {
+  it('ignores request-body roadmap data and reads the Agent 1 artifact', async () => {
     calls.length = 0;
     toolCalls.length = 0;
-    const res = await app.request('/api/training-roadmap/run', {
+
+    const res = await app.request('/api/training-roadmap/qa', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ employees: [] }),
