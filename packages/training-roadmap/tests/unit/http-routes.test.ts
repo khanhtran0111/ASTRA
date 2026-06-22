@@ -289,4 +289,32 @@ describe('training roadmap routes', () => {
     expect(res.status).toBe(404);
     await expect(res.json()).resolves.toEqual({ error: 'QA run not found' });
   });
+
+  it('rejects feedback once the run has already been approved', async () => {
+    await app.request('/api/training-roadmap/qa', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
+    await app.request('/api/training-roadmap/approve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        runId: 'fixture-roadmap-run',
+        decision: 'approved_with_risks',
+        approvalNote: 'Accepted for this test.',
+      }),
+    });
+
+    const res = await app.request('/api/training-roadmap/feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run', feedback: 'Please redo this.' }),
+    });
+
+    expect(res.status).toBe(409);
+    await expect(res.json()).resolves.toEqual({
+      error: 'Run fixture-roadmap-run is already approved_with_risks',
+    });
+  });
 });

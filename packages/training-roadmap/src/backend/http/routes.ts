@@ -442,6 +442,17 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
         );
       }
 
+      const qaResult = readJsonFileOrDefault(getRunScratchPath(runId, 'qa_result.json'), null);
+      if (
+        qaResult &&
+        typeof qaResult === 'object' &&
+        'reviewStatus' in qaResult &&
+        qaResult.reviewStatus !== 'pending_review' &&
+        qaResult.reviewStatus !== 'blocked'
+      ) {
+        return c.json({ error: `Run ${runId} is already ${qaResult.reviewStatus}` }, 409);
+      }
+
       saveHumanFeedback(runId, feedback, c.get('user')?.user_id);
 
       const result = await runCoordinator('', {
