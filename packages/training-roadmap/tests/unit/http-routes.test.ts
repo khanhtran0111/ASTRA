@@ -1,17 +1,24 @@
+import { rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { StructuredAgentRuntime } from '@seta/core';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { z } from 'zod';
 import { QA_TOOL_IDS } from '../../src/backend/agent-tools.ts';
+import { calculateQaScore } from '../../src/backend/domain/qa/qa-score.ts';
 import {
+  getQaFinalFindings,
   markQaToolCalled,
   recordQaScoreCall,
 } from '../../src/backend/domain/qa/qa-tool-context.ts';
 import { buildTrainingRoadmapRoutes } from '../../src/backend/http/index.ts';
+import { getScratchPath } from '../../src/backend/scratch-storage.ts';
 
 const fixturesDir = fileURLToPath(new URL('../helpers/fixtures', import.meta.url));
 const roadmapFixture = fileURLToPath(
   new URL('../helpers/fixtures/roadmap_output_agent.json', import.meta.url),
+);
+const missingProjectFixture = fileURLToPath(
+  new URL('../helpers/fixtures/roadmap_missing_project.json', import.meta.url),
 );
 
 beforeAll(() => {
@@ -59,11 +66,8 @@ const agents: StructuredAgentRuntime = {
     if (!runId) throw new Error('QA runId missing from tool prompt');
     markQaToolCalled(runId, toolName);
     if (toolName === QA_TOOL_IDS.score) {
-      recordQaScoreCall(runId, [], {
-        score: 100,
-        riskLevel: 'LOW',
-        reason: 'QA tools returned no findings.',
-      });
+      const findings = getQaFinalFindings(runId);
+      recordQaScoreCall(runId, findings, calculateQaScore(findings));
     }
   },
   async callTools({ prompt }) {
@@ -101,7 +105,8 @@ describe('training roadmap routes', () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body.reviewStatus).toBe('pending');
+    expect(body.reviewStatus).toBe('pending_review');
+    expect(body.qaDecision).toBe('PASS_WITH_WARNINGS');
     expect(body.executionLog).toContain('Loaded roadmap_output_agent.json.');
     expect(body.initiatives).toHaveLength(22);
     expect(body.qaScore).toBeGreaterThanOrEqual(0);
@@ -129,6 +134,38 @@ describe('training roadmap routes', () => {
 
     expect(res.status).toBe(400);
     await expect(res.json()).resolves.toEqual({ error: 'runId is required' });
+  });
+
+  it('loops Agent 2 findings back to Agent 1 and re-audits the revised roadmap', async () => {
+    const runId = 'fixture-missing-project-qa';
+    const runDirectory = getScratchPath('training-roadmap-runs', runId);
+    rmSync(runDirectory, { recursive: true, force: true });
+    vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', missingProjectFixture);
+
+    try {
+      const res = await app.request('/api/training-roadmap/qa', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId }),
+      });
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body).toMatchObject({
+        qaDecision: 'PASS_WITH_WARNINGS',
+        reviewStatus: 'pending_review',
+        revisionCount: 1,
+        approvalRequirement: 'APPROVE_WITH_RISKS',
+      });
+      expect(body.initiatives[0]).toMatchObject({
+        alignmentType: 'BOD_AND_SURVEY_ONLY',
+        approvalRequired: true,
+      });
+      expect(body.executionLog).toContain('Agent 1 revised the roadmap from Agent 2 instructions.');
+    } finally {
+      vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', roadmapFixture);
+      rmSync(runDirectory, { recursive: true, force: true });
+    }
   });
 
   it('rejects a QA request whose runId does not match the Agent 1 artifact', async () => {
@@ -173,15 +210,47 @@ describe('training roadmap routes', () => {
       body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
     });
 
+    const lockedExport = await app.request('/api/training-roadmap/export', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
+    expect(lockedExport.status).toBe(409);
+
+    const missingNote = await app.request('/api/training-roadmap/approve', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        runId: 'fixture-roadmap-run',
+        decision: 'approved_with_risks',
+      }),
+    });
+    expect(missingNote.status).toBe(400);
+
     const approved = await app.request('/api/training-roadmap/approve', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run', decision: 'approved' }),
+      body: JSON.stringify({
+        runId: 'fixture-roadmap-run',
+        decision: 'approved_with_risks',
+        approvalNote: 'Accepted test fixture fallbacks.',
+      }),
     });
     const approvedBody = await approved.json();
 
     expect(approved.status).toBe(200);
     expect(approvedBody.approvalToken).toMatch(/^APPROVAL-fixture-roadmap-run-/);
+
+    const exported = await app.request('/api/training-roadmap/export', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+    });
+    expect(exported.status).toBe(200);
+    await expect(exported.json()).resolves.toMatchObject({
+      qaDecision: 'PASS_WITH_WARNINGS',
+      approvalNotes: 'Accepted test fixture fallbacks.',
+    });
 
     await app.request('/api/training-roadmap/qa', {
       method: 'POST',

@@ -15,12 +15,18 @@ describe('training need request scope', () => {
 
     expect(trainingNeeds.length).toBeGreaterThan(0);
     expect(trainingNeeds.map((need) => need.skillName)).toEqual(
-      expect.arrayContaining(['React', 'Automation Testing']),
+      expect.arrayContaining(['React', 'Automation Testing', 'System Design']),
     );
+    expect(trainingNeeds.find((need) => need.skillName === 'React')?.traineeIds).toEqual([]);
+    expect(
+      trainingNeeds.find((need) => need.skillName === 'Automation Testing')?.traineeIds,
+    ).toEqual(['EMP-016']);
     for (const need of trainingNeeds) {
       expect(need.targetQuarter).toBe('Q3_2026');
-      expect(need.traineeIds.length).toBeGreaterThan(0);
       expect(need.traineeIds.every((id) => allowedFrontendMidLevelEmployees.has(id))).toBe(true);
+      expect(need.evidenceRefs?.every((evidence) => typeof evidence.reason === 'string')).toBe(
+        true,
+      );
     }
   });
 });

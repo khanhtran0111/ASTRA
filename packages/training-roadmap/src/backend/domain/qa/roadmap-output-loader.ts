@@ -2,8 +2,51 @@ import { access, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import type { EvidenceRef } from '../../../types.ts';
 import { getRunScratchPath, getScratchPath } from '../../scratch-storage.ts';
 import type { QaInput } from '../qa/qa-validate-roadmap.ts';
+
+const evidenceRefSchema = z.object({
+  source: z.enum(['DS01', 'DS02', 'DS03', 'DS04', 'DS05']),
+  recordId: z.string().min(1),
+  field: z.string().min(1),
+  value: z.string(),
+  reason: z.string().min(1),
+});
+
+function legacyEvidenceRef(recordId: string): EvidenceRef {
+  const source = recordId.startsWith('EMP-')
+    ? 'DS01'
+    : recordId.startsWith('PRJ-')
+      ? 'DS02'
+      : recordId.startsWith('SUR-') || recordId.startsWith('SUR_')
+        ? 'DS03'
+        : recordId.startsWith('TRN-')
+          ? 'DS04'
+          : 'DS05';
+  return {
+    source,
+    recordId,
+    field: 'legacy_reference',
+    value: recordId,
+    reason: 'Legacy fixture reference normalized into the granular evidence contract.',
+  };
+}
+
+const fallbackMilestoneSchema = z.object({
+  week: z.number(),
+  description: z.string(),
+  deliverable: z.string(),
+});
+
+const fallbackPlanSchema = z.object({
+  learningMode: z.enum(['self-study', 'external', 'study-group', 'blended', 'lab-based']),
+  pic: z.string(),
+  materials: z.array(z.string()),
+  milestones: z.array(fallbackMilestoneSchema),
+  estimatedHours: z.number(),
+  evaluationCriteria: z.string(),
+});
 
 const initiativeSchema = z.object({
   id: z.string().min(1),
@@ -33,8 +76,30 @@ const initiativeSchema = z.object({
     })
     .optional(),
   estimatedHours: z.number().positive(),
-  evidence: z.array(z.string()),
+  evidence: z
+    .array(z.union([evidenceRefSchema, z.string().min(1)]))
+    .transform((items) =>
+      items.map((item) => (typeof item === 'string' ? legacyEvidenceRef(item) : item)),
+    ),
   fallbackReason: z.string().optional(),
+  fallbackPlan: fallbackPlanSchema.optional(),
+  alignmentType: z.enum(['PROJECT_BACKED', 'BOD_AND_SURVEY_ONLY']).optional(),
+  approvalRequired: z.boolean().optional(),
+  alignmentNote: z.string().min(1).optional(),
+});
+
+const revisionInstructionSchema = z.object({
+  initiativeId: z.string().min(1),
+  issueType: z.string().min(1),
+  action: z.enum([
+    'ADD_EVIDENCE',
+    'DOWNGRADE_PRIORITY',
+    'CHANGE_ALIGNMENT_TYPE',
+    'REMOVE_INITIATIVE',
+    'ADD_FALLBACK',
+    'REQUEST_HUMAN_CONFIRMATION',
+  ]),
+  message: z.string().min(1),
 });
 
 const roadmapOutputAgentSchema = z.object({
@@ -45,7 +110,29 @@ const roadmapOutputAgentSchema = z.object({
     })
     .optional(),
   executionLog: z.array(z.string()),
-  initiatives: z.array(initiativeSchema).min(1),
+  initiatives: z.array(initiativeSchema),
+  revisionCount: z.number().int().min(0).default(0),
+  revisionHistory: z
+    .array(
+      z.object({
+        revision: z.number().int().positive(),
+        revisedAt: z.string().min(1),
+        instructions: z.array(revisionInstructionSchema),
+      }),
+    )
+    .default([]),
+  coverageResult: z
+    .object({
+      targetGroup: z.string(),
+      totalEligibleEmployees: z.number(),
+      requiredCoveragePercent: z.number(),
+      requiredTraineeCount: z.number(),
+      selectedTraineeCount: z.number(),
+      achievedCoveragePercent: z.number(),
+      coverageStatus: z.enum(['MET', 'NOT_MET']),
+      missingTraineeCount: z.number(),
+    })
+    .optional(),
 });
 
 export type RoadmapOutputAgent = z.infer<typeof roadmapOutputAgentSchema>;
@@ -84,6 +171,87 @@ const normalizedDataSchema = z.object({
   ),
 });
 
+type NormalizedData = z.infer<typeof normalizedDataSchema>;
+
+function normalizedSkill(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function enrichLegacyEvidence(
+  source: RoadmapOutputAgent,
+  normalized: NormalizedData,
+): RoadmapOutputAgent {
+  return {
+    ...source,
+    initiatives: source.initiatives.map((initiative) => {
+      const evidence = initiative.evidence.map((ref): EvidenceRef => {
+        if (ref.field !== 'legacy_reference') return ref;
+        if (ref.source === 'DS02') {
+          const project = normalized.projects.find((item) => item.project_id === ref.recordId);
+          return {
+            ...ref,
+            field: 'Required_Skills',
+            value: project?.required_skills.join('; ') ?? ref.value,
+            reason: `Legacy project reference normalized for ${initiative.topic}.`,
+          };
+        }
+        if (ref.source === 'DS05') {
+          const goal = normalized.goals.find((item) => item.goal_id === ref.recordId);
+          return {
+            ...ref,
+            field: 'Goal_Description',
+            value: goal?._raw_description ?? goal?.required_skills.join('; ') ?? ref.value,
+            reason: `Legacy BOD goal reference normalized for ${initiative.topic}.`,
+          };
+        }
+        return ref;
+      });
+
+      for (const traineeId of initiative.targetTrainees) {
+        if (evidence.some((ref) => ref.source === 'DS01' && ref.recordId === traineeId)) continue;
+        const employee = normalized.employees.find((item) => item.employee_id === traineeId);
+        const topic = normalizedSkill(initiative.topic);
+        const matchesGap = employee?.self_reported_gaps.some((gap) => {
+          const normalizedGap = normalizedSkill(gap);
+          return (
+            normalizedGap === topic ||
+            normalizedGap.includes(topic) ||
+            topic.includes(normalizedGap)
+          );
+        });
+        if (employee && matchesGap) {
+          evidence.push({
+            source: 'DS01',
+            recordId: traineeId,
+            field: 'Skill_Gap',
+            value: employee.self_reported_gaps.join('; '),
+            reason: `${employee.position ?? 'Employee'} (${employee.proficiency_level ?? 'unknown proficiency'}) has a direct recorded gap matching ${initiative.topic}.`,
+          });
+        }
+      }
+
+      if (
+        initiative.trainerName &&
+        !evidence.some((ref) => ref.source === 'DS04' && ref.recordId === initiative.trainerName)
+      ) {
+        const trainer = normalized.trainers.find(
+          (item) => item.trainer_id === initiative.trainerName,
+        );
+        if (trainer) {
+          evidence.push({
+            source: 'DS04',
+            recordId: trainer.trainer_id,
+            field: 'Skills;Available_Hours_Per_Month',
+            value: `${trainer.skills.join('; ')} | ${trainer.available_hours_per_month}h/month`,
+            reason: `Trainer record normalized for the ${initiative.topic} assignment.`,
+          });
+        }
+      }
+      return { ...initiative, evidence };
+    }),
+  };
+}
+
 async function firstExisting(candidates: string[]): Promise<string> {
   for (const candidate of candidates) {
     try {
@@ -103,7 +271,7 @@ async function readJson(path: string): Promise<unknown> {
 function roadmapCandidates(runId?: string): string[] {
   const configured = process.env.TRAINING_ROADMAP_OUTPUT_FILE;
   if (runId) {
-    return [configured, getRunScratchPath(runId, 'roadmap_output_agent.json')].filter(
+    return [getRunScratchPath(runId, 'roadmap_output_agent.json'), configured].filter(
       (value): value is string => Boolean(value),
     );
   }
@@ -152,11 +320,12 @@ export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
     readJson(roadmapPath),
     readJson(normalizedPath),
   ]);
-  const source = roadmapOutputAgentSchema.parse(sourceRaw);
+  let source = roadmapOutputAgentSchema.parse(sourceRaw);
   if (runId && source.runId !== runId) {
     throw new Error(`Agent 1 artifact belongs to run ${source.runId}, not ${runId}`);
   }
   const normalized = normalizedDataSchema.parse(normalizedRaw);
+  source = enrichLegacyEvidence(source, normalized);
   const quarters = [...new Set(source.initiatives.map((initiative) => initiative.quarter))];
 
   const qaInput: QaInput = {
@@ -166,11 +335,19 @@ export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
         initiativeId: initiative.id,
         skill: initiative.topic,
         traineeIds: initiative.targetTrainees,
-        trainerType: trainerType(initiative.format),
+        trainerType: initiative.trainerName ? 'internal' : trainerType(initiative.format),
+        trainerId: initiative.trainerName,
+        fallbackReason:
+          initiative.fallbackReason ??
+          (initiative.trainerName === null && trainerType(initiative.format) !== 'internal'
+            ? `${trainerType(initiative.format).toUpperCase()}_FALLBACK`
+            : undefined),
         quarter: initiative.quarter,
-        evidence: initiative.evidence.filter(
-          (id) => id.startsWith('PRJ-') || id.startsWith('GOAL-'),
-        ),
+        evidence: initiative.evidence,
+        alignmentType: initiative.alignmentType,
+        approvalRequired: initiative.approvalRequired,
+        alignmentNote: initiative.alignmentNote,
+        fallbackPlan: initiative.fallbackPlan,
       })),
     },
     priorityResult: {
@@ -179,10 +356,19 @@ export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
         skill: initiative.topic,
         target_employees: initiative.targetTrainees,
         internal_trainer_available: initiative.trainerName !== null,
-        supporting_projects: initiative.evidence.filter((id) => id.startsWith('PRJ-')),
-        supporting_bod_goals: initiative.evidence.filter((id) => id.startsWith('GOAL-')),
+        supporting_projects: initiative.evidence
+          .filter((evidence) => evidence.source === 'DS02')
+          .map((evidence) => evidence.recordId),
+        supporting_bod_goals: initiative.evidence
+          .filter((evidence) => evidence.source === 'DS05')
+          .map((evidence) => evidence.recordId),
         evidence_summary: initiative.formatExplanation,
+        evidence: initiative.evidence,
         quarter: initiative.quarter,
+        alignmentType: initiative.alignmentType,
+        approvalRequired: initiative.approvalRequired,
+        alignmentNote: initiative.alignmentNote,
+        fallbackPlan: initiative.fallbackPlan,
       })),
     },
     normalizedData: {

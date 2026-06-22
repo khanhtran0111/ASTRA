@@ -19,7 +19,7 @@ describe('request scope QA', () => {
 
     expect(findings).toEqual([
       expect.objectContaining({
-        type: 'REQUEST_SCOPE_MISMATCH',
+        type: 'PROMPT_SCOPE_VIOLATION',
         severity: 'HIGH',
         relatedInitiativeId: 'CLS-K8S',
       }),
@@ -34,7 +34,7 @@ describe('request scope QA', () => {
     });
 
     expect(findings[0]).toMatchObject({
-      type: 'REQUEST_SCOPE_MISMATCH',
+      type: 'PROMPT_SCOPE_VIOLATION',
       severity: 'HIGH',
       relatedInitiativeId: 'CLS-REACT',
     });

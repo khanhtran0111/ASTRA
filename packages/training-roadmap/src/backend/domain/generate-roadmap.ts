@@ -33,6 +33,7 @@ export function generateDraftRoadmap(
         bodGoals: cls.evidence.bodGoals,
         projects: cls.evidence.projectIds,
       },
+      evidence: cls.evidenceRefs ?? [],
       traineeCount: cls.trainees.length,
       trainees: cls.trainees,
       estimatedHours: cls.estimatedHours,
@@ -44,6 +45,7 @@ export function generateDraftRoadmap(
       durationWeeks: cls.durationWeeks,
       startWeek: cls.startWeek,
       endWeek: cls.endWeek,
+      fallbackPlan: cls.fallbackPlan,
       resource: {
         trainerId: cls.assignedTrainer,
         isExternalRequired: cls.isExternalRequired,

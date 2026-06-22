@@ -35,13 +35,19 @@ describe('TrainingRoadmapDemoPage', () => {
         new Response(
           JSON.stringify({
             runId: 'agent-1-run',
-            reviewStatus: 'pending',
+            reviewStatus: 'pending_review',
             executionLog: ['Loaded roadmap_output_agent.json.'],
             initiatives: [],
+            qaDecision: 'PASS',
             qaFindings: [],
+            blockingIssues: [],
+            revisionInstructions: [],
+            approvalRequirement: 'HUMAN_APPROVAL',
+            qaSummary: 'QA passed.',
             qaScore: 100,
             riskLevel: 'LOW',
             riskReason: 'No findings.',
+            revisionCount: 0,
             evidencePack: {},
             reviewPack: {
               request: { userPrompt: 'React testing in Q3' },
@@ -74,6 +80,48 @@ describe('TrainingRoadmapDemoPage', () => {
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ runId: 'agent-1-run' }),
+      }),
+    );
+  });
+
+  it('generates on Enter and keeps Shift+Enter for a new line', async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError('Stopped after submit'));
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+    const prompt = screen.getByLabelText('Constraints Prompt');
+
+    await user.type(prompt, 'Frontend roadmap');
+    await user.keyboard('{Shift>}{Enter}{/Shift}');
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await user.keyboard('{Enter}');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows an animated workflow status while Agent 1 and Agent 2 are running', async () => {
+    let resolveRun: ((response: Response) => void) | undefined;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveRun = resolve;
+          }),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.type(screen.getByLabelText('Constraints Prompt'), 'Kubernetes roadmap{enter}');
+
+    expect(screen.getByRole('status', { name: 'Generating roadmap' })).toBeInTheDocument();
+    expect(screen.getByText('Agent workflow in progress')).toBeInTheDocument();
+
+    resolveRun?.(
+      new Response(JSON.stringify({ error: 'Stopped' }), {
+        status: 500,
+        headers: { 'content-type': 'application/json' },
       }),
     );
   });

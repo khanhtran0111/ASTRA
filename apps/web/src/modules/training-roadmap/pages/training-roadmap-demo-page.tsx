@@ -6,11 +6,11 @@ import {
   Button,
   EmptyState,
   PageChrome,
-  Skeleton,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
+  Textarea,
 } from '@seta/shared-ui';
 import { AlertCircle, BarChart3, Database, Play, Route, ShieldCheck } from 'lucide-react';
 import { useCallback, useState } from 'react';
@@ -26,6 +26,7 @@ import { ExportProposalCard } from '../components/export-proposal-card.tsx';
 import { HitlApprovalCard } from '../components/hitl-approval-card.tsx';
 import { PriorityScoreTable } from '../components/priority-score-table.tsx';
 import { QaFindingsPanel } from '../components/qa-findings-panel.tsx';
+import { RoadmapGenerationStatus } from '../components/roadmap-generation-status.tsx';
 import { RoadmapTable } from '../components/roadmap-table.tsx';
 import { SkillGapTable } from '../components/skill-gap-table.tsx';
 import { TrainerReadinessPanel } from '../components/trainer-readiness-panel.tsx';
@@ -36,6 +37,7 @@ type View = 'data' | 'analysis' | 'roadmap';
 
 const decisionLog: Record<ApprovalDecision, string> = {
   approved: 'Human reviewer approved the roadmap.',
+  approved_with_risks: 'Human reviewer approved the roadmap with acknowledged risks.',
   revision_requested: 'Human reviewer requested a revision.',
   rejected: 'Human reviewer rejected the roadmap.',
 };
@@ -51,6 +53,7 @@ export function TrainingRoadmapDemoPage() {
   const [userPrompt, setUserPrompt] = useState<string>('');
 
   const handleRun = useCallback(async () => {
+    if (loading || reviewSubmitting) return;
     setLoading(true);
     setError(null);
     setApprovalToken(null);
@@ -65,17 +68,17 @@ export function TrainingRoadmapDemoPage() {
     } finally {
       setLoading(false);
     }
-  }, [userPrompt]);
+  }, [loading, reviewSubmitting, userPrompt]);
 
   const handleDecision = useCallback(
-    async (decision: ApprovalDecision) => {
+    async (decision: ApprovalDecision, approvalNote?: string) => {
       if (!result) return;
 
       setReviewSubmitting(true);
       setError(null);
 
       try {
-        const response = await submitReviewDecision(result.runId, decision);
+        const response = await submitReviewDecision(result.runId, decision, approvalNote);
         setApprovalToken(response.data.approvalToken);
         setDataSource(response.source);
         setResult((current) =>
@@ -83,6 +86,10 @@ export function TrainingRoadmapDemoPage() {
             ? {
                 ...current,
                 reviewStatus: response.data.reviewStatus,
+                approvalToken: response.data.approvalToken,
+                approvalNotes: response.data.approvalNotes,
+                approvedBy: response.data.approvedBy,
+                approvedAt: response.data.approvedAt,
                 executionLog: [...current.executionLog, decisionLog[response.data.reviewStatus]],
               }
             : current,
@@ -113,14 +120,22 @@ export function TrainingRoadmapDemoPage() {
           <label htmlFor="userPrompt" className="text-sm font-medium">
             Constraints Prompt
           </label>
-          <textarea
+          <Textarea
             id="userPrompt"
             value={userPrompt}
             onChange={(e) => setUserPrompt(e.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) {
+                event.preventDefault();
+                void handleRun();
+              }
+            }}
             placeholder="Hãy tạo lộ trình đào tạo Q3 cho team Frontend gồm 12 nhân sự Mid-level. Mục tiêu là nâng cao React..."
-            className="w-full rounded-md border p-2 text-sm"
             rows={3}
           />
+          <div className="text-caption text-ink-subtle">
+            Press Enter to generate · Shift+Enter for a new line
+          </div>
         </div>
         <Alert variant="info">
           <ShieldCheck aria-hidden className="size-4" />
@@ -178,13 +193,7 @@ export function TrainingRoadmapDemoPage() {
               </Alert>
             )}
 
-            {loading && (
-              <div className="space-y-3" aria-label="Generating roadmap" role="status">
-                <Skeleton className="h-24 w-full" />
-                <Skeleton className="h-56 w-full" />
-                <Skeleton className="h-36 w-full" />
-              </div>
-            )}
+            {loading && <RoadmapGenerationStatus />}
 
             {!loading && !result && (
               <EmptyState
@@ -215,11 +224,16 @@ export function TrainingRoadmapDemoPage() {
                   score={result.qaScore}
                   riskLevel={result.riskLevel}
                   riskReason={result.riskReason}
+                  qaDecision={result.qaDecision}
+                  blockingIssues={result.blockingIssues}
+                  revisionInstructions={result.revisionInstructions}
                 />
                 <div className="grid gap-4 xl:grid-cols-2">
                   <HitlApprovalCard
                     runId={result.runId}
                     reviewStatus={result.reviewStatus}
+                    qaDecision={result.qaDecision}
+                    approvalRequirement={result.approvalRequirement}
                     reviewPack={result.reviewPack}
                     onDecision={handleDecision}
                     disabled={reviewSubmitting}

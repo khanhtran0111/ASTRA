@@ -12,7 +12,15 @@ describe('training roadmap QA validation', () => {
             traineeIds: ['EMP-001', 'EMP-404'],
             trainerType: 'internal',
             quarter: 'Q1 2027',
-            evidence: ['UNKNOWN-001'],
+            evidence: [
+              {
+                source: 'DS02',
+                recordId: 'UNKNOWN-001',
+                field: 'Required_Skills',
+                value: 'Kubernetes',
+                reason: 'Invalid reference used to exercise traceability.',
+              },
+            ],
           },
         ],
       },
@@ -41,12 +49,12 @@ describe('training roadmap QA validation', () => {
 
     expect(result.findings.map((item) => item.type)).toEqual(
       expect.arrayContaining([
-        'INVALID_TRAINEE',
-        'TRAINER_GAP',
+        'NO_TRAINEE_EVIDENCE',
+        'TRAINER_NOT_FOUND',
+        'UNSUPPORTED_INITIATIVE',
         'BOD_ALIGNMENT_RISK',
         'MISSING_PROJECT_REQUIREMENT',
-        'TRAINEE_MISMATCH',
-        'TIMELINE_RISK',
+        'TIMELINE_MISMATCH',
         'TRACEABILITY_GAP',
       ]),
     );
@@ -76,7 +84,7 @@ describe('training roadmap QA validation', () => {
 
     expect(result.findings).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ type: 'MISSING_EVIDENCE', severity: 'MEDIUM' }),
+        expect.objectContaining({ type: 'UNSUPPORTED_INITIATIVE', severity: 'HIGH' }),
       ]),
     );
   });
@@ -93,6 +101,29 @@ describe('training roadmap QA validation', () => {
             supporting_projects: ['PRJ-001'],
             supporting_bod_goals: ['GOAL-001'],
             evidence_summary: 'Traceable evidence.',
+            evidence: [
+              {
+                source: 'DS01',
+                recordId: 'EMP-001',
+                field: 'Skill_Gap',
+                value: 'Kubernetes',
+                reason: 'Direct employee gap.',
+              },
+              {
+                source: 'DS02',
+                recordId: 'PRJ-001',
+                field: 'Required_Skills',
+                value: 'Kubernetes',
+                reason: 'Direct project requirement.',
+              },
+              {
+                source: 'DS05',
+                recordId: 'GOAL-001',
+                field: 'Goal_Description',
+                value: 'Kubernetes capability.',
+                reason: 'Direct BOD alignment.',
+              },
+            ],
             quarter: 'Q3 2026',
           },
         ],
