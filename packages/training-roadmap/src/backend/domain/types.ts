@@ -5,7 +5,7 @@
  * the Coordinator (this module), and the QA Agent (Member 4).
  */
 
-import type { AlignmentType, EvidenceRef } from '../../types.ts';
+import type { AlignmentType, AllocatedTrainee, EvidenceRef } from '../../types.ts';
 import type { FallbackPlan } from './fallback-plan.ts';
 
 // ---------------------------------------------------------------------------
@@ -46,6 +46,7 @@ export interface ScoredTrainingNeed {
   };
   /** Granular record/field evidence carried into the Agent 1 artifact. */
   evidenceRefs?: EvidenceRef[];
+  allocatedTrainees?: AllocatedTrainee[];
 }
 
 // ---------------------------------------------------------------------------
@@ -68,6 +69,7 @@ export interface MatchedTrainingClass {
   classId: string;
   skillName: string;
   trainees: string[];
+  traineeDetails?: AllocatedTrainee[];
   /** Assigned trainer ID, or null when external resource is needed */
   assignedTrainer: string | null;
   isExternalRequired: boolean;
@@ -109,6 +111,7 @@ export interface RoadmapClassEntry {
   evidence: EvidenceRef[];
   traineeCount: number;
   trainees: string[];
+  traineeDetails?: AllocatedTrainee[];
   estimatedHours: number;
   objective?: string;
   prerequisites?: string[];

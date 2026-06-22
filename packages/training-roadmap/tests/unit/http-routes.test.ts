@@ -20,6 +20,7 @@ const roadmapFixture = fileURLToPath(
 const missingProjectFixture = fileURLToPath(
   new URL('../helpers/fixtures/roadmap_missing_project.json', import.meta.url),
 );
+const realDataDir = fileURLToPath(new URL('../../../../data', import.meta.url));
 
 beforeAll(() => {
   vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', roadmapFixture);
@@ -91,6 +92,61 @@ describe('training roadmap routes', () => {
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toMatchObject({ ok: true, module: 'training-roadmap' });
   });
+
+  it('runs Agent 1 from DS01-DS05 without an LLM-created candidate list', async () => {
+    vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', realDataDir);
+    try {
+      const res = await app.request('/api/training-roadmap/run', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          userPrompt:
+            'Hãy tạo một training initiative Q3/2026 về Docker & Containerization Foundation cho Software Developer có skill gap Containerization trong DS01. Chỉ chọn tối đa 5 trainees có evidence rõ. Initiative này phục vụ PRJ-005 và GOAL-2026-07.',
+        }),
+      });
+      const body = await res.json();
+
+      expect(res.status).toBe(200);
+      expect(body.initiatives).toHaveLength(1);
+      expect(body.initiatives[0]).toMatchObject({
+        topic: 'Docker & Containerization Foundation',
+        quarter: 'Q3 2026',
+      });
+      expect(body.initiatives[0].targetTrainees).toHaveLength(5);
+      expect(body.initiatives[0].evidence).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ source: 'DS01' }),
+          expect.objectContaining({ source: 'DS02', recordId: 'PRJ-005' }),
+        ]),
+      );
+      expect(body.dataInventory).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ sourceId: 'DS01', validRows: expect.any(Number) }),
+          expect.objectContaining({ sourceId: 'DS05', validRows: expect.any(Number) }),
+        ]),
+      );
+      expect(body.toolTrace.map((entry: { tool: string }) => entry.tool)).toEqual(
+        expect.arrayContaining([
+          'ingestAllSourcesTool',
+          'buildEvidenceIndexTool',
+          'buildSkillOntologyTool',
+          'generateRoadmapTool',
+        ]),
+      );
+
+      const qaRes = await app.request('/api/training-roadmap/qa', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId: body.runId }),
+      });
+      const qaBody = await qaRes.json();
+      expect(qaRes.status).toBe(200);
+      expect(qaBody.qaDecision).not.toBe('BLOCKED');
+      expect(qaBody.dataRevisionActions).toEqual([]);
+    } finally {
+      vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+    }
+  }, 15_000);
 
   it('passes the Agent 1 artifact through the QA agent pipeline', async () => {
     calls.length = 0;

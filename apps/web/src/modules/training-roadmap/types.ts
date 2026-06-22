@@ -23,13 +23,49 @@ export type EvidenceRef = {
   reason: string;
 };
 
+export type AllocatedTrainee = {
+  employeeId: string;
+  employeeName?: string;
+  position: string;
+  team?: string;
+  proficiencyLevel: string;
+  matchedSkillGap: string[];
+  evidenceRefs: EvidenceRef[];
+  reason: string;
+};
+
+export type RoadmapTrainerCandidate = {
+  trainerId: string;
+  fitScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  capacityStatus: 'FULL' | 'PARTIAL' | 'NONE';
+  availabilityHoursPerMonth: number;
+  evidenceRefs: EvidenceRef[];
+};
+
+export type RoadmapScoreBreakdown = {
+  bodAlignment: number;
+  projectUrgency: number;
+  traineeGapImpact: number;
+  surveyDemand: number;
+  feasibility: number;
+  marketTrend: number;
+  riskPenalty: number;
+};
+
 export type RevisionInstruction = {
   initiativeId: string;
   issueType: string;
   action:
     | 'ADD_EVIDENCE'
+    | 'ALLOCATE_TRAINEES'
+    | 'FILTER_SCOPE'
+    | 'ADD_SUPPORTING_PROJECT'
+    | 'RETRY_TRAINER_MATCH_WITH_ALIASES'
     | 'DOWNGRADE_PRIORITY'
     | 'CHANGE_ALIGNMENT_TYPE'
+    | 'REMOVE_EXTRA_INITIATIVE'
     | 'REMOVE_INITIATIVE'
     | 'ADD_FALLBACK'
     | 'REQUEST_HUMAN_CONFIRMATION';
@@ -45,6 +81,7 @@ export type QaFinding = {
     | 'TIMELINE_MISMATCH'
     | 'PROMPT_SCOPE_VIOLATION'
     | 'BOD_ALIGNMENT_RISK'
+    | 'COVERAGE_SHORTFALL'
     | 'TRACEABILITY_GAP';
   severity: QaRisk;
   message: string;
@@ -60,6 +97,19 @@ export type TrainingInitiative = {
   score: number;
   quarter: string;
   targetTrainees: string[];
+  traineeDetails?: AllocatedTrainee[];
+  canonicalSkillId?: string;
+  trainerCandidates?: RoadmapTrainerCandidate[];
+  selectedTrainer?: string | null;
+  totalHours?: number;
+  trainerContactHours?: number;
+  selfStudyHours?: number;
+  labHours?: number;
+  scoreBreakdown?: RoadmapScoreBreakdown;
+  selectionReason?: string;
+  risks?: string[];
+  requiresHumanApproval?: boolean;
+  deliveryFormat?: string;
   trainerName: string | null;
   objective?: string;
   prerequisites?: string[];
@@ -104,6 +154,51 @@ export type RoadmapResult = {
     semanticSummary: unknown[];
     findings: QaFinding[];
   };
+  dataInventory?: Array<{
+    sourceId: 'DS01' | 'DS02' | 'DS03' | 'DS04' | 'DS05' | 'MARKET';
+    fileName: string;
+    rowCount: number;
+    validRows: number;
+    invalidRows: number;
+    skippedRows: number;
+    detectedColumns: string[];
+    warnings: string[];
+  }>;
+  dataCoverageReport?: {
+    totalRecordsBySource: Record<string, number>;
+    validRecordsBySource: Record<string, number>;
+    candidateCount: number;
+    selectedCount: number;
+    droppedCount: number;
+    unmatchedSkills: string[];
+    unmatchedTraineeRows: string[];
+    unmatchedTrainerRows: string[];
+    warnings: string[];
+    coverageResult?: {
+      targetGroup: string;
+      totalEligibleEmployees: number;
+      requiredCoveragePercent: number;
+      requiredTraineeCount: number;
+      selectedTraineeCount: number;
+      achievedCoveragePercent: number;
+      coverageStatus: 'MET' | 'NOT_MET';
+      missingTraineeCount: number;
+    };
+  };
+  unselectedCandidates?: Array<{
+    candidate: string;
+    reasonDropped: string;
+    evidenceRefs: EvidenceRef[];
+    suggestedFix: string;
+  }>;
+  toolTrace?: Array<{ tool: string; status: 'completed'; detail: string }>;
+  dataRevisionActions?: Array<{
+    issueCode: string;
+    affectedItemId: string;
+    blockingLevel: QaRisk;
+    requiredToolToRerun: string;
+    expectedFix: string;
+  }>;
 };
 
 export type ApprovalDecision =

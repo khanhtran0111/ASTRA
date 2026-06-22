@@ -1,11 +1,9 @@
 import { type AgentTool, defineAgentTool } from '@seta/agent-sdk';
 import { z } from 'zod';
 import {
-  lndAssignLearningFormats,
-  lndCompileQuarterlyRoadmap,
-  lndFindAndAssignTrainer,
-  lndGetPendingSkills,
-} from './agent-tools/roadmap-tools.ts';
+  DATA_FIRST_TOOL_IDS,
+  dataDrivenTrainingRoadmapTools,
+} from './agent-tools/data-driven-tools.ts';
 import { calculateQaScore } from './domain/qa/qa-score.ts';
 import {
   getQaFinalFindings,
@@ -36,6 +34,8 @@ export const QA_TOOL_IDS = {
   score: 'trainingRoadmap_calculateQaScore',
 } as const;
 
+export { DATA_FIRST_TOOL_IDS };
+
 const runInputSchema = z.object({ runId: z.string().min(1) });
 const evidenceSchema = z.object({ path: z.string().min(1), value: z.string() });
 const findingSchema = z.object({
@@ -46,6 +46,7 @@ const findingSchema = z.object({
     'MISSING_PROJECT_REQUIREMENT',
     'TRAINER_NOT_FOUND',
     'TIMELINE_MISMATCH',
+    'COVERAGE_SHORTFALL',
     'TRACEABILITY_GAP',
     'PROMPT_SCOPE_VIOLATION',
   ]),
@@ -282,8 +283,5 @@ export const trainingRoadmapAgentTools: AgentTool[] = [
   timelineTool,
   traceabilityTool,
   scoreTool,
-  lndGetPendingSkills as unknown as AgentTool,
-  lndFindAndAssignTrainer as unknown as AgentTool,
-  lndAssignLearningFormats as unknown as AgentTool,
-  lndCompileQuarterlyRoadmap as unknown as AgentTool,
+  ...dataDrivenTrainingRoadmapTools,
 ];

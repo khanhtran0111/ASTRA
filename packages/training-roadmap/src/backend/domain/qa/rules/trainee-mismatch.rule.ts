@@ -1,9 +1,17 @@
+import { matchesSkill, normalizeSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaRoadmap } from '../qa-types.ts';
 
-const normalize = (value: string) => value.trim().toLowerCase();
+const normalize = (value: string) => normalizeSkill(value);
 
 function requestedRole(prompt: string): string | null {
-  for (const role of ['frontend', 'backend', 'qa', 'mobile', 'software engineer']) {
+  for (const role of [
+    'software developer',
+    'software engineer',
+    'frontend',
+    'backend',
+    'qa',
+    'mobile',
+  ]) {
     if (prompt.toLowerCase().includes(role)) return role;
   }
   return null;
@@ -53,12 +61,10 @@ export function checkTraineeMismatch(
     item.traineeIds?.forEach((traineeId, traineeIndex) => {
       const employee = employees.get(traineeId);
       if (!employee) return;
-      const matchesSkill = employee.targetSkills.some((skill) => {
-        const target = normalize(skill);
-        const initiative = normalize(item.skill);
-        return target === initiative || target.includes(initiative) || initiative.includes(target);
-      });
-      const matchesRole = role ? normalize(employee.position ?? '').includes(role) : true;
+      const hasSkillGap = employee.targetSkills.some((skill) => matchesSkill(skill, item.skill));
+      const matchesRole = role
+        ? normalize(employee.position ?? '').includes(normalize(role))
+        : true;
       const matchesProficiency = proficiency
         ? normalize(employee.proficiency ?? '') === proficiency
         : true;
@@ -68,7 +74,7 @@ export function checkTraineeMismatch(
           evidence.recordId === traineeId &&
           evidence.field === 'Skill_Gap',
       );
-      if (!matchesSkill || !matchesRole || !matchesProficiency || !hasGranularDs01Evidence) {
+      if (!hasSkillGap || !matchesRole || !matchesProficiency || !hasGranularDs01Evidence) {
         findings.push({
           type: 'NO_TRAINEE_EVIDENCE',
           severity: 'HIGH',

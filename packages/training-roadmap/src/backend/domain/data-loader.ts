@@ -19,6 +19,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { EvidenceRef } from '../../types.ts';
+import { matchesSkill, normalizeSkill } from './skill-aliases.ts';
 import type { EmployeeProfile, ProjectProfile } from './trainee-allocator.ts';
 import type { InternalTrainer, ScoredTrainingNeed } from './types.ts';
 
@@ -338,18 +339,8 @@ function normalizeProficiency(value: string): string {
   return normalized;
 }
 
-function normalizeSkill(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-
 function hasDirectSkillGap(profile: EmployeeScopeProfile, skillName: string): boolean {
-  const requested = normalizeSkill(skillName);
-  return profile.skillGaps.some((gap) => {
-    const candidate = normalizeSkill(gap);
-    return (
-      candidate === requested || candidate.includes(requested) || requested.includes(candidate)
-    );
-  });
+  return profile.skillGaps.some((gap) => matchesSkill(gap, skillName));
 }
 
 function loadProjectEvidence(): Map<string, { value: string }> {
@@ -389,6 +380,42 @@ export function loadProjectProfiles(): ProjectProfile[] {
       return { projectId, requiredSkills };
     })
     .filter((project): project is ProjectProfile => project !== null);
+}
+
+export function loadRequestedEvidenceRefs(args: {
+  skillName: string;
+  projectIds?: string[];
+  goalIds?: string[];
+}): EvidenceRef[] {
+  const refs: EvidenceRef[] = [];
+  const projects = loadProjectEvidence();
+  const goals = loadGoalEvidence();
+
+  for (const projectId of args.projectIds ?? []) {
+    const project = projects.get(projectId);
+    if (!project || !matchesSkill(project.value, args.skillName)) continue;
+    refs.push({
+      source: 'DS02',
+      recordId: projectId,
+      field: 'Required_Skills',
+      value: project.value,
+      reason: `${projectId} requires skills aligned with ${args.skillName}.`,
+    });
+  }
+
+  for (const goalId of args.goalIds ?? []) {
+    const goal = goals.get(goalId);
+    if (!goal || !matchesSkill(goal.value, args.skillName)) continue;
+    refs.push({
+      source: 'DS05',
+      recordId: goalId,
+      field: 'Goal_Description',
+      value: goal.value,
+      reason: `${args.skillName} is aligned with the requested BOD goal ${goalId}.`,
+    });
+  }
+
+  return refs;
 }
 
 function loadGoalEvidence(): Map<string, { value: string }> {
@@ -445,6 +472,7 @@ function buildEvidenceRefs(
   for (const projectId of need.evidence.projectIds) {
     const project = projects.get(projectId);
     if (!project) continue;
+    if (!matchesSkill(project.value, need.skillName)) continue;
     refs.push({
       source: 'DS02',
       recordId: projectId,
@@ -472,6 +500,7 @@ function buildEvidenceRefs(
   for (const goalId of need.evidence.bodGoals) {
     const goal = goals.get(goalId);
     if (!goal) continue;
+    if (!matchesSkill(goal.value, need.skillName)) continue;
     refs.push({
       source: 'DS05',
       recordId: goalId,

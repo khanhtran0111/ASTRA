@@ -14,6 +14,37 @@ const evidenceRefSchema = z.object({
   reason: z.string().min(1),
 });
 
+const allocatedTraineeSchema = z.object({
+  employeeId: z.string().min(1),
+  employeeName: z.string().min(1).optional(),
+  position: z.string().min(1),
+  team: z.string().min(1).optional(),
+  proficiencyLevel: z.string().min(1),
+  matchedSkillGap: z.array(z.string().min(1)),
+  evidenceRefs: z.array(evidenceRefSchema),
+  reason: z.string().min(1),
+});
+
+const trainerCandidateSchema = z.object({
+  trainerId: z.string().min(1),
+  fitScore: z.number(),
+  matchedSkills: z.array(z.string()),
+  missingSkills: z.array(z.string()),
+  capacityStatus: z.enum(['FULL', 'PARTIAL', 'NONE']),
+  availabilityHoursPerMonth: z.number(),
+  evidenceRefs: z.array(evidenceRefSchema),
+});
+
+const scoreBreakdownSchema = z.object({
+  bodAlignment: z.number(),
+  projectUrgency: z.number(),
+  traineeGapImpact: z.number(),
+  surveyDemand: z.number(),
+  feasibility: z.number(),
+  marketTrend: z.number(),
+  riskPenalty: z.number(),
+});
+
 function legacyEvidenceRef(recordId: string): EvidenceRef {
   const source = recordId.startsWith('EMP-')
     ? 'DS01'
@@ -55,6 +86,19 @@ const initiativeSchema = z.object({
   score: z.number(),
   quarter: z.string().min(1),
   targetTrainees: z.array(z.string()),
+  traineeDetails: z.array(allocatedTraineeSchema).optional(),
+  canonicalSkillId: z.string().min(1).optional(),
+  trainerCandidates: z.array(trainerCandidateSchema).optional(),
+  selectedTrainer: z.string().nullable().optional(),
+  totalHours: z.number().positive().optional(),
+  trainerContactHours: z.number().nonnegative().optional(),
+  selfStudyHours: z.number().nonnegative().optional(),
+  labHours: z.number().nonnegative().optional(),
+  scoreBreakdown: scoreBreakdownSchema.optional(),
+  selectionReason: z.string().min(1).optional(),
+  risks: z.array(z.string()).optional(),
+  requiresHumanApproval: z.boolean().optional(),
+  deliveryFormat: z.string().min(1).optional(),
   trainerName: z.string().nullable(),
   objective: z.string().min(1).optional(),
   prerequisites: z.array(z.string()).optional(),
@@ -93,8 +137,13 @@ const revisionInstructionSchema = z.object({
   issueType: z.string().min(1),
   action: z.enum([
     'ADD_EVIDENCE',
+    'ALLOCATE_TRAINEES',
+    'FILTER_SCOPE',
+    'ADD_SUPPORTING_PROJECT',
+    'RETRY_TRAINER_MATCH_WITH_ALIASES',
     'DOWNGRADE_PRIORITY',
     'CHANGE_ALIGNMENT_TYPE',
+    'REMOVE_EXTRA_INITIATIVE',
     'REMOVE_INITIATIVE',
     'ADD_FALLBACK',
     'REQUEST_HUMAN_CONFIRMATION',
@@ -132,6 +181,64 @@ const roadmapOutputAgentSchema = z.object({
       coverageStatus: z.enum(['MET', 'NOT_MET']),
       missingTraineeCount: z.number(),
     })
+    .optional(),
+  dataInventory: z
+    .array(
+      z.object({
+        sourceId: z.enum(['DS01', 'DS02', 'DS03', 'DS04', 'DS05', 'MARKET']),
+        fileName: z.string(),
+        rowCount: z.number().int().nonnegative(),
+        validRows: z.number().int().nonnegative(),
+        invalidRows: z.number().int().nonnegative(),
+        skippedRows: z.number().int().nonnegative(),
+        detectedColumns: z.array(z.string()),
+        warnings: z.array(z.string()),
+      }),
+    )
+    .optional(),
+  dataCoverageReport: z
+    .object({
+      totalRecordsBySource: z.record(z.string(), z.number()),
+      validRecordsBySource: z.record(z.string(), z.number()),
+      candidateCount: z.number().int().nonnegative(),
+      selectedCount: z.number().int().nonnegative(),
+      droppedCount: z.number().int().nonnegative(),
+      unmatchedSkills: z.array(z.string()),
+      unmatchedTraineeRows: z.array(z.string()),
+      unmatchedTrainerRows: z.array(z.string()),
+      warnings: z.array(z.string()),
+      coverageResult: z
+        .object({
+          targetGroup: z.string(),
+          totalEligibleEmployees: z.number(),
+          requiredCoveragePercent: z.number(),
+          requiredTraineeCount: z.number(),
+          selectedTraineeCount: z.number(),
+          achievedCoveragePercent: z.number(),
+          coverageStatus: z.enum(['MET', 'NOT_MET']),
+          missingTraineeCount: z.number(),
+        })
+        .optional(),
+    })
+    .optional(),
+  unselectedCandidates: z
+    .array(
+      z.object({
+        candidate: z.string(),
+        reasonDropped: z.string(),
+        evidenceRefs: z.array(evidenceRefSchema),
+        suggestedFix: z.string(),
+      }),
+    )
+    .optional(),
+  toolTrace: z
+    .array(
+      z.object({
+        tool: z.string(),
+        status: z.literal('completed'),
+        detail: z.string(),
+      }),
+    )
     .optional(),
 });
 

@@ -1,6 +1,5 @@
+import { matchesSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaPriorityResult, QaRoadmap } from '../qa-types.ts';
-
-const normalize = (value: string) => value.trim().toLowerCase();
 
 export function checkProjectRequirement(
   roadmap: QaRoadmap,
@@ -17,7 +16,7 @@ export function checkProjectRequirement(
     const matchingProjects = (normalizedData.projects ?? []).filter(
       (project) =>
         supportingIds.has(project.id) &&
-        (project.requiredSkills ?? []).some((skill) => normalize(skill) === normalize(item.skill)),
+        (project.requiredSkills ?? []).some((skill) => matchesSkill(skill, item.skill)),
     );
 
     if (matchingProjects.length === 0) {

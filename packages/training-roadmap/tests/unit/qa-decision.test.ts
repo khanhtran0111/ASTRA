@@ -85,7 +85,7 @@ describe('training roadmap QA decision gate', () => {
     });
   });
 
-  it('blocks a trainee without matching DS01 evidence', () => {
+  it('requests trainee reallocation before blocking missing DS01 evidence', () => {
     const issue = finding({
       type: 'NO_TRAINEE_EVIDENCE',
       severity: 'HIGH',
@@ -99,9 +99,21 @@ describe('training roadmap QA decision gate', () => {
       revisionCount: 0,
     });
 
-    expect(result.qaDecision).toBe('BLOCKED');
-    expect(result.blockingIssues).toEqual([issue]);
-    expect(result.approvalRequirement).toBe('BLOCKED');
+    expect(result.qaDecision).toBe('REVISE_REQUIRED');
+    expect(result.blockingIssues).toEqual([]);
+    expect(result.approvalRequirement).toBe('REVISION_REQUIRED');
+    expect(result.revisionInstructions).toContainEqual(
+      expect.objectContaining({ action: 'ALLOCATE_TRAINEES' }),
+    );
+
+    const exhausted = buildQaReviewResult({
+      findings: [issue],
+      score: 80,
+      riskLevel: 'HIGH',
+      initiatives: [initiative()],
+      revisionCount: 2,
+    });
+    expect(exhausted.qaDecision).toBe('BLOCKED');
   });
 
   it('treats a documented external trainer fallback as a warning', () => {

@@ -53,6 +53,70 @@ interface TopicRule {
 }
 
 const CLOUD_NATIVE_RULES: Record<string, TopicRule> = {
+  docker: {
+    preferredModes: ['blended', 'self-study'],
+    materials: [
+      'Docker official getting started guide',
+      'Internal hands-on lab: containerize a sample service',
+      'Project-based checklist mapped to PRJ-005',
+    ],
+    evaluationTemplate:
+      'Trainee submits a working Dockerfile and runs a containerized sample application.',
+    milestoneTemplates: [
+      {
+        weekOffset: 1,
+        description: 'Docker fundamentals and image/container lifecycle',
+        deliverable: 'Run and inspect containers locally',
+      },
+      {
+        weekOffset: 2,
+        description: 'Dockerfile and local container workflow',
+        deliverable: 'Build a reusable Docker image for a sample service',
+      },
+      {
+        weekOffset: 3,
+        description: 'docker compose and multi-service setup',
+        deliverable: 'Run a multi-service environment with docker compose',
+      },
+      {
+        weekOffset: 4,
+        description: 'Containerize sample app and peer review',
+        deliverable: 'Peer-reviewed Dockerfile and runbook mapped to PRJ-005',
+      },
+    ],
+  },
+  containerization: {
+    preferredModes: ['blended', 'self-study'],
+    materials: [
+      'Docker official getting started guide',
+      'Internal hands-on lab: containerize a sample service',
+      'Project-based checklist mapped to PRJ-005',
+    ],
+    evaluationTemplate:
+      'Trainee submits a working Dockerfile and runs a containerized sample application.',
+    milestoneTemplates: [
+      {
+        weekOffset: 1,
+        description: 'Docker fundamentals and image/container lifecycle',
+        deliverable: 'Run and inspect containers locally',
+      },
+      {
+        weekOffset: 2,
+        description: 'Dockerfile and local container workflow',
+        deliverable: 'Build a reusable Docker image for a sample service',
+      },
+      {
+        weekOffset: 3,
+        description: 'docker compose and multi-service setup',
+        deliverable: 'Run a multi-service environment with docker compose',
+      },
+      {
+        weekOffset: 4,
+        description: 'Containerize sample app and peer review',
+        deliverable: 'Peer-reviewed Dockerfile and runbook mapped to PRJ-005',
+      },
+    ],
+  },
   kubernetes: {
     preferredModes: ['external', 'blended'],
     materials: [

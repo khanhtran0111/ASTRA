@@ -20,6 +20,7 @@ import {
   type TrainingRoadmapDataSource,
 } from '../api/training-roadmap-client.ts';
 import { AnalysisKpiStrip } from '../components/analysis-kpi-strip.tsx';
+import { DataCoveragePanel } from '../components/data-coverage-panel.tsx';
 import { DatasetReadinessPanel } from '../components/dataset-readiness-panel.tsx';
 import { ExecutionLogPanel } from '../components/execution-log-panel.tsx';
 import { ExportProposalCard } from '../components/export-proposal-card.tsx';
@@ -218,6 +219,7 @@ export function TrainingRoadmapDemoPage() {
                   </Badge>
                 </div>
                 <ExecutionLogPanel logs={result.executionLog} />
+                <DataCoveragePanel result={result} />
                 <RoadmapTable initiatives={result.initiatives} />
                 <QaFindingsPanel
                   findings={result.qaFindings}
@@ -227,6 +229,7 @@ export function TrainingRoadmapDemoPage() {
                   qaDecision={result.qaDecision}
                   blockingIssues={result.blockingIssues}
                   revisionInstructions={result.revisionInstructions}
+                  dataRevisionActions={result.dataRevisionActions}
                 />
                 <div className="grid gap-4 xl:grid-cols-2">
                   <HitlApprovalCard

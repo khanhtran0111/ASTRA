@@ -28,6 +28,82 @@ export interface EvidenceRef {
   reason: string;
 }
 
+export interface AllocatedTrainee {
+  employeeId: string;
+  employeeName?: string;
+  position: string;
+  team?: string;
+  proficiencyLevel: string;
+  matchedSkillGap: string[];
+  evidenceRefs: EvidenceRef[];
+  reason: string;
+}
+
+export interface RoadmapTrainerCandidate {
+  trainerId: string;
+  fitScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  capacityStatus: 'FULL' | 'PARTIAL' | 'NONE';
+  availabilityHoursPerMonth: number;
+  evidenceRefs: EvidenceRef[];
+}
+
+export interface RoadmapScoreBreakdown {
+  bodAlignment: number;
+  projectUrgency: number;
+  traineeGapImpact: number;
+  surveyDemand: number;
+  feasibility: number;
+  marketTrend: number;
+  riskPenalty: number;
+}
+
+export interface DataInventorySummary {
+  sourceId: 'DS01' | 'DS02' | 'DS03' | 'DS04' | 'DS05' | 'MARKET';
+  fileName: string;
+  rowCount: number;
+  validRows: number;
+  invalidRows: number;
+  skippedRows: number;
+  detectedColumns: string[];
+  warnings: string[];
+}
+
+export interface DataCoverageReport {
+  totalRecordsBySource: Record<string, number>;
+  validRecordsBySource: Record<string, number>;
+  candidateCount: number;
+  selectedCount: number;
+  droppedCount: number;
+  unmatchedSkills: string[];
+  unmatchedTraineeRows: string[];
+  unmatchedTrainerRows: string[];
+  warnings: string[];
+  coverageResult?: CoverageResult;
+}
+
+export interface UnselectedCandidateSummary {
+  candidate: string;
+  reasonDropped: string;
+  evidenceRefs: EvidenceRef[];
+  suggestedFix: string;
+}
+
+export interface RoadmapToolTraceEntry {
+  tool: string;
+  status: 'completed';
+  detail: string;
+}
+
+export interface DataRevisionAction {
+  issueCode: string;
+  affectedItemId: string;
+  blockingLevel: QaRisk;
+  requiredToolToRerun: string;
+  expectedFix: string;
+}
+
 export type AlignmentType = 'PROJECT_BACKED' | 'BOD_AND_SURVEY_ONLY';
 
 export type FallbackLearningMode =
@@ -71,6 +147,7 @@ export type QaFindingType =
   | 'TIMELINE_MISMATCH'
   | 'PROMPT_SCOPE_VIOLATION'
   | 'BOD_ALIGNMENT_RISK'
+  | 'COVERAGE_SHORTFALL'
   | 'TRACEABILITY_GAP';
 
 export type QaFinding = {
@@ -87,8 +164,13 @@ export interface RevisionInstruction {
   issueType: string;
   action:
     | 'ADD_EVIDENCE'
+    | 'ALLOCATE_TRAINEES'
+    | 'FILTER_SCOPE'
+    | 'ADD_SUPPORTING_PROJECT'
+    | 'RETRY_TRAINER_MATCH_WITH_ALIASES'
     | 'DOWNGRADE_PRIORITY'
     | 'CHANGE_ALIGNMENT_TYPE'
+    | 'REMOVE_EXTRA_INITIATIVE'
     | 'REMOVE_INITIATIVE'
     | 'ADD_FALLBACK'
     | 'REQUEST_HUMAN_CONFIRMATION';
@@ -113,6 +195,19 @@ export type TrainingInitiative = {
   score: number;
   quarter: string;
   targetTrainees: string[];
+  traineeDetails?: AllocatedTrainee[];
+  canonicalSkillId?: string;
+  trainerCandidates?: RoadmapTrainerCandidate[];
+  selectedTrainer?: string | null;
+  totalHours?: number;
+  trainerContactHours?: number;
+  selfStudyHours?: number;
+  labHours?: number;
+  scoreBreakdown?: RoadmapScoreBreakdown;
+  selectionReason?: string;
+  risks?: string[];
+  requiresHumanApproval?: boolean;
+  deliveryFormat?: string;
   trainerName: string | null;
   objective?: string;
   prerequisites?: string[];
@@ -159,6 +254,11 @@ export type RoadmapResult = {
     findings: QaFinding[];
   };
   coverageResult?: CoverageResult;
+  dataInventory?: DataInventorySummary[];
+  dataCoverageReport?: DataCoverageReport;
+  unselectedCandidates?: UnselectedCandidateSummary[];
+  toolTrace?: RoadmapToolTraceEntry[];
+  dataRevisionActions?: DataRevisionAction[];
 };
 
 export type ApprovalDecision =

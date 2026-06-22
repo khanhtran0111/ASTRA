@@ -1,6 +1,12 @@
 import type { Priority, RevisionInstruction } from '../../types.ts';
 import { calculateCoverage, parseCoverageTarget } from './coverage-calculator.ts';
-import { loadEmployeeProfiles, loadProjectProfiles } from './data-loader.ts';
+import {
+  loadEmployeeProfiles,
+  loadProjectProfiles,
+  loadRequestedEvidenceRefs,
+} from './data-loader.ts';
+import { generateFallbackPlan } from './fallback-plan.ts';
+import { enforcePromptScope, parseRoadmapConstraints } from './prompt-constraints.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
 import { allocateTraineesForInitiative } from './trainee-allocator.ts';
 
@@ -25,8 +31,9 @@ export function reviseRoadmap(
     byInitiative.set(instruction.initiativeId, group);
   }
   const targetQuarter = requestedQuarter(source.request?.userPrompt);
+  const constraints = parseRoadmapConstraints(source.request?.userPrompt ?? '');
 
-  const initiatives = source.initiatives.flatMap((initiative) => {
+  const revisedInitiatives = source.initiatives.flatMap((initiative) => {
     const initiativeInstructions = byInitiative.get(initiative.id) ?? [];
     if (initiativeInstructions.length === 0) return [initiative];
 
@@ -45,6 +52,15 @@ export function reviseRoadmap(
         revised.trainerName = null;
         revised.format = 'EXTERNAL_TRAINER';
         revised.fallbackReason ??= 'SKILL_NOT_FOUND_INTERNAL';
+        revised.fallbackPlan ??= generateFallbackPlan({
+          skillName: revised.topic,
+          fallbackReason:
+            revised.fallbackReason === 'CAPACITY_EXCEEDED'
+              ? 'CAPACITY_EXCEEDED'
+              : 'TRAINER_NOT_FOUND',
+          estimatedHours: revised.estimatedHours,
+          traineeCount: revised.targetTrainees.length,
+        });
         revised.formatExplanation =
           'No qualified internal trainer has sufficient availability; use a documented external fallback.';
         continue;
@@ -55,7 +71,10 @@ export function reviseRoadmap(
         continue;
       }
 
-      if (instruction.issueType === 'NO_TRAINEE_EVIDENCE') {
+      if (
+        instruction.issueType === 'NO_TRAINEE_EVIDENCE' ||
+        instruction.action === 'ALLOCATE_TRAINEES'
+      ) {
         const employees = loadEmployeeProfiles();
         const projects = loadProjectProfiles();
         const userPrompt = source.request?.userPrompt || '';
@@ -67,27 +86,52 @@ export function reviseRoadmap(
         const requiredByProject = revised.evidence
           .filter((ref) => ref.source === 'DS02')
           .map((ref) => ref.recordId);
+        const requestedRefs = loadRequestedEvidenceRefs({
+          skillName: revised.topic,
+          projectIds: constraints.requiredProjectIds,
+          goalIds: constraints.requiredGoalIds,
+        });
 
         const allocated = allocateTraineesForInitiative({
           skillName: revised.topic,
           employees,
           targetGroup: coverageTarget?.targetGroup || undefined,
+          targetRoles: constraints.targetRoles,
+          targetSkillGaps: constraints.targetSkillGaps,
+          maxTrainees: constraints.maxTrainees,
           requiredByBod,
           requiredByProject,
           projects,
         });
 
         revised.targetTrainees = allocated.map((t) => t.employeeId);
-        const otherRefs = revised.evidence.filter((ref) => ref.source !== 'DS01');
+        revised.traineeDetails = allocated;
+        const otherRefs = [
+          ...revised.evidence.filter((ref) => ref.source !== 'DS01'),
+          ...requestedRefs,
+        ].filter(
+          (ref, index, refs) =>
+            refs.findIndex(
+              (candidate) => candidate.source === ref.source && candidate.recordId === ref.recordId,
+            ) === index,
+        );
         const ds01Refs = allocated.flatMap((t) => t.evidenceRefs);
         revised.evidence = [...otherRefs, ...ds01Refs];
         continue;
       }
 
       if (
-        instruction.action === 'REMOVE_INITIATIVE' &&
+        (instruction.action === 'REMOVE_INITIATIVE' ||
+          instruction.action === 'REMOVE_EXTRA_INITIATIVE' ||
+          instruction.action === 'FILTER_SCOPE') &&
         instruction.issueType === 'PROMPT_SCOPE_VIOLATION'
       ) {
+        if (
+          constraints.requestedTopics?.length ||
+          constraints.requestedInitiativeCount !== undefined
+        ) {
+          continue;
+        }
         return [];
       }
 
@@ -98,6 +142,8 @@ export function reviseRoadmap(
     }
     return [revised];
   });
+
+  const initiatives = enforcePromptScope(revisedInitiatives, constraints);
 
   // Recalculate overall coverage result if target group is defined
   let coverageResult = source.coverageResult;

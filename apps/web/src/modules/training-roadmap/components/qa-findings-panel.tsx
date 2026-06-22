@@ -1,7 +1,13 @@
 import { Badge, Card, CardContent, CardHeader, CardTitle } from '@seta/shared-ui';
 import { AlertTriangle, Ban, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { ComponentProps } from 'react';
-import type { QaDecision, QaFinding, QaRisk, RevisionInstruction } from '../types.ts';
+import type {
+  QaDecision,
+  QaFinding,
+  QaRisk,
+  RevisionInstruction,
+  RoadmapResult,
+} from '../types.ts';
 
 const riskVariant = {
   HIGH: 'destructive',
@@ -51,6 +57,7 @@ export function QaFindingsPanel({
   qaDecision,
   blockingIssues,
   revisionInstructions,
+  dataRevisionActions,
 }: {
   findings: QaFinding[];
   score: number;
@@ -59,6 +66,7 @@ export function QaFindingsPanel({
   qaDecision: QaDecision;
   blockingIssues: QaFinding[];
   revisionInstructions: RevisionInstruction[];
+  dataRevisionActions?: RoadmapResult['dataRevisionActions'];
 }) {
   const blockingKeys = new Set(
     blockingIssues.map((finding) => `${finding.type}:${finding.relatedInitiativeId ?? ''}`),
@@ -127,6 +135,36 @@ export function QaFindingsPanel({
                     <span className="text-caption text-ink-subtle">{instruction.issueType}</span>
                   </div>
                   <p className="mt-2 text-body-sm text-ink">{instruction.message}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {dataRevisionActions && dataRevisionActions.length > 0 && (
+          <section aria-labelledby="data-revision-actions-title">
+            <div className="mb-2 flex items-center gap-2">
+              <RotateCcw className="size-4 text-ink-subtle" aria-hidden />
+              <h3 id="data-revision-actions-title" className="font-medium text-ink">
+                DATA-FIRST Revision Actions ({dataRevisionActions.length})
+              </h3>
+            </div>
+            <ul className="space-y-2">
+              {dataRevisionActions.map((action) => (
+                <li
+                  key={`${action.issueCode}-${action.affectedItemId}-${action.requiredToolToRerun}`}
+                  className="rounded-md border border-hairline bg-surface-1 p-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant={riskVariant[action.blockingLevel]}>
+                      {action.blockingLevel}
+                    </Badge>
+                    <span className="font-medium text-ink">{action.issueCode}</span>
+                    <span className="font-mono text-caption text-ink-subtle">
+                      {action.requiredToolToRerun}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-body-sm text-ink">{action.expectedFix}</p>
                 </li>
               ))}
             </ul>

@@ -1,6 +1,5 @@
+import { matchesSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaPriorityResult, QaRoadmap } from '../qa-types.ts';
-
-const normalize = (value: string) => value.trim().toLowerCase();
 
 export function checkBodAlignment(
   roadmap: QaRoadmap,
@@ -17,7 +16,9 @@ export function checkBodAlignment(
     const matchingGoals = (normalizedData.bodGoals ?? []).filter(
       (goal) =>
         supportingGoalIds.has(goal.id) &&
-        (goal.requiredSkills ?? []).some((skill) => normalize(skill) === normalize(item.skill)),
+        [...(goal.requiredSkills ?? []), goal.description ?? ''].some((skill) =>
+          matchesSkill(skill, item.skill),
+        ),
     );
 
     if (matchingGoals.length === 0) {

@@ -7,10 +7,7 @@ import type {
 } from '../../../types.ts';
 import type { QaRiskLevel, QaRoadmapItem } from './qa-types.ts';
 
-const BLOCKING_TYPES = new Set<QaFinding['type']>([
-  'NO_TRAINEE_EVIDENCE',
-  'UNSUPPORTED_INITIATIVE',
-]);
+const BLOCKING_TYPES = new Set<QaFinding['type']>(['UNSUPPORTED_INITIATIVE']);
 
 const REVISION_TYPES = new Set<QaFinding['type']>([
   'TIMELINE_MISMATCH',
@@ -81,8 +78,9 @@ function toInstruction(
     return {
       initiativeId,
       issueType: finding.type,
-      action: 'REMOVE_INITIATIVE',
-      message: 'Remove the initiative or its out-of-scope trainees from the requested roadmap.',
+      action: 'REMOVE_EXTRA_INITIATIVE',
+      message:
+        'Filter the roadmap to the requested topic/count and remove extra out-of-scope initiatives.',
     };
   }
 
@@ -100,9 +98,9 @@ function toInstruction(
     return {
       initiativeId,
       issueType: finding.type,
-      action: 'REMOVE_INITIATIVE',
+      action: 'ALLOCATE_TRAINEES',
       message:
-        'Remove every trainee that lacks matching DS01 role, proficiency, and skill-gap evidence.',
+        'Select DS01-backed trainees matching the requested role, proficiency, and skill-gap constraints.',
     };
   }
 
@@ -159,10 +157,15 @@ export function buildQaReviewResult(args: {
   initiatives: QaRoadmapItem[];
   revisionCount: number;
 }): QaReviewResult {
-  const blockingIssues = args.findings.filter((finding) => BLOCKING_TYPES.has(finding.type));
+  const blockingIssues = args.findings.filter(
+    (finding) =>
+      BLOCKING_TYPES.has(finding.type) ||
+      (finding.type === 'NO_TRAINEE_EVIDENCE' && args.revisionCount >= 2),
+  );
 
   const needsRevision = args.findings.some((finding) => {
     if (BLOCKING_TYPES.has(finding.type)) return false;
+    if (finding.type === 'NO_TRAINEE_EVIDENCE') return args.revisionCount < 2;
     if (REVISION_TYPES.has(finding.type)) return true;
     if (finding.type === 'MISSING_PROJECT_REQUIREMENT') {
       return !isResolvedMissingProject(finding, args.initiatives, args.revisionCount);

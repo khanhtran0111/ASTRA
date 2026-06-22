@@ -36,6 +36,7 @@ export function generateDraftRoadmap(
       evidence: cls.evidenceRefs ?? [],
       traineeCount: cls.trainees.length,
       trainees: cls.trainees,
+      traineeDetails: cls.traineeDetails,
       estimatedHours: cls.estimatedHours,
       objective: cls.objective,
       prerequisites: cls.prerequisites,

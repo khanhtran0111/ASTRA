@@ -20,6 +20,7 @@
  */
 
 import { generateFallbackPlan } from './fallback-plan.ts';
+import { matchesSkill } from './skill-aliases.ts';
 import type { InternalTrainer, MatchedTrainingClass, ScoredTrainingNeed } from './types.ts';
 
 /** Number of months in a quarter, used for capacity distribution. */
@@ -63,9 +64,8 @@ export function matchTrainers(
     const monthlyHoursNeeded = requiredHoursPerMonth(need.estimatedHours);
 
     // Step 1: Find all trainers whose expertise matches the skill name
-    const skillLower = need.skillName.toLowerCase();
     const matchingTrainers = trainers.filter((t) =>
-      t.expertise.some((e) => e.toLowerCase() === skillLower),
+      t.expertise.some((expertise) => matchesSkill(expertise, need.skillName)),
     );
 
     if (matchingTrainers.length === 0) {
@@ -88,6 +88,7 @@ export function matchTrainers(
         targetQuarter: need.targetQuarter,
         evidence: need.evidence,
         evidenceRefs: need.evidenceRefs ?? [],
+        traineeDetails: need.allocatedTrainees,
         priorityScore: need.priorityScore,
         estimatedHours: need.estimatedHours,
       });
@@ -121,6 +122,7 @@ export function matchTrainers(
               reason: `${trainer.trainerId} matches ${need.skillName} and has sufficient delivery capacity.`,
             },
           ],
+          traineeDetails: need.allocatedTrainees,
           priorityScore: need.priorityScore,
           estimatedHours: need.estimatedHours,
         });
@@ -149,6 +151,7 @@ export function matchTrainers(
         targetQuarter: need.targetQuarter,
         evidence: need.evidence,
         evidenceRefs: need.evidenceRefs ?? [],
+        traineeDetails: need.allocatedTrainees,
         priorityScore: need.priorityScore,
         estimatedHours: need.estimatedHours,
       });

@@ -17,10 +17,12 @@ import {
   loadEmployeeProfiles,
   loadProjectProfiles,
   loadRealData,
+  loadRequestedEvidenceRefs,
   loadTrainersFromCSV,
 } from '../domain/data-loader.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { matchTrainers } from '../domain/match-trainers.ts';
+import { parseRoadmapConstraints } from '../domain/prompt-constraints.ts';
 import { allocateTraineesForInitiative } from '../domain/trainee-allocator.ts';
 import type { InternalTrainer } from '../domain/types.ts';
 import { getActiveRunScratchPath } from '../scratch-storage.ts';
@@ -40,6 +42,15 @@ const EvidenceRefSchema = z.object({
   recordId: z.string(),
   field: z.string(),
   value: z.string(),
+  reason: z.string(),
+});
+
+const AllocatedTraineeSchema = z.object({
+  employeeId: z.string(),
+  position: z.string(),
+  proficiencyLevel: z.string(),
+  matchedSkillGap: z.array(z.string()),
+  evidenceRefs: z.array(EvidenceRefSchema),
   reason: z.string(),
 });
 
@@ -80,6 +91,7 @@ const MatchedTrainingClassSchema = z.object({
   targetQuarter: z.string(),
   evidence: EvidenceSchema,
   evidenceRefs: z.array(EvidenceRefSchema).optional(),
+  allocatedTrainees: z.array(AllocatedTraineeSchema).optional(),
   priorityScore: z.number(),
   estimatedHours: z.number(),
   objective: z.string().optional(),
@@ -104,6 +116,7 @@ const RoadmapClassEntrySchema = z.object({
   evidence: z.array(EvidenceRefSchema),
   traineeCount: z.number(),
   trainees: z.array(z.string()),
+  traineeDetails: z.array(AllocatedTraineeSchema).optional(),
   estimatedHours: z.number(),
   objective: z.string().optional(),
   prerequisites: z.array(z.string()).optional(),
@@ -257,19 +270,50 @@ export const lndFindAndAssignTrainer = createTool({
       } catch {}
 
       const coverageTarget = parseCoverageTarget(userPrompt);
+      const constraints = parseRoadmapConstraints(userPrompt);
 
       for (const need of resolvedNeeds) {
+        const requestedRefs = loadRequestedEvidenceRefs({
+          skillName: need.skillName,
+          projectIds: constraints.requiredProjectIds,
+          goalIds: constraints.requiredGoalIds,
+        });
+        const supportingRefs = [
+          ...(need.evidenceRefs?.filter((ref) => ref.source !== 'DS01') ?? []),
+          ...requestedRefs,
+        ].filter(
+          (ref, index, refs) =>
+            refs.findIndex(
+              (candidate) => candidate.source === ref.source && candidate.recordId === ref.recordId,
+            ) === index,
+        );
+        need.evidence.projectIds = [
+          ...new Set([
+            ...need.evidence.projectIds,
+            ...supportingRefs.filter((ref) => ref.source === 'DS02').map((ref) => ref.recordId),
+          ]),
+        ];
+        need.evidence.bodGoals = [
+          ...new Set([
+            ...need.evidence.bodGoals,
+            ...supportingRefs.filter((ref) => ref.source === 'DS05').map((ref) => ref.recordId),
+          ]),
+        ];
         const allocated = allocateTraineesForInitiative({
           skillName: need.skillName,
           employees,
           targetGroup: coverageTarget?.targetGroup || targetTeam || undefined,
+          targetRoles: constraints.targetRoles,
+          targetSkillGaps: constraints.targetSkillGaps,
+          maxTrainees: constraints.maxTrainees,
           requiredByBod: need.evidence.bodGoals,
           requiredByProject: need.evidence.projectIds,
           projects,
         });
 
         need.traineeIds = allocated.map((t) => t.employeeId);
-        need.evidenceRefs = allocated.flatMap((t) => t.evidenceRefs);
+        need.allocatedTrainees = allocated;
+        need.evidenceRefs = [...supportingRefs, ...allocated.flatMap((t) => t.evidenceRefs)];
       }
 
       // If a coverage target was parsed, calculate overall coverage across all initiatives

@@ -1,6 +1,5 @@
+import { matchesSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaPriorityResult, QaRoadmap } from '../qa-types.ts';
-
-const normalize = (value: string) => value.trim().toLowerCase();
 
 export function checkTrainerGap(
   roadmap: QaRoadmap,
@@ -16,7 +15,7 @@ export function checkTrainerGap(
     const qualifiedTrainers = (normalizedData.trainers ?? []).filter(
       (trainer) =>
         trainer.availableHours > 0 &&
-        trainer.skills.some((skill) => normalize(skill) === normalize(item.skill)),
+        trainer.skills.some((skill) => matchesSkill(skill, item.skill)),
     );
 
     const hasDs04Evidence = (item.evidence ?? []).some(
