@@ -22,7 +22,7 @@ export function buildRequestScopeFindings(args: {
   if (args.initiatives.length === 0) {
     return [
       {
-        type: 'REQUEST_SCOPE_MISMATCH',
+        type: 'PROMPT_SCOPE_VIOLATION',
         severity: 'HIGH',
         message: 'Agent 1 produced no evidence-backed initiatives for the user request.',
         evidence: [{ path: 'request.userPrompt', value: args.userPrompt }],
@@ -38,7 +38,7 @@ export function buildRequestScopeFindings(args: {
     if (!decision) {
       return [
         {
-          type: 'REQUEST_SCOPE_MISMATCH' as const,
+          type: 'PROMPT_SCOPE_VIOLATION' as const,
           severity: 'HIGH' as const,
           skill: initiative.topic,
           relatedInitiativeId: initiative.id,
@@ -55,7 +55,7 @@ export function buildRequestScopeFindings(args: {
 
     return [
       {
-        type: 'REQUEST_SCOPE_MISMATCH' as const,
+        type: 'PROMPT_SCOPE_VIOLATION' as const,
         severity: 'HIGH' as const,
         skill: initiative.topic,
         relatedInitiativeId: initiative.id,

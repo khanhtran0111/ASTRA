@@ -1,0 +1,46 @@
+{
+  "runId": "fixture-missing-project-qa",
+  "request": {
+    "userPrompt": "Create a Q3 2026 roadmap focused on System Design."
+  },
+  "executionLog": ["Generated draft roadmap."],
+  "revisionCount": 0,
+  "revisionHistory": [],
+  "initiatives": [
+    {
+      "id": "CLS-001",
+      "topic": "System Design",
+      "priority": "P1",
+      "score": 90,
+      "quarter": "Q3 2026",
+      "targetTrainees": ["EMP-001"],
+      "trainerName": "TRN-001",
+      "format": "INTERNAL_TRAINING",
+      "formatExplanation": "Internal trainer has matching expertise and capacity.",
+      "estimatedHours": 16,
+      "evidence": [
+        {
+          "source": "DS01",
+          "recordId": "EMP-001",
+          "field": "Skill_Gap",
+          "value": "System Design",
+          "reason": "Direct employee skill-gap evidence."
+        },
+        {
+          "source": "DS05",
+          "recordId": "GOAL-001",
+          "field": "Goal_Description",
+          "value": "Build the engineering capabilities required for the 2026 roadmap.",
+          "reason": "Direct BOD capability evidence."
+        },
+        {
+          "source": "DS04",
+          "recordId": "TRN-001",
+          "field": "Expertise;Availability_Hours_Per_Month",
+          "value": "System Design | 40h/month available",
+          "reason": "Trainer has matching expertise and capacity."
+        }
+      ]
+    }
+  ]
+}

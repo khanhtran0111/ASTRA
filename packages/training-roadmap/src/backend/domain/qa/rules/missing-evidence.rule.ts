@@ -4,24 +4,23 @@ export function checkMissingEvidence(priorityResult: QaPriorityResult): QaFindin
   const findings: QaFinding[] = [];
 
   priorityResult.initiatives.forEach((initiative, index) => {
-    const hasProjects = (initiative.supporting_projects?.length ?? 0) > 0;
-    const hasGoals = (initiative.supporting_bod_goals?.length ?? 0) > 0;
-    const hasSummary = Boolean(initiative.evidence_summary?.trim());
+    const supportedSources = new Set(['DS01', 'DS02', 'DS03', 'DS05']);
+    const hasSupportedEvidence = (initiative.evidence ?? []).some((evidence) =>
+      supportedSources.has(evidence.source),
+    );
 
-    if (!hasProjects && !hasGoals && !hasSummary) {
+    if (!hasSupportedEvidence) {
       findings.push({
-        type: 'MISSING_EVIDENCE',
-        severity: 'MEDIUM',
+        type: 'UNSUPPORTED_INITIATIVE',
+        severity: 'HIGH',
         skill: initiative.skill,
         relatedInitiativeId: initiative.id,
-        message: 'Initiative has no supporting project, BOD goal, or evidence summary.',
+        message: 'Initiative has no granular DS01, DS02, DS03, or DS05 evidence.',
         evidence: [
           {
             path: `priorityResult.initiatives[${index}]`,
             value: {
-              supporting_projects: initiative.supporting_projects ?? [],
-              supporting_bod_goals: initiative.supporting_bod_goals ?? [],
-              evidence_summary: initiative.evidence_summary ?? null,
+              evidence: initiative.evidence ?? [],
             },
           },
         ],

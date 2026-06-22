@@ -63,6 +63,17 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                       <strong>Prerequisites:</strong> {initiative.prerequisites.join(', ')}
                     </div>
                   )}
+                  {initiative.alignmentType && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      <strong>Alignment:</strong> {initiative.alignmentType.replaceAll('_', ' ')}
+                      {initiative.approvalRequired ? ' · Human risk approval required' : ''}
+                    </div>
+                  )}
+                  {initiative.alignmentNote && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      {initiative.alignmentNote}
+                    </div>
+                  )}
                   {initiative.evaluationCriteria && (
                     <div className="mt-1 text-caption text-ink-subtle text-green-700">
                       <strong>Eval:</strong> {initiative.evaluationCriteria}
@@ -107,9 +118,14 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                 <TableCell>
                   <div className="flex min-w-48 flex-wrap gap-1">
                     {initiative.evidence.map((item) => (
-                      <Badge key={item} variant="outline">
-                        {item}
-                      </Badge>
+                      <span
+                        key={`${item.source}-${item.recordId}-${item.field}`}
+                        title={`${item.field}: ${item.value}\n${item.reason}`}
+                      >
+                        <Badge variant="outline">
+                          {item.source} · {item.recordId}
+                        </Badge>
+                      </span>
                     ))}
                   </div>
                 </TableCell>

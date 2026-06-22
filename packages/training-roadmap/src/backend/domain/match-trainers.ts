@@ -19,6 +19,7 @@
  *  tự động bật cờ thuê ngoài."
  */
 
+import { generateFallbackPlan } from './fallback-plan.ts';
 import type { InternalTrainer, MatchedTrainingClass, ScoredTrainingNeed } from './types.ts';
 
 /** Number of months in a quarter, used for capacity distribution. */
@@ -69,6 +70,12 @@ export function matchTrainers(
 
     if (matchingTrainers.length === 0) {
       // No trainer has this skill at all → external resource needed
+      const fallbackPlan = generateFallbackPlan({
+        skillName: need.skillName,
+        fallbackReason: 'TRAINER_NOT_FOUND',
+        estimatedHours: need.estimatedHours,
+        traineeCount: need.traineeIds.length,
+      });
       results.push({
         classId,
         skillName: need.skillName,
@@ -76,8 +83,11 @@ export function matchTrainers(
         assignedTrainer: null,
         isExternalRequired: true,
         fallbackReason: 'SKILL_NOT_FOUND_INTERNAL',
+        fallbackPlan,
+        learningFormat: 'EXTERNAL_TRAINER',
         targetQuarter: need.targetQuarter,
         evidence: need.evidence,
+        evidenceRefs: need.evidenceRefs ?? [],
         priorityScore: need.priorityScore,
         estimatedHours: need.estimatedHours,
       });
@@ -101,6 +111,16 @@ export function matchTrainers(
           isExternalRequired: false,
           targetQuarter: need.targetQuarter,
           evidence: need.evidence,
+          evidenceRefs: [
+            ...(need.evidenceRefs ?? []),
+            {
+              source: 'DS04',
+              recordId: trainer.trainerId,
+              field: 'Expertise;Availability_Hours_Per_Month',
+              value: `${trainer.expertise.join('; ')} | ${currentCapacity}h/month available`,
+              reason: `${trainer.trainerId} matches ${need.skillName} and has sufficient delivery capacity.`,
+            },
+          ],
           priorityScore: need.priorityScore,
           estimatedHours: need.estimatedHours,
         });
@@ -111,6 +131,12 @@ export function matchTrainers(
 
     if (!assigned) {
       // Trainers with the skill exist, but all are out of capacity
+      const fallbackPlan = generateFallbackPlan({
+        skillName: need.skillName,
+        fallbackReason: 'CAPACITY_EXCEEDED',
+        estimatedHours: need.estimatedHours,
+        traineeCount: need.traineeIds.length,
+      });
       results.push({
         classId,
         skillName: need.skillName,
@@ -118,8 +144,11 @@ export function matchTrainers(
         assignedTrainer: null,
         isExternalRequired: true,
         fallbackReason: 'CAPACITY_EXCEEDED',
+        fallbackPlan,
+        learningFormat: 'EXTERNAL_TRAINER',
         targetQuarter: need.targetQuarter,
         evidence: need.evidence,
+        evidenceRefs: need.evidenceRefs ?? [],
         priorityScore: need.priorityScore,
         estimatedHours: need.estimatedHours,
       });

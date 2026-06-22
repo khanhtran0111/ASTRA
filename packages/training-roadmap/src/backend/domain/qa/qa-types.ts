@@ -1,30 +1,19 @@
-export type QaSeverity = 'HIGH' | 'MEDIUM' | 'LOW';
+import type {
+  AlignmentType,
+  EvidenceRef,
+  FallbackPlan,
+  QaFinding,
+  QaFindingType,
+  QaRisk,
+} from '../../../types.ts';
 
-export type QaRiskLevel = 'LOW' | 'MEDIUM' | 'HIGH';
-
-export type QaFindingType =
-  | 'INVALID_TRAINEE'
-  | 'TRAINER_GAP'
-  | 'MISSING_EVIDENCE'
-  | 'BOD_ALIGNMENT_RISK'
-  | 'MISSING_PROJECT_REQUIREMENT'
-  | 'TRAINEE_MISMATCH'
-  | 'TIMELINE_RISK'
-  | 'TRACEABILITY_GAP'
-  | 'REQUEST_SCOPE_MISMATCH';
+export type QaSeverity = QaRisk;
+export type QaRiskLevel = QaRisk;
+export type { QaFinding, QaFindingType };
 
 export interface QaEvidence {
   path: string;
   value: unknown;
-}
-
-export interface QaFinding {
-  type: QaFindingType;
-  severity: QaSeverity;
-  message: string;
-  skill?: string;
-  relatedInitiativeId?: string;
-  evidence: QaEvidence[];
 }
 
 export interface QaValidationResult {
@@ -40,8 +29,14 @@ export interface QaRoadmapItem {
   skill: string;
   traineeIds?: string[];
   trainerType: 'internal' | 'external' | 'self-study';
+  trainerId?: string | null;
+  fallbackReason?: string;
   quarter?: string;
-  evidence?: string[];
+  evidence?: EvidenceRef[];
+  alignmentType?: AlignmentType;
+  approvalRequired?: boolean;
+  alignmentNote?: string;
+  fallbackPlan?: FallbackPlan;
 }
 
 export interface QaRoadmap {
@@ -83,7 +78,12 @@ export interface QaPriorityInitiative {
   supporting_projects?: string[];
   supporting_bod_goals?: string[];
   evidence_summary?: string;
+  evidence?: EvidenceRef[];
   quarter?: string;
+  alignmentType?: AlignmentType;
+  approvalRequired?: boolean;
+  alignmentNote?: string;
+  fallbackPlan?: FallbackPlan;
 }
 
 export interface QaPriorityResult {

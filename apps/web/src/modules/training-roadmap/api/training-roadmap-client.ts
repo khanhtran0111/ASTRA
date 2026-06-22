@@ -1,4 +1,9 @@
-import type { ApprovalDecision, ApprovalResponse, RoadmapResult } from '../types.ts';
+import type {
+  ApprovalDecision,
+  ApprovalResponse,
+  RoadmapExportProposal,
+  RoadmapResult,
+} from '../types.ts';
 
 export type TrainingRoadmapDataSource = 'api';
 
@@ -58,16 +63,27 @@ export async function runTrainingRoadmap(
 export async function submitReviewDecision(
   runId: string,
   decision: ApprovalDecision,
+  approvalNote?: string,
 ): Promise<TrainingRoadmapClientResult<ApprovalResponse>> {
   const response = await fetch('/api/training-roadmap/approve', {
     method: 'POST',
     credentials: 'include',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ runId, decision }),
+    body: JSON.stringify({ runId, decision, approvalNote }),
   });
   const data = await parseJsonOrThrow<ApprovalResponse>(
     response,
     'Failed to submit review decision',
   );
   return { data, source: 'api' };
+}
+
+export async function exportTrainingRoadmap(runId: string): Promise<RoadmapExportProposal> {
+  const response = await fetch('/api/training-roadmap/export', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ runId }),
+  });
+  return parseJsonOrThrow<RoadmapExportProposal>(response, 'Failed to export training roadmap');
 }

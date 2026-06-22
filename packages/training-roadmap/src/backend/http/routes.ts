@@ -4,7 +4,7 @@ import type { SessionEnv, StructuredAgentRuntime } from '@seta/core';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import type { ApprovalDecision, ApprovalResponse, Priority } from '../../types.ts';
+import type { ApprovalDecision, ApprovalResponse, Priority, RoadmapResult } from '../../types.ts';
 import { lndCoordinatorSpec } from '../agent-specs/lnd-orchestrator-spec.ts';
 import {
   lndAssignLearningFormats,
@@ -13,10 +13,12 @@ import {
   lndGetPendingSkills,
   MatchedTrainingClassesSchema,
 } from '../agent-tools/roadmap-tools.ts';
+import { buildExportProposal } from '../domain/export-proposal.ts';
 import { generateDraftRoadmap } from '../domain/generate-roadmap.ts';
 import { runTrainingRoadmapPipeline } from '../domain/pipeline.ts';
 import type { RoadmapOutputAgent } from '../domain/qa/roadmap-output-loader.ts';
 import { loadQaInputFromRoadmapOutput } from '../domain/qa/roadmap-output-loader.ts';
+import { reviseRoadmap } from '../domain/revise-roadmap.ts';
 import type { DraftRoadmapOutput, MatchedTrainingClass } from '../domain/types.ts';
 import {
   getActiveRunScratchPath,
@@ -52,10 +54,27 @@ const AgentSkillsResponseSchema = z.object({
   ),
 });
 
+const CoverageResultSchema = z.object({
+  targetGroup: z.string(),
+  totalEligibleEmployees: z.number(),
+  requiredCoveragePercent: z.number(),
+  requiredTraineeCount: z.number(),
+  selectedTraineeCount: z.number(),
+  achievedCoveragePercent: z.number(),
+  coverageStatus: z.enum(['MET', 'NOT_MET']),
+  missingTraineeCount: z.number(),
+});
+
 type AgentSkillUpdates = z.infer<typeof AgentSkillUpdatesSchema>;
+type CoverageResult = z.infer<typeof CoverageResultSchema>;
 
 function isApprovalDecision(value: unknown): value is ApprovalDecision {
-  return value === 'approved' || value === 'revision_requested' || value === 'rejected';
+  return (
+    value === 'approved' ||
+    value === 'approved_with_risks' ||
+    value === 'revision_requested' ||
+    value === 'rejected'
+  );
 }
 
 async function readJsonBody(c: Context) {
@@ -81,6 +100,19 @@ function toAgentOneResult(
   runId: string,
   userPrompt: string,
 ): RoadmapOutputAgent {
+  let coverageResult: CoverageResult | undefined;
+
+  try {
+    const coveragePath = getActiveRunScratchPath('coverage_result.json');
+    if (fs.existsSync(coveragePath)) {
+      coverageResult = CoverageResultSchema.parse(
+        JSON.parse(fs.readFileSync(coveragePath, 'utf-8')),
+      );
+    }
+  } catch {
+    coverageResult = undefined;
+  }
+
   return {
     runId,
     request: { userPrompt },
@@ -93,6 +125,8 @@ function toAgentOneResult(
       'Generated draft roadmap.',
       'Paused at Human Review Gate.',
     ],
+    revisionCount: 0,
+    revisionHistory: [],
     initiatives: classes.map((item) => {
       const format =
         item.learningFormat ?? (item.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING');
@@ -117,14 +151,15 @@ function toAgentOneResult(
             ? { startWeek: item.startWeek, endWeek: item.endWeek }
             : undefined,
         estimatedHours: item.estimatedHours,
-        evidence: [
-          ...item.evidence.bodGoals,
-          ...item.evidence.projectIds,
-          ...item.evidence.surveyIds,
-        ],
+        evidence: item.evidenceRefs ?? [],
+        ...(item.evidence.projectIds.length > 0
+          ? { alignmentType: 'PROJECT_BACKED' as const }
+          : {}),
         ...(item.fallbackReason ? { fallbackReason: item.fallbackReason } : {}),
+        ...(item.fallbackPlan ? { fallbackPlan: item.fallbackPlan } : {}),
       };
     }),
+    ...(coverageResult ? { coverageResult } : {}),
   };
 }
 
@@ -136,6 +171,11 @@ async function runCoordinator(userPrompt: string): Promise<{
   const runId = createRunId();
 
   return withTrainingRoadmapRun(runId, async () => {
+    fs.writeFileSync(
+      getActiveRunScratchPath('run_metadata.json'),
+      JSON.stringify({ userPrompt }, null, 2),
+    );
+
     const agent = new Agent({
       id: 'lnd-coordinator',
       name: 'L&D Coordinator',
@@ -195,20 +235,25 @@ Do not call lnd_assignLearningFormats.`;
       maxSteps: 8,
       structuredOutput: { schema: AgentSkillsResponseSchema },
     });
+
     const structuredResponse = AgentSkillsResponseSchema.parse(response.object);
     const extractedMap: Record<string, AgentSkillUpdates> = {};
+
     for (const selection of structuredResponse.skills) {
       if (extractedMap[selection.skillName]) {
         throw new Error(`Coordinator returned duplicate skill ${selection.skillName}`);
       }
+
       const { skillName, ...updates } = selection;
       extractedMap[skillName] = updates;
     }
+
     for (const [skill, updates] of Object.entries(extractedMap)) {
       if (updates.endWeek < updates.startWeek) {
         throw new Error(`Coordinator returned an invalid week range for ${skill}`);
       }
     }
+
     const agentReasoning = response.text || JSON.stringify(structuredResponse, null, 2);
 
     fs.writeFileSync(
@@ -220,10 +265,12 @@ Do not call lnd_assignLearningFormats.`;
       getActiveRunScratchPath('matched_classes.json'),
       [],
     );
+
     let matchedClasses: MatchedTrainingClass[] =
       MatchedTrainingClassesSchema.parse(parsedMatchedClasses);
 
     const relevantSkills = new Set(Object.keys(extractedMap));
+
     if (userPrompt.trim() && relevantSkills.size === 0) {
       throw new Error('Coordinator returned no valid scope-aligned skills for the user prompt');
     }
@@ -235,6 +282,7 @@ Do not call lnd_assignLearningFormats.`;
     const requestedSkillWasNotMatched = [...relevantSkills].some(
       (skill) => !matchedSkillNames.has(skill),
     );
+
     if (matchingWasOutOfScope || requestedSkillWasNotMatched) {
       throw new Error(
         'Coordinator trainer matching did not use the exact scope-aligned skill selection',
@@ -242,12 +290,14 @@ Do not call lnd_assignLearningFormats.`;
     }
 
     matchedClasses = matchedClasses.filter((item) => relevantSkills.has(item.skillName));
+
     if (matchedClasses.length === 0) {
       throw new Error('Coordinator produced no evidence-backed training initiatives');
     }
 
     for (const item of matchedClasses) {
       const updates = extractedMap[item.skillName];
+
       if (updates?.objective) item.objective = updates.objective;
       if (updates?.prerequisites) item.prerequisites = updates.prerequisites;
       if (updates?.estimatedHours) item.estimatedHours = updates.estimatedHours;
@@ -257,7 +307,16 @@ Do not call lnd_assignLearningFormats.`;
       if (updates?.durationWeeks) item.durationWeeks = updates.durationWeeks;
       if (updates?.startWeek) item.startWeek = updates.startWeek;
       if (updates?.endWeek) item.endWeek = updates.endWeek;
-      if (!item.learningFormat) {
+
+      if (
+        item.isExternalRequired &&
+        item.learningFormat !== 'EXTERNAL_TRAINER' &&
+        item.learningFormat !== 'ONLINE_COURSE' &&
+        item.learningFormat !== 'GROUP_STUDY'
+      ) {
+        item.learningFormat = 'EXTERNAL_TRAINER';
+        item.formatExplanation = `${item.fallbackReason ?? 'No qualified internal trainer'}; use an external delivery fallback.`;
+      } else if (!item.learningFormat) {
         item.learningFormat = item.isExternalRequired ? 'EXTERNAL_TRAINER' : 'INTERNAL_TRAINING';
       }
     }
@@ -266,6 +325,7 @@ Do not call lnd_assignLearningFormats.`;
       getActiveRunScratchPath('matched_classes.json'),
       JSON.stringify(matchedClasses, null, 2),
     );
+
     const draftRoadmap = generateDraftRoadmap(matchedClasses, 'RM-2026-V1');
     const source = toAgentOneResult(matchedClasses, runId, userPrompt);
 
@@ -291,6 +351,7 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
 
     try {
       const result = await runCoordinator(userPrompt);
+
       return c.json({
         ...result.source,
         agentReasoning: result.agentReasoning,
@@ -298,6 +359,7 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
       });
     } catch (error) {
       console.error('Coordinator agent execution error', error);
+
       if (
         error instanceof Error &&
         (error.message.startsWith('Coordinator returned no valid scope-aligned skills') ||
@@ -306,38 +368,60 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
       ) {
         return c.json({ error: error.message }, 422);
       }
+
       return c.json({ error: String(error) }, 500);
     }
   });
 
   routes.post('/qa', async (c) => {
     const body = await readJsonBody(c);
+
     if (typeof body.runId !== 'string' || body.runId.trim().length === 0) {
       return c.json({ error: 'runId is required' }, 400);
     }
 
     try {
-      const { source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId);
-      const result = await runTrainingRoadmapPipeline({
-        source,
-        qaInput,
-        agents: deps.agents,
-        abortSignal: c.req.raw.signal,
-        session: c.get('user'),
-      });
+      let { source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId);
+      let result: RoadmapResult;
+
+      while (true) {
+        result = await runTrainingRoadmapPipeline({
+          source,
+          qaInput,
+          agents: deps.agents,
+          abortSignal: c.req.raw.signal,
+          session: c.get('user'),
+        });
+
+        if (result.qaDecision !== 'REVISE_REQUIRED' || source.revisionCount >= 2) break;
+
+        source = reviseRoadmap(source, result.revisionInstructions);
+
+        fs.writeFileSync(
+          getRunScratchPath(source.runId, 'roadmap_output_agent.json'),
+          JSON.stringify(source, null, 2),
+        );
+
+        ({ source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId));
+      }
+
       fs.writeFileSync(
         getRunScratchPath(result.runId, 'qa_result.json'),
         JSON.stringify(result, null, 2),
       );
+
       return c.json(result);
     } catch (error) {
       console.error('QA agent execution error', error);
+
       if (error instanceof Error && error.message.startsWith('Agent 1 artifact belongs to run ')) {
         return c.json({ error: error.message }, 409);
       }
+
       if (error instanceof Error && error.message.startsWith('QA input file not found.')) {
         return c.json({ error: 'Agent 1 run not found' }, 404);
       }
+
       return c.json({ error: String(error) }, 500);
     }
   });
@@ -355,34 +439,89 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
 
     const qaResultPath = getRunScratchPath(body.runId, 'qa_result.json');
     const qaResult = readJsonFileOrDefault(qaResultPath, null);
+
     if (!qaResult || typeof qaResult !== 'object') {
       return c.json({ error: 'QA run not found' }, 404);
     }
+
     if (!('reviewPack' in qaResult)) {
       return c.json({ error: 'Review Pack is required before approval' }, 409);
     }
+
     if (!('runId' in qaResult) || qaResult.runId !== body.runId) {
       return c.json({ error: 'QA runId does not match the approval request' }, 409);
     }
-    if (!('reviewStatus' in qaResult) || qaResult.reviewStatus !== 'pending') {
+
+    if (!('reviewStatus' in qaResult) || !('qaDecision' in qaResult)) {
+      return c.json({ error: 'QA result is missing decision state' }, 409);
+    }
+
+    if (qaResult.reviewStatus !== 'pending_review' && qaResult.reviewStatus !== 'blocked') {
       return c.json({ error: 'QA run is no longer pending review' }, 409);
     }
 
+    const allowedDecisions =
+      qaResult.qaDecision === 'PASS'
+        ? new Set<ApprovalDecision>(['approved', 'revision_requested', 'rejected'])
+        : qaResult.qaDecision === 'PASS_WITH_WARNINGS'
+          ? new Set<ApprovalDecision>(['approved_with_risks', 'revision_requested', 'rejected'])
+          : qaResult.qaDecision === 'REVISE_REQUIRED'
+            ? new Set<ApprovalDecision>(['revision_requested'])
+            : new Set<ApprovalDecision>(['revision_requested', 'rejected']);
+
+    if (!allowedDecisions.has(body.decision)) {
+      return c.json(
+        { error: `${body.decision} is not allowed when QA decision is ${qaResult.qaDecision}` },
+        409,
+      );
+    }
+
+    const approvalNotes = typeof body.approvalNote === 'string' ? body.approvalNote.trim() : '';
+
+    if (body.decision === 'approved_with_risks' && !approvalNotes) {
+      return c.json({ error: 'Approval note is required for approve-with-risks' }, 400);
+    }
+
     const approvalToken =
-      body.decision === 'approved' ? `APPROVAL-${body.runId}-${Date.now()}` : null;
+      body.decision === 'approved' || body.decision === 'approved_with_risks'
+        ? `APPROVAL-${body.runId}-${Date.now()}`
+        : null;
+
+    const approvedAt = approvalToken ? new Date().toISOString() : undefined;
+    const approvedBy = approvalToken ? c.get('user')?.user_id : undefined;
 
     const response: ApprovalResponse = {
       runId: body.runId,
       reviewStatus: body.decision,
       approvalToken,
+      ...(approvalNotes ? { approvalNotes } : {}),
+      ...(approvedBy ? { approvedBy } : {}),
+      ...(approvedAt ? { approvedAt } : {}),
     };
 
-    fs.writeFileSync(
-      qaResultPath,
-      JSON.stringify({ ...qaResult, reviewStatus: body.decision, approvalToken }, null, 2),
-    );
+    fs.writeFileSync(qaResultPath, JSON.stringify({ ...qaResult, ...response }, null, 2));
 
     return c.json(response);
+  });
+
+  routes.post('/export', async (c) => {
+    const body = await readJsonBody(c);
+
+    if (typeof body.runId !== 'string' || body.runId.trim().length === 0) {
+      return c.json({ error: 'runId is required' }, 400);
+    }
+
+    const qaResult = readJsonFileOrDefault(getRunScratchPath(body.runId, 'qa_result.json'), null);
+
+    if (!qaResult || typeof qaResult !== 'object') {
+      return c.json({ error: 'QA run not found' }, 404);
+    }
+
+    try {
+      return c.json(buildExportProposal(qaResult as RoadmapResult));
+    } catch (error) {
+      return c.json({ error: error instanceof Error ? error.message : String(error) }, 409);
+    }
   });
 
   return routes;

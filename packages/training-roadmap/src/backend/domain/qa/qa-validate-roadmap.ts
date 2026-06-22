@@ -32,10 +32,10 @@ function deriveRoadmap(priorityResult: QaPriorityResult): QaRoadmap {
       traineeIds: initiative.target_employees ?? [],
       trainerType: initiative.internal_trainer_available ? 'internal' : 'external',
       quarter: initiative.quarter,
-      evidence: [
-        ...(initiative.supporting_projects ?? []),
-        ...(initiative.supporting_bod_goals ?? []),
-      ],
+      evidence: initiative.evidence ?? [],
+      alignmentType: initiative.alignmentType,
+      approvalRequired: initiative.approvalRequired,
+      alignmentNote: initiative.alignmentNote,
     })),
   };
 }
@@ -48,8 +48,13 @@ export async function qaValidateRoadmap(input: QaInput): Promise<QaValidationRes
     ...checkMissingEvidence(input.priorityResult),
     ...checkBodAlignment(roadmap, input.priorityResult, input.normalizedData),
     ...checkProjectRequirement(roadmap, input.priorityResult, input.normalizedData),
-    ...checkTraineeMismatch(roadmap, input.normalizedData),
-    ...checkTimelineRisk(roadmap, input.priorityResult, input.normalizedData),
+    ...checkTraineeMismatch(roadmap, input.normalizedData, input.request?.userPrompt),
+    ...checkTimelineRisk(
+      roadmap,
+      input.priorityResult,
+      input.normalizedData,
+      input.request?.userPrompt,
+    ),
     ...checkTraceabilityGap(roadmap, input.normalizedData),
   ];
   const result = calculateQaScore(findings);

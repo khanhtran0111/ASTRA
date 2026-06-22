@@ -1,8 +1,9 @@
 import type { SessionScope, StructuredAgentRuntime } from '@seta/core';
 import { z } from 'zod';
-import type { RoadmapResult, TrainingInitiative } from '../../types.ts';
+import type { QaFinding, RoadmapResult, TrainingInitiative } from '../../types.ts';
 import { TRAINING_QA_AGENT_ID } from '../agent-specs.ts';
 import { QA_TOOL_IDS } from '../agent-tools.ts';
+import { buildQaReviewResult } from './qa/qa-decision.ts';
 import {
   assertQaScoreMatches,
   assertQaToolsCalled,
@@ -14,20 +15,20 @@ import {
   recordQaFinalFindings,
 } from './qa/qa-tool-context.ts';
 import type { QaInput } from './qa/qa-validate-roadmap.ts';
+import { qaValidateRoadmap } from './qa/qa-validate-roadmap.ts';
 import { buildRequestScopeFindings } from './qa/request-scope.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
 
 const qaFindingSchema = z.object({
   type: z.enum([
-    'INVALID_TRAINEE',
-    'TRAINER_GAP',
-    'MISSING_EVIDENCE',
+    'NO_TRAINEE_EVIDENCE',
+    'UNSUPPORTED_INITIATIVE',
     'BOD_ALIGNMENT_RISK',
     'MISSING_PROJECT_REQUIREMENT',
-    'TRAINEE_MISMATCH',
-    'TIMELINE_RISK',
+    'TRAINER_NOT_FOUND',
+    'TIMELINE_MISMATCH',
     'TRACEABILITY_GAP',
-    'REQUEST_SCOPE_MISMATCH',
+    'PROMPT_SCOPE_VIOLATION',
   ]),
   severity: z.enum(['HIGH', 'MEDIUM', 'LOW']),
   message: z.string().min(1),
@@ -49,6 +50,10 @@ const qaAgentOutputSchema = z.object({
   ),
 });
 
+type QaAgentOutput = Omit<z.infer<typeof qaAgentOutputSchema>, 'findings'> & {
+  findings: QaFinding[];
+};
+
 function mapFormat(
   format: RoadmapOutputAgent['initiatives'][number]['format'],
 ): TrainingInitiative['format'] {
@@ -65,7 +70,7 @@ export async function runTrainingRoadmapPipeline(args: {
   session?: SessionScope;
 }): Promise<RoadmapResult> {
   const toolRunId = createQaToolRun(args.qaInput);
-  let reviewed: z.infer<typeof qaAgentOutputSchema>;
+  let reviewed: QaAgentOutput;
   let scored: ReturnType<typeof getQaScoreCall>;
   try {
     const checkToolIds = Object.values(QA_TOOL_IDS).filter(
@@ -106,7 +111,7 @@ export async function runTrainingRoadmapPipeline(args: {
             id: initiative.id,
             topic: initiative.topic,
             quarter: initiative.quarter,
-            evidence: initiative.evidence,
+            evidence: initiative.evidence.map((evidence) => evidence.recordId),
           })),
           traineeProfiles: (args.qaInput.normalizedData.employees ?? []).filter((employee) =>
             args.source.initiatives.some((initiative) =>
@@ -124,7 +129,7 @@ export async function runTrainingRoadmapPipeline(args: {
     });
     const existingScopeFindings = new Set(
       reviewed.findings
-        .filter((finding) => finding.type === 'REQUEST_SCOPE_MISMATCH')
+        .filter((finding) => finding.type === 'PROMPT_SCOPE_VIOLATION')
         .map((finding) => finding.relatedInitiativeId ?? finding.skill ?? 'request'),
     );
     const scopeFindings = buildRequestScopeFindings({
@@ -139,6 +144,19 @@ export async function runTrainingRoadmapPipeline(args: {
         !existingScopeFindings.has(finding.relatedInitiativeId ?? finding.skill ?? 'request'),
     );
     reviewed.findings.push(...scopeFindings);
+    const deterministic = await qaValidateRoadmap(args.qaInput);
+    const findingKeys = new Set(
+      reviewed.findings.map(
+        (finding) => `${finding.type}:${finding.relatedInitiativeId ?? ''}:${finding.skill ?? ''}`,
+      ),
+    );
+    for (const finding of deterministic.findings) {
+      const key = `${finding.type}:${finding.relatedInitiativeId ?? ''}:${finding.skill ?? ''}`;
+      if (!findingKeys.has(key)) {
+        reviewed.findings.push(finding);
+        findingKeys.add(key);
+      }
+    }
     recordQaFinalFindings(toolRunId, reviewed.findings);
     await args.agents.callTool({
       agentId: TRAINING_QA_AGENT_ID,
@@ -159,14 +177,29 @@ export async function runTrainingRoadmapPipeline(args: {
     deleteQaToolRun(toolRunId);
   }
 
+  const qaReview = buildQaReviewResult({
+    findings: reviewed.findings,
+    score: scored.result.score,
+    riskLevel: scored.result.riskLevel,
+    initiatives: args.qaInput.roadmap?.items ?? [],
+    revisionCount: args.source.revisionCount,
+  });
+  const reviewStatus = qaReview.qaDecision === 'BLOCKED' ? 'blocked' : 'pending_review';
+  const gateLog =
+    qaReview.qaDecision === 'PASS' || qaReview.qaDecision === 'PASS_WITH_WARNINGS'
+      ? 'Paused at Human Review Gate.'
+      : qaReview.qaDecision === 'REVISE_REQUIRED'
+        ? 'Agent 2 returned revision instructions to Agent 1.'
+        : 'Agent 2 blocked the roadmap from approval and export.';
+
   return {
     runId: args.source.runId,
-    reviewStatus: 'pending',
+    reviewStatus,
     executionLog: [
       ...args.source.executionLog.filter((entry) => entry !== 'Paused at Human Review Gate.'),
       'Loaded roadmap_output_agent.json.',
       'QA reviewer audited the Agent 1 draft against normalized data.',
-      'Paused at Human Review Gate.',
+      gateLog,
     ],
     initiatives: args.source.initiatives.map((initiative) => ({
       id: initiative.id,
@@ -185,16 +218,28 @@ export async function runTrainingRoadmapPipeline(args: {
       timeline: initiative.timeline,
       estimatedHours: initiative.estimatedHours,
       evidence: initiative.evidence,
+      alignmentType: initiative.alignmentType,
+      approvalRequired: initiative.approvalRequired,
+      alignmentNote: initiative.alignmentNote,
       riskFlags: reviewed.findings.filter(
         (finding) => finding.relatedInitiativeId === initiative.id,
       ),
       ...(initiative.fallbackReason ? { fallbackReason: initiative.fallbackReason } : {}),
+      ...(initiative.fallbackPlan ? { fallbackPlan: initiative.fallbackPlan } : {}),
     })),
     qaFindings: reviewed.findings,
+    qaDecision: qaReview.qaDecision,
+    blockingIssues: qaReview.blockingIssues,
+    revisionInstructions: qaReview.revisionInstructions,
+    approvalRequirement: qaReview.approvalRequirement,
+    qaSummary: qaReview.summary,
     qaScore: scored.result.score,
     riskLevel: scored.result.riskLevel,
     riskReason: scored.result.reason,
+    revisionCount: args.source.revisionCount,
+    coverageResult: args.source.coverageResult,
     evidencePack: {
+      revisionHistory: args.source.revisionHistory,
       semanticSummary: reviewed.semanticSummary,
       findings: reviewed.findings.map((finding) => ({
         type: finding.type,
