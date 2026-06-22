@@ -12,6 +12,7 @@ docs/superpowers
 node_modules
 .pnp
 .pnp.js
+.pnpm-store/
 
 # Local env files
 .env
