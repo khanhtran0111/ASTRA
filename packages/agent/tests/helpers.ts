@@ -22,6 +22,16 @@ export function makeToolContext(actor: {
 export function withAgentTestDb<T>(
   fn: (ctx: { pool: Pool; databaseUrl: string }) => Promise<T>,
 ): Promise<T> {
+  const templateDbName = process.env.PLATFORM_TEST_PG_TEMPLATE;
+  const baseUrl = process.env.PLATFORM_TEST_PG_BASE;
+
+  if (!templateDbName || !baseUrl) {
+    throw new Error(
+      `Missing env:
+      PLATFORM_TEST_PG_TEMPLATE=${templateDbName}
+      PLATFORM_TEST_PG_BASE=${baseUrl}`,
+    );
+  }
   return withTestDb(
     {
       templateDbName: process.env.PLATFORM_TEST_PG_TEMPLATE as string,

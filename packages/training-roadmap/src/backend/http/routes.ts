@@ -4,7 +4,14 @@ import type { SessionEnv, StructuredAgentRuntime } from '@seta/core';
 import type { Context } from 'hono';
 import { Hono } from 'hono';
 import { z } from 'zod';
-import type { ApprovalDecision, ApprovalResponse, Priority } from '../../types.ts';
+import type {
+  ApprovalDecision,
+  ApprovalResponse,
+  HumanFeedback,
+  Priority,
+  RoadmapResult,
+  RoadmapVersion,
+} from '../../types.ts';
 import { lndCoordinatorSpec } from '../agent-specs/lnd-orchestrator-spec.ts';
 import {
   lndAssignLearningFormats,
@@ -70,6 +77,72 @@ function createRunId(): string {
   return globalThis.crypto?.randomUUID?.() ?? `run-${Date.now()}`;
 }
 
+function formatPreviousRoadmapSummary(previousRoadmap: RoadmapOutputAgent): string {
+  const rows = previousRoadmap.initiatives.map((initiative) => {
+    const trainerTag = initiative.trainerName ? `${initiative.trainerName}` : 'unassigned';
+    const timeline = initiative.timeline
+      ? `weeks ${initiative.timeline.startWeek}-${initiative.timeline.endWeek}`
+      : initiative.quarter;
+    return `- ${initiative.topic} (${initiative.priority}) | ${trainerTag} | ${timeline}`;
+  });
+  return rows.slice(0, 12).join('\n') + (rows.length > 12 ? '\n- ...more initiatives omitted' : '');
+}
+
+function saveHumanFeedback(
+  runId: string,
+  feedback: string,
+  reviewerId?: string | null,
+): HumanFeedback {
+  const payload: HumanFeedback = {
+    runId,
+    feedback,
+    createdAt: new Date().toISOString(),
+    reviewerId: reviewerId ?? null,
+  };
+  fs.mkdirSync(getRunScratchPath(runId), { recursive: true });
+  fs.writeFileSync(
+    getRunScratchPath(runId, 'human_feedback.json'),
+    JSON.stringify(payload, null, 2),
+  );
+  return payload;
+}
+
+function resolveRoadmapOutputPath(runId: string): string | null {
+  const configured = process.env.TRAINING_ROADMAP_OUTPUT_FILE;
+  const scratchPath = getRunScratchPath(runId, 'roadmap_output_agent.json');
+  if (fs.existsSync(scratchPath)) {
+    return scratchPath;
+  }
+  if (typeof configured === 'string' && configured.trim().length > 0 && fs.existsSync(configured)) {
+    return configured;
+  }
+  return null;
+}
+
+function normalizeInitiativeFormat(format: string): RoadmapResult['initiatives'][number]['format'] {
+  if (format === 'EXTERNAL_TRAINER') return 'external';
+  if (format === 'GROUP_STUDY' || format === 'ONLINE_COURSE') return 'self-study';
+  return 'internal';
+}
+
+function saveRoadmapVersion(runId: string, roadmap: RoadmapResult, feedback?: string): void {
+  const versionDir = getRunScratchPath(runId, 'versions');
+  fs.mkdirSync(versionDir, { recursive: true });
+  const existing = fs.readdirSync(versionDir).filter((name) => name.endsWith('.json'));
+  const version = existing.length + 1;
+  const roadmapVersion: RoadmapVersion = {
+    runId,
+    version,
+    feedback,
+    roadmap,
+    createdAt: new Date().toISOString(),
+  };
+  fs.writeFileSync(
+    getRunScratchPath(runId, 'versions', `version-${version}.json`),
+    JSON.stringify(roadmapVersion, null, 2),
+  );
+}
+
 function scoreToPriority(score: number): Priority {
   if (score >= 85) return 'P1';
   if (score >= 65) return 'P2';
@@ -128,12 +201,20 @@ function toAgentOneResult(
   };
 }
 
-async function runCoordinator(userPrompt: string): Promise<{
+async function runCoordinator(
+  userPrompt: string,
+  options?: {
+    runId?: string;
+    previousRoadmap?: RoadmapOutputAgent;
+    feedback?: string;
+  },
+): Promise<{
   source: RoadmapOutputAgent;
   agentReasoning: string;
   draftRoadmap: DraftRoadmapOutput;
 }> {
-  const runId = createRunId();
+  const runId = options?.runId ?? createRunId();
+  const effectiveUserPrompt = options?.previousRoadmap?.request?.userPrompt ?? userPrompt;
 
   return withTrainingRoadmapRun(runId, async () => {
     const agent = new Agent({
@@ -152,7 +233,7 @@ async function runCoordinator(userPrompt: string): Promise<{
       } as never,
     });
 
-    const prompt = `Please retrieve the pending skills. Extract and pass every scope constraint supplied by the user:
+    let prompt = `Please retrieve the pending skills. Extract and pass every scope constraint supplied by the user:
 - target team or role as "targetTeam"
 - proficiency such as Mid-level/Intermediate as "targetProficiency"
 - requested quarter such as Q3/2026 as "targetQuarter" using Q3_2026 format
@@ -170,7 +251,7 @@ CRITICAL KEY NAMING: The keys in your "skills" JSON output MUST be EXACTLY the o
 Once you have your final list of relevant skills, call lnd_findAndAssignTrainer with relevantSkills, targetTeam, targetProficiency, targetQuarter, and estimatedHoursMap. Estimate hours from intrinsic difficulty, not trainee count.
 
 USER CONSTRAINTS AND PREFERENCES:
-"${userPrompt || 'None specified'}"
+"${effectiveUserPrompt || 'None specified'}"
 
 Respect every user constraint. Return structured data with this shape:
 {
@@ -190,6 +271,21 @@ Respect every user constraint. Return structured data with this shape:
   ]
 }
 Do not call lnd_assignLearningFormats.`;
+
+    if (options?.feedback) {
+      prompt += `\n\nThe previous roadmap received the following reviewer feedback:\n\n${options.feedback
+        .split('\n')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => `- ${line}`)
+        .join(
+          '\n',
+        )}\n\nRegenerate the roadmap while preserving valid initiatives and applying the requested changes when possible.`;
+    }
+
+    if (options?.previousRoadmap) {
+      prompt += `\n\nPrevious roadmap summary:\n${formatPreviousRoadmapSummary(options.previousRoadmap)}`;
+    }
 
     const response = await agent.generate(prompt, {
       maxSteps: 8,
@@ -306,6 +402,103 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
       ) {
         return c.json({ error: error.message }, 422);
       }
+      return c.json({ error: String(error) }, 500);
+    }
+  });
+
+  routes.post('/feedback', async (c) => {
+    const body = await readJsonBody(c);
+    const runId = typeof body.runId === 'string' ? body.runId.trim() : '';
+    const feedback = typeof body.feedback === 'string' ? body.feedback.trim() : '';
+
+    if (!runId) {
+      return c.json({ error: 'runId is required' }, 400);
+    }
+    if (!feedback) {
+      return c.json({ error: 'feedback is required' }, 400);
+    }
+
+    try {
+      const sourcePath = resolveRoadmapOutputPath(runId);
+      if (!sourcePath) {
+        return c.json({ error: 'Agent 1 run not found' }, 404);
+      }
+      const source = readJsonFileOrDefault(sourcePath, null);
+      if (!source || typeof source !== 'object' || !('runId' in source)) {
+        return c.json({ error: 'Agent 1 run not found' }, 404);
+      }
+      const previousRoadmap = source as RoadmapOutputAgent;
+      if (previousRoadmap.runId !== runId) {
+        return c.json(
+          { error: `Agent 1 artifact belongs to run ${previousRoadmap.runId}, not ${runId}` },
+          409,
+        );
+      }
+
+      saveHumanFeedback(runId, feedback, c.get('user')?.user_id);
+
+      const result = await runCoordinator('', {
+        runId,
+        previousRoadmap,
+        feedback,
+      });
+
+      fs.writeFileSync(
+        getRunScratchPath(result.source.runId, 'roadmap_output_agent.json'),
+        JSON.stringify(
+          {
+            ...result.source,
+            agentReasoning: result.agentReasoning,
+            draftRoadmap: result.draftRoadmap,
+          },
+          null,
+          2,
+        ),
+      );
+      saveRoadmapVersion(
+        result.source.runId,
+        {
+          runId: result.source.runId,
+          reviewStatus: 'pending',
+          executionLog: result.source.executionLog,
+          initiatives: result.source.initiatives.map((initiative) => ({
+            id: initiative.id,
+            topic: initiative.topic,
+            priority: initiative.priority,
+            score: initiative.score,
+            quarter: initiative.quarter,
+            targetTrainees: initiative.targetTrainees,
+            trainerName: initiative.trainerName,
+            objective: initiative.objective,
+            prerequisites: initiative.prerequisites,
+            format: normalizeInitiativeFormat(initiative.format),
+            formatExplanation: initiative.formatExplanation,
+            evaluationCriteria: initiative.evaluationCriteria,
+            durationWeeks: initiative.durationWeeks,
+            timeline: initiative.timeline,
+            estimatedHours: initiative.estimatedHours,
+            evidence: initiative.evidence,
+            riskFlags: [],
+          })),
+          qaFindings: [],
+          qaScore: 0,
+          riskLevel: 'LOW',
+          riskReason: 'Regeneration in progress',
+          evidencePack: {},
+          reviewPack: {
+            request: previousRoadmap.request ?? { userPrompt: '' },
+            generatedAt: new Date().toISOString(),
+            initiativeCount: result.source.initiatives.length,
+            semanticSummary: [],
+            findings: [],
+          },
+        },
+        feedback,
+      );
+
+      return c.json({ runId, status: 'reprocessing' });
+    } catch (error) {
+      console.error('Feedback handling error', error);
       return c.json({ error: String(error) }, 500);
     }
   });

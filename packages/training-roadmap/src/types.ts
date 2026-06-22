@@ -64,6 +64,21 @@ export type RoadmapResult = {
 
 export type ApprovalDecision = Exclude<ReviewStatus, 'pending'>;
 
+export type HumanFeedback = {
+  runId: string;
+  feedback: string;
+  createdAt: string;
+  reviewerId?: string | null;
+};
+
+export type RoadmapVersion = {
+  runId: string;
+  version: number;
+  feedback?: string;
+  roadmap: RoadmapResult;
+  createdAt: string;
+};
+
 export type ApprovalResponse = {
   runId: string;
   reviewStatus: ApprovalDecision;

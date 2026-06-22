@@ -17,6 +17,7 @@ import { useCallback, useState } from 'react';
 import {
   runTrainingRoadmap,
   submitReviewDecision,
+  submitRevisionFeedback,
   type TrainingRoadmapDataSource,
 } from '../api/training-roadmap-client.ts';
 import { AnalysisKpiStrip } from '../components/analysis-kpi-strip.tsx';
@@ -68,7 +69,7 @@ export function TrainingRoadmapDemoPage() {
   }, [userPrompt]);
 
   const handleDecision = useCallback(
-    async (decision: ApprovalDecision) => {
+    async (decision: Exclude<ApprovalDecision, 'revision_requested'>) => {
       if (!result) return;
 
       setReviewSubmitting(true);
@@ -89,6 +90,27 @@ export function TrainingRoadmapDemoPage() {
         );
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to submit review decision');
+      } finally {
+        setReviewSubmitting(false);
+      }
+    },
+    [result],
+  );
+
+  const handleRevision = useCallback(
+    async (feedback: string) => {
+      if (!result) return;
+
+      setReviewSubmitting(true);
+      setError(null);
+      setApprovalToken(null);
+
+      try {
+        const response = await submitRevisionFeedback(result.runId, feedback);
+        setResult(response.data);
+        setDataSource(response.source);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to regenerate training roadmap');
       } finally {
         setReviewSubmitting(false);
       }
@@ -222,6 +244,7 @@ export function TrainingRoadmapDemoPage() {
                     reviewStatus={result.reviewStatus}
                     reviewPack={result.reviewPack}
                     onDecision={handleDecision}
+                    onRevision={handleRevision}
                     disabled={reviewSubmitting}
                   />
                   <ExportProposalCard result={result} approvalToken={approvalToken} />

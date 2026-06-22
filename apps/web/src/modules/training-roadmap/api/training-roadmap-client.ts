@@ -71,3 +71,34 @@ export async function submitReviewDecision(
   );
   return { data, source: 'api' };
 }
+
+export async function submitRevisionFeedback(
+  runId: string,
+  feedback: string,
+): Promise<TrainingRoadmapClientResult<RoadmapResult>> {
+  const feedbackResponse = await fetch('/api/training-roadmap/feedback', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ runId, feedback }),
+  });
+  const regeneration = await parseJsonOrThrow<{ runId?: unknown }>(
+    feedbackResponse,
+    'Failed to regenerate the training roadmap',
+  );
+  if (regeneration.runId !== runId) {
+    throw new Error('Regenerated roadmap response does not match the current run');
+  }
+
+  const qaResponse = await fetch('/api/training-roadmap/qa', {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ runId }),
+  });
+  const data = await parseJsonOrThrow<RoadmapResult>(
+    qaResponse,
+    'Failed to QA the regenerated training roadmap',
+  );
+  return { data, source: 'api' };
+}

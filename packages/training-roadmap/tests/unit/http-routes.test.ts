@@ -155,6 +155,17 @@ describe('training roadmap routes', () => {
     await expect(res.json()).resolves.toEqual({ error: 'runId is required' });
   });
 
+  it('requires written feedback before regenerating a roadmap', async () => {
+    const res = await app.request('/api/training-roadmap/feedback', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ runId: 'fixture-roadmap-run', feedback: '   ' }),
+    });
+
+    expect(res.status).toBe(400);
+    await expect(res.json()).resolves.toEqual({ error: 'feedback is required' });
+  });
+
   it('validates invalid approval decisions', async () => {
     const res = await app.request('/api/training-roadmap/approve', {
       method: 'POST',

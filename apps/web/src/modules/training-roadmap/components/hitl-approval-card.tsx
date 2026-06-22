@@ -1,6 +1,6 @@
 import { Badge, Button, Card, CardContent, CardHeader, CardTitle } from '@seta/shared-ui';
 import { CheckCircle2, RotateCcw, XCircle } from 'lucide-react';
-import type { ComponentProps } from 'react';
+import { type ComponentProps, useState } from 'react';
 import type { ApprovalDecision, ReviewStatus, RoadmapResult } from '../types.ts';
 
 const statusLabel: Record<ReviewStatus, string> = {
@@ -22,15 +22,20 @@ export function HitlApprovalCard({
   reviewStatus,
   reviewPack,
   onDecision,
+  onRevision,
   disabled = false,
 }: {
   runId: string;
   reviewStatus: ReviewStatus;
   reviewPack: RoadmapResult['reviewPack'];
-  onDecision: (decision: ApprovalDecision) => Promise<void>;
+  onDecision: (decision: Exclude<ApprovalDecision, 'revision_requested'>) => Promise<void>;
+  onRevision: (feedback: string) => Promise<void>;
   disabled?: boolean;
 }) {
+  const [showRevisionForm, setShowRevisionForm] = useState(false);
+  const [feedback, setFeedback] = useState('');
   const locked = disabled || reviewStatus !== 'pending';
+  const trimmedFeedback = feedback.trim();
 
   return (
     <Card>
@@ -55,11 +60,7 @@ export function HitlApprovalCard({
             <CheckCircle2 aria-hidden />
             Approve
           </Button>
-          <Button
-            disabled={locked}
-            variant="secondary"
-            onClick={() => onDecision('revision_requested')}
-          >
+          <Button disabled={locked} variant="secondary" onClick={() => setShowRevisionForm(true)}>
             <RotateCcw aria-hidden />
             Request Revision
           </Button>
@@ -68,6 +69,45 @@ export function HitlApprovalCard({
             Reject
           </Button>
         </div>
+        {showRevisionForm && reviewStatus === 'pending' && (
+          <div className="mt-4 space-y-3 rounded-md border border-hairline bg-canvas p-3">
+            <div>
+              <label htmlFor={`revision-feedback-${runId}`} className="font-medium text-ink">
+                Revision feedback
+              </label>
+              <div className="mt-1 text-caption text-ink-subtle">
+                Describe what the coordinator must change. The revised roadmap will run through QA
+                again before returning to this review gate.
+              </div>
+            </div>
+            <textarea
+              id={`revision-feedback-${runId}`}
+              value={feedback}
+              onChange={(event) => setFeedback(event.target.value)}
+              disabled={disabled}
+              rows={4}
+              className="w-full rounded-md border border-hairline bg-surface-1 px-3 py-2 text-body-sm text-ink"
+              placeholder="For example: move React testing to Q3 and shorten the internal workshop to two weeks."
+            />
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant="secondary"
+                disabled={disabled || !trimmedFeedback}
+                onClick={() => onRevision(trimmedFeedback)}
+              >
+                <RotateCcw aria-hidden />
+                Submit &amp; Regenerate
+              </Button>
+              <Button
+                variant="ghost"
+                disabled={disabled}
+                onClick={() => setShowRevisionForm(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
