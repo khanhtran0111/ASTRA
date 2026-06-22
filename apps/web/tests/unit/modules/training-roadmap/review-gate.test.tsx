@@ -46,6 +46,7 @@ describe('training roadmap human quality gate', () => {
         approvalRequirement="APPROVE_WITH_RISKS"
         reviewPack={reviewPack}
         onDecision={onDecision}
+        onRevision={vi.fn()}
       />,
     );
 
@@ -67,6 +68,7 @@ describe('training roadmap human quality gate', () => {
         approvalRequirement="REVISION_REQUIRED"
         reviewPack={reviewPack}
         onDecision={vi.fn()}
+        onRevision={vi.fn()}
       />,
     );
 

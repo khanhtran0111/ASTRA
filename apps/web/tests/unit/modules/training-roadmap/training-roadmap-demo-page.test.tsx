@@ -126,6 +126,96 @@ describe('TrainingRoadmapDemoPage', () => {
     );
   });
 
+  it('sends revision feedback through regeneration and QA before reopening review', async () => {
+    const roadmapResult = {
+      runId: 'agent-1-run',
+      reviewStatus: 'pending_review',
+      executionLog: ['Paused at Human Review Gate.'],
+      initiatives: [],
+      qaDecision: 'PASS',
+      qaFindings: [],
+      blockingIssues: [],
+      revisionInstructions: [],
+      approvalRequirement: 'HUMAN_APPROVAL',
+      qaSummary: 'QA passed.',
+      qaScore: 100,
+      riskLevel: 'LOW',
+      riskReason: 'No findings.',
+      revisionCount: 0,
+      evidencePack: {},
+      reviewPack: {
+        request: { userPrompt: 'React testing in Q3' },
+        generatedAt: '2026-06-21T00:00:00.000Z',
+        initiativeCount: 0,
+        semanticSummary: [],
+        findings: [],
+      },
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ runId: 'agent-1-run' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify(roadmapResult), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ runId: 'agent-1-run', status: 'reprocessing' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            ...roadmapResult,
+            executionLog: ['Applied human feedback.', 'Paused at Human Review Gate.'],
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+    await screen.findByText('Review Pack');
+    await user.click(screen.getByRole('button', { name: 'Request Revision' }));
+    await user.type(
+      screen.getByLabelText('Revision feedback'),
+      'Move React testing to Q3 and shorten the workshop.',
+    );
+    await user.click(screen.getByRole('button', { name: 'Submit & Regenerate' }));
+
+    expect(await screen.findByText('Applied human feedback.')).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      3,
+      '/api/training-roadmap/feedback',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          runId: 'agent-1-run',
+          feedback: 'Move React testing to Q3 and shorten the workshop.',
+        }),
+      }),
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      4,
+      '/api/training-roadmap/qa',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ runId: 'agent-1-run' }),
+      }),
+    );
+    expect(screen.getByText('Pending Review')).toBeInTheDocument();
+  });
+
   it('shows skill gaps, priorities, and trainer readiness without calling the API', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
