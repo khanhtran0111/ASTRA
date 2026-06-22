@@ -105,6 +105,7 @@ WORKDIR /app
 COPY --from=prune --chown=10001:10001 /out/apps/server /app/apps/server
 COPY --from=prune --chown=10001:10001 /out/apps/cli    /app/apps/cli
 COPY --from=prune --chown=10001:10001 /out/apps/worker /app/apps/worker
+COPY --chown=10001:10001 data/processed /app/data/processed
 COPY --chown=10001:10001 infra/docker/entrypoint.sh    /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh

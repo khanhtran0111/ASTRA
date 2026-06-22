@@ -53,25 +53,75 @@ function parseCSVLines(raw: string): string[][] {
   });
 }
 
+function getCSVHeader(rows: string[][], source: string): string[] {
+  const header = rows[0];
+  if (!header) {
+    throw new Error(`${source}: CSV header is missing`);
+  }
+  return header;
+}
+
+function getColumnIndex(header: string[], column: string, source: string): number {
+  const index = header.indexOf(column);
+  if (index === -1) {
+    throw new Error(`${source}: required column "${column}" is missing`);
+  }
+  return index;
+}
+
+function getRequiredCell(
+  row: string[],
+  columnIndex: number,
+  column: string,
+  source: string,
+  rowNumber: number,
+): string {
+  const value = row[columnIndex];
+  if (!value) {
+    throw new Error(`${source}: row ${rowNumber} has no value for "${column}"`);
+  }
+  return value;
+}
+
 // ---------------------------------------------------------------------------
 // DS04: Internal Trainer List
 // ---------------------------------------------------------------------------
 
 export function loadTrainersFromCSV(): InternalTrainer[] {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS04_Internal_Trainer_List.csv'), 'utf-8');
+  const source = 'DS04_Internal_Trainer_List.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const idIdx = header.indexOf('Trainer_ID');
-  const expertiseIdx = header.indexOf('Expertise');
-  const hoursIdx = header.indexOf('Availability_Hours_Per_Month');
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Trainer_ID', source);
+  const expertiseIdx = getColumnIndex(header, 'Expertise', source);
+  const hoursIdx = getColumnIndex(header, 'Availability_Hours_Per_Month', source);
 
-  return rows.slice(1).map((row) => ({
-    trainerId: row[idIdx]!,
-    expertise: row[expertiseIdx]!.split(/[;,]/)
-      .map((s) => s.trim())
-      .filter(Boolean),
-    availabilityHoursPerMonth: Number.parseInt(row[hoursIdx]!, 10),
-  }));
+  return rows.slice(1).map((row, index) => {
+    const rowNumber = index + 2;
+    const trainerId = getRequiredCell(row, idIdx, 'Trainer_ID', source, rowNumber);
+    const expertiseRaw = getRequiredCell(row, expertiseIdx, 'Expertise', source, rowNumber);
+    const hoursRaw = getRequiredCell(
+      row,
+      hoursIdx,
+      'Availability_Hours_Per_Month',
+      source,
+      rowNumber,
+    );
+    const availabilityHoursPerMonth = Number.parseInt(hoursRaw, 10);
+
+    if (Number.isNaN(availabilityHoursPerMonth)) {
+      throw new Error(`${source}: row ${rowNumber} has invalid availability hours`);
+    }
+
+    return {
+      trainerId,
+      expertise: expertiseRaw
+        .split(/[;,]/)
+        .map((expertise) => expertise.trim())
+        .filter(Boolean),
+      availabilityHoursPerMonth,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -79,19 +129,49 @@ export function loadTrainersFromCSV(): InternalTrainer[] {
 // ---------------------------------------------------------------------------
 
 export function loadEmployeeRoles(): Map<string, string> {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS01_Employee_Skill_Profile.csv'), 'utf-8');
+  const source = 'DS01_Employee_Skill_Profile.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const idIdx = header.indexOf('Employee_ID');
-  const roleIdx = header.indexOf('Position');
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Employee_ID', source);
+  const roleIdx = getColumnIndex(header, 'Position', source);
 
   const map = new Map<string, string>();
   for (const row of rows.slice(1)) {
-    if (row[idIdx] && row[roleIdx]) {
-      map.set(row[idIdx]!, row[roleIdx]!);
+    const employeeId = row[idIdx];
+    const role = row[roleIdx];
+    if (employeeId && role) {
+      map.set(employeeId, role);
     }
   }
   return map;
+}
+
+type EmployeeScopeProfile = {
+  position: string;
+  proficiency: string;
+};
+
+function loadEmployeeScopeProfiles(): Map<string, EmployeeScopeProfile> {
+  const source = 'DS01_Employee_Skill_Profile.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
+  const rows = parseCSVLines(raw);
+  const header = getCSVHeader(rows, source);
+  const idIdx = getColumnIndex(header, 'Employee_ID', source);
+  const roleIdx = getColumnIndex(header, 'Position', source);
+  const proficiencyIdx = getColumnIndex(header, 'Proficiency_Level', source);
+  const profiles = new Map<string, EmployeeScopeProfile>();
+
+  for (const row of rows.slice(1)) {
+    const employeeId = row[idIdx];
+    const position = row[roleIdx];
+    const proficiency = row[proficiencyIdx];
+    if (employeeId && position && proficiency) {
+      profiles.set(employeeId, { position, proficiency });
+    }
+  }
+
+  return profiles;
 }
 
 // ---------------------------------------------------------------------------
@@ -99,15 +179,19 @@ export function loadEmployeeRoles(): Map<string, string> {
 // ---------------------------------------------------------------------------
 
 function loadGoalQuarterMap(): Map<string, string> {
-  const raw = readFileSync(resolve(DATA_DIR, 'DS05_BOD_Training_Goals.csv'), 'utf-8');
+  const source = 'DS05_BOD_Training_Goals.csv';
+  const raw = readFileSync(resolve(DATA_DIR, source), 'utf-8');
   const rows = parseCSVLines(raw);
-  const header = rows[0]!;
-  const goalIdIdx = header.indexOf('Goal_ID');
-  const quarterIdx = header.indexOf('Target_Quarter');
+  const header = getCSVHeader(rows, source);
+  const goalIdIdx = getColumnIndex(header, 'Goal_ID', source);
+  const quarterIdx = getColumnIndex(header, 'Target_Quarter', source);
 
   const map = new Map<string, string>();
-  for (const row of rows.slice(1)) {
-    map.set(row[goalIdIdx]!, row[quarterIdx]!);
+  for (const [index, row] of rows.slice(1).entries()) {
+    const rowNumber = index + 2;
+    const goalId = getRequiredCell(row, goalIdIdx, 'Goal_ID', source, rowNumber);
+    const quarter = getRequiredCell(row, quarterIdx, 'Target_Quarter', source, rowNumber);
+    map.set(goalId, quarter);
   }
   return map;
 }
@@ -189,32 +273,78 @@ export function loadTrainingNeedsFromJSON(): ScoredTrainingNeed[] {
 // Convenience: load both at once
 // ---------------------------------------------------------------------------
 
-export function loadRealData(targetTeam?: string) {
-  let trainingNeeds = loadTrainingNeedsFromJSON();
+function normalizeTeam(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\bteam\b/g, '')
+    .replace(/[\s_-]+/g, '')
+    .trim();
+}
 
-  if (targetTeam && targetTeam.trim() !== '') {
-    const roleMap = loadEmployeeRoles();
-    const teamKey = targetTeam.toLowerCase();
+function normalizeProficiency(value: string): string {
+  const normalized = value.toLowerCase().replace(/[\s_-]+/g, '');
+  if (normalized === 'mid' || normalized === 'midlevel') return 'intermediate';
+  if (normalized === 'junior' || normalized === 'juniorlevel') return 'beginner';
+  if (normalized === 'senior' || normalized === 'seniorlevel') return 'advanced';
+  return normalized;
+}
+
+function normalizeQuarter(value: string): string | null {
+  const match = /Q([1-4])\D*(20\d{2})/i.exec(value);
+  return match ? `Q${match[1]}_${match[2]}` : null;
+}
+
+export function loadRealData(
+  targetTeam?: string,
+  targetProficiency?: string,
+  targetQuarter?: string,
+) {
+  let trainingNeeds = loadTrainingNeedsFromJSON();
+  const requestedQuarter = targetQuarter ? normalizeQuarter(targetQuarter) : null;
+
+  if (targetTeam?.trim() || targetProficiency?.trim()) {
+    const profiles = loadEmployeeScopeProfiles();
+    const teamKey = targetTeam?.trim() ? normalizeTeam(targetTeam) : null;
+    const proficiencyKey = targetProficiency?.trim()
+      ? normalizeProficiency(targetProficiency)
+      : null;
+    const scopedEmployeeIds = [...profiles]
+      .filter(([, profile]) => {
+        const matchesTeam = teamKey ? normalizeTeam(profile.position).includes(teamKey) : true;
+        const matchesProficiency = proficiencyKey
+          ? normalizeProficiency(profile.proficiency) === proficiencyKey
+          : true;
+        return matchesTeam && matchesProficiency;
+      })
+      .map(([employeeId]) => employeeId);
+    const scopedEmployeeIdSet = new Set(scopedEmployeeIds);
 
     trainingNeeds = trainingNeeds
       .map((need) => {
-        // P1 and P2 (score >= 65) are NOT filtered by team mapping
-        if (need.priorityScore >= 65) {
-          return need;
-        }
-
-        // P3 (score < 65) are filtered by team
-        const filteredTrainees = need.traineeIds.filter((id) => {
-          const role = roleMap.get(id);
-          return role && role.toLowerCase().includes(teamKey);
-        });
+        const employeesWithRecordedGap = need.traineeIds.filter((id) =>
+          scopedEmployeeIdSet.has(id),
+        );
+        const hasBusinessEvidence =
+          need.evidence.bodGoals.length > 0 || need.evidence.projectIds.length > 0;
+        const filteredTrainees =
+          employeesWithRecordedGap.length > 0
+            ? employeesWithRecordedGap
+            : hasBusinessEvidence
+              ? scopedEmployeeIds
+              : [];
         return {
           ...need,
           traineeIds: filteredTrainees,
           estimatedHours: estimateHours(filteredTrainees.length),
+          targetQuarter: requestedQuarter ?? need.targetQuarter,
         };
       })
-      .filter((need) => need.priorityScore >= 65 || need.traineeIds.length > 0);
+      .filter((need) => need.traineeIds.length > 0);
+  } else if (requestedQuarter) {
+    trainingNeeds = trainingNeeds.map((need) => ({
+      ...need,
+      targetQuarter: requestedQuarter,
+    }));
   }
 
   return {

@@ -36,8 +36,8 @@ describe('generateDraftRoadmap', () => {
     const result = generateDraftRoadmap(classes);
 
     expect(Object.keys(result.quarters)).toEqual(expect.arrayContaining(['Q3_2026', 'Q4_2026']));
-    expect(result.quarters['Q3_2026']).toHaveLength(2);
-    expect(result.quarters['Q4_2026']).toHaveLength(1);
+    expect(result.quarters.Q3_2026).toHaveLength(2);
+    expect(result.quarters.Q4_2026).toHaveLength(1);
   });
 
   it('sets status to DRAFT', () => {
@@ -78,7 +78,11 @@ describe('generateDraftRoadmap', () => {
     });
 
     const result = generateDraftRoadmap([cls]);
-    const entry = result.quarters['Q3_2026']![0]!;
+    const entry = result.quarters.Q3_2026?.[0];
+    expect(entry).toBeDefined();
+    if (!entry) {
+      throw new Error('Expected the Q3_2026 roadmap entry to exist');
+    }
 
     expect(entry.classId).toBe('CLS-TEST');
     expect(entry.topic).toBe('Kubernetes');
@@ -101,7 +105,11 @@ describe('generateDraftRoadmap', () => {
     });
 
     const result = generateDraftRoadmap([cls]);
-    const entry = result.quarters['Q3_2026']![0]!;
+    const entry = result.quarters.Q3_2026?.[0];
+    expect(entry).toBeDefined();
+    if (!entry) {
+      throw new Error('Expected the Q3_2026 roadmap entry to exist');
+    }
 
     expect(entry.resource.trainerId).toBeNull();
     expect(entry.resource.isExternalRequired).toBe(true);

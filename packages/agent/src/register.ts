@@ -2,8 +2,10 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Mastra } from '@mastra/core';
 import { Agent } from '@mastra/core/agent';
+import { RequestContext } from '@mastra/core/request-context';
 import type { MastraCompositeStore } from '@mastra/core/storage';
 import type { AnyWorkflow } from '@mastra/core/workflows';
+import type { AgentTool } from '@seta/agent-sdk';
 import {
   AgentRegistry,
   registerPendingAssignReader,
@@ -12,7 +14,7 @@ import {
   setConversationMemory,
   setExecutionPolicy,
 } from '@seta/agent-sdk';
-import type { AgentSpec, ContributionRegistry } from '@seta/core';
+import type { AgentSpec, ContributionRegistry, StructuredAgentRuntime } from '@seta/core';
 import type { Hono } from 'hono';
 import type { Pool } from 'pg';
 import { buildBreakerEmitter } from './backend/breaker-emitter.ts';
@@ -47,17 +49,29 @@ export function registerAgentContributions(reg: ContributionRegistry): void {
 export type AgentHandle = {
   attach: (app: Hono) => void;
   mastra: Mastra;
+  structured: StructuredAgentRuntime;
 };
 
-export function buildAgentFromSpec(spec: AgentSpec, opts: { model?: unknown } = {}): Agent {
+export function buildAgentFromSpec(
+  spec: AgentSpec,
+  opts: { model?: unknown; tools?: ReadonlyMap<string, AgentTool> } = {},
+): Agent {
   const model =
     opts.model ??
     resolveModel(undefined, { tierHint: spec.defaultTier as ModelTier | undefined }).model;
+  const tools = Object.fromEntries(
+    spec.tools.map((toolId) => {
+      const tool = opts.tools?.get(toolId);
+      if (!tool) throw new Error(`agent spec ${spec.id} references unknown tool: ${toolId}`);
+      return [toolId, tool];
+    }),
+  );
   return new Agent({
     id: spec.id,
     name: spec.id,
     instructions: spec.instructions,
     model: model as never,
+    tools,
   });
 }
 
@@ -121,8 +135,11 @@ export function registerAgent(deps: {
     storage: deps.mastraStorage,
   });
 
+  const toolCatalog = new Map(
+    deps.reg.collected.agentTools.map((tool) => [(tool as { id: string }).id, tool]),
+  );
   for (const spec of deps.reg.collected.agentSpecs) {
-    mastra.addAgent(buildAgentFromSpec(spec));
+    mastra.addAgent(buildAgentFromSpec(spec, { tools: toolCatalog }));
   }
 
   for (const { contribution } of deps.reg.collected.workflowContributions) {
@@ -160,6 +177,57 @@ export function registerAgent(deps: {
   // Mastra serializes around tool execution (stripping a live Memory's methods).
   setConversationMemory(entitiesMem);
 
+  const structured: StructuredAgentRuntime = {
+    async generate({ agentId, prompt, schema, abortSignal, maxSteps, session, toolChoice }) {
+      const requestContext = new RequestContext();
+      if (session) {
+        requestContext.set('actor', { type: 'user', user_id: session.user_id });
+        requestContext.set('tenant_id', session.tenant_id);
+        requestContext.set('role_summary', session.role_summary);
+        requestContext.set('effective_permissions', session.permissions);
+      }
+      const result = await mastra.getAgent(agentId).generate(prompt, {
+        structuredOutput: { schema },
+        abortSignal,
+        maxSteps,
+        toolChoice,
+        ...(session ? { requestContext } : {}),
+      });
+      if (!result.object) throw new Error(`Agent ${agentId} returned no structured output`);
+      return schema.parse(result.object);
+    },
+    async callTool({ agentId, toolName, prompt, abortSignal, session }) {
+      const requestContext = new RequestContext();
+      if (session) {
+        requestContext.set('actor', { type: 'user', user_id: session.user_id });
+        requestContext.set('tenant_id', session.tenant_id);
+        requestContext.set('role_summary', session.role_summary);
+        requestContext.set('effective_permissions', session.permissions);
+      }
+      await mastra.getAgent(agentId).generate(prompt, {
+        abortSignal,
+        maxSteps: 1,
+        toolChoice: { type: 'tool', toolName },
+        ...(session ? { requestContext } : {}),
+      });
+    },
+    async callTools({ agentId, prompt, abortSignal, session }) {
+      const requestContext = new RequestContext();
+      if (session) {
+        requestContext.set('actor', { type: 'user', user_id: session.user_id });
+        requestContext.set('tenant_id', session.tenant_id);
+        requestContext.set('role_summary', session.role_summary);
+        requestContext.set('effective_permissions', session.permissions);
+      }
+      await mastra.getAgent(agentId).generate(prompt, {
+        abortSignal,
+        maxSteps: 1,
+        toolChoice: 'required',
+        ...(session ? { requestContext } : {}),
+      });
+    },
+  };
+
   return {
     attach(app) {
       registerAgentRoutes(app as never, {
@@ -177,5 +245,6 @@ export function registerAgent(deps: {
       });
     },
     mastra,
+    structured,
   };
 }

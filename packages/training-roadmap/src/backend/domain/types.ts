@@ -77,9 +77,13 @@ export interface MatchedTrainingClass {
   /** Carried from the original ScoredTrainingNeed for roadmap generation */
   priorityScore: number;
   estimatedHours: number;
+  objective?: string;
+  prerequisites?: string[];
   formatExplanation?: string;
   evaluationCriteria?: string;
   durationWeeks?: number;
+  startWeek?: number;
+  endWeek?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,10 +101,14 @@ export interface RoadmapClassEntry {
   traineeCount: number;
   trainees: string[];
   estimatedHours: number;
+  objective?: string;
+  prerequisites?: string[];
   learningFormat?: LearningFormat;
   formatExplanation?: string;
   evaluationCriteria?: string;
   durationWeeks?: number;
+  startWeek?: number;
+  endWeek?: number;
   resource: {
     trainerId: string | null;
     isExternalRequired: boolean;

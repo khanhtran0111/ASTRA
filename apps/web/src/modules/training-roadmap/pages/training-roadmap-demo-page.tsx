@@ -65,7 +65,7 @@ export function TrainingRoadmapDemoPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [userPrompt]);
 
   const handleDecision = useCallback(
     async (decision: ApprovalDecision) => {
@@ -77,7 +77,7 @@ export function TrainingRoadmapDemoPage() {
       try {
         const response = await submitReviewDecision(result.runId, decision);
         setApprovalToken(response.data.approvalToken);
-        if (response.source === 'bundled-demo') setDataSource('bundled-demo');
+        setDataSource(response.source);
         setResult((current) =>
           current
             ? {
@@ -201,22 +201,26 @@ export function TrainingRoadmapDemoPage() {
                   <div>
                     <div className="font-medium text-ink">Roadmap run {result.runId}</div>
                     <div className="text-caption text-ink-subtle">
-                      {dataSource === 'bundled-demo'
-                        ? 'Backend unavailable; using the deterministic bundled response.'
-                        : 'Response received from the training-roadmap API.'}
+                      Response received from the training-roadmap API.
                     </div>
                   </div>
-                  <Badge variant={dataSource === 'bundled-demo' ? 'warning' : 'success'}>
-                    {dataSource === 'bundled-demo' ? 'Stable demo fallback' : 'API connected'}
+                  <Badge variant={dataSource === 'api' ? 'success' : 'secondary'}>
+                    API connected
                   </Badge>
                 </div>
                 <ExecutionLogPanel logs={result.executionLog} />
                 <RoadmapTable initiatives={result.initiatives} />
-                <QaFindingsPanel findings={result.qaFindings} />
+                <QaFindingsPanel
+                  findings={result.qaFindings}
+                  score={result.qaScore}
+                  riskLevel={result.riskLevel}
+                  riskReason={result.riskReason}
+                />
                 <div className="grid gap-4 xl:grid-cols-2">
                   <HitlApprovalCard
                     runId={result.runId}
                     reviewStatus={result.reviewStatus}
+                    reviewPack={result.reviewPack}
                     onDecision={handleDecision}
                     disabled={reviewSubmitting}
                   />

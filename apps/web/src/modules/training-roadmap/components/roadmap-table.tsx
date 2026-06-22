@@ -53,13 +53,30 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                   <div className="mt-1 text-caption text-ink-subtle">
                     {initiative.id} · Score {initiative.score}
                   </div>
+                  {initiative.objective && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      <strong>Objective:</strong> {initiative.objective}
+                    </div>
+                  )}
+                  {initiative.prerequisites && initiative.prerequisites.length > 0 && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      <strong>Prerequisites:</strong> {initiative.prerequisites.join(', ')}
+                    </div>
+                  )}
                   {initiative.evaluationCriteria && (
                     <div className="mt-1 text-caption text-ink-subtle text-green-700">
                       <strong>Eval:</strong> {initiative.evaluationCriteria}
                     </div>
                   )}
                 </TableCell>
-                <TableCell>{initiative.quarter}</TableCell>
+                <TableCell>
+                  <div>{initiative.quarter}</div>
+                  {initiative.timeline && (
+                    <div className="mt-1 text-caption text-ink-subtle">
+                      Week {initiative.timeline.startWeek}–{initiative.timeline.endWeek}
+                    </div>
+                  )}
+                </TableCell>
                 <TableCell className="min-w-44">{initiative.targetTrainees.join(', ')}</TableCell>
                 <TableCell className="min-w-48">
                   <div>{initiative.trainerName ?? 'External fallback'}</div>

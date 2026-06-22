@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import 'dotenv/config';
 
 const Env = z.object({
   DATABASE_URL: z.string().url(),
