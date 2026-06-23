@@ -31,9 +31,17 @@ if [ "${UID_OUT}" != "10001" ]; then
 fi
 echo "OK: UID = 10001"
 
+echo "==> verifying training-roadmap source data"
+for source in DS01_Employee_Skill_Profile.csv DS02_Project_Roadmap.csv DS03_Training_Need_Survey.csv DS04_Internal_Trainer_List.csv DS05_BOD_Training_Goals.csv; do
+  docker run --rm --entrypoint test "${IMAGE_TAG}" -s "/app/data/${source}"
+done
+echo "OK: DS01-DS05 source data is present"
+
 COMMON_ENV=(
   -e "DATABASE_URL=postgres://x:x@localhost:5432/x"
   -e "BETTER_AUTH_SECRET=$(printf 'a%.0s' {1..32})"
+  -e "CRYPTO_KEY_PROVIDER=env"
+  -e "CRYPTO_LOCAL_MASTER_KEY=$(printf 'a%.0s' {1..64})"
 )
 
 echo "==> running 'health' subcommand"

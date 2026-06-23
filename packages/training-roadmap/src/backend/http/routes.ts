@@ -71,7 +71,10 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
     } catch (error) {
       console.error('Training roadmap run execution error', error);
       if (error instanceof TrainingRoadmapRunError) {
-        return c.json({ error: error.message }, 422);
+        return c.json(
+          { error: error.message, code: error.code, runId },
+          error.code === 'TRAINING_DATA_UNAVAILABLE' ? 503 : 422,
+        );
       }
 
       return c.json({ error: String(error) }, 500);
@@ -134,7 +137,10 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
     } catch (error) {
       console.error('Feedback handling error', error);
       if (error instanceof TrainingRoadmapRunError) {
-        return c.json({ error: error.message }, 422);
+        return c.json(
+          { error: error.message, code: error.code, runId },
+          error.code === 'TRAINING_DATA_UNAVAILABLE' ? 503 : 422,
+        );
       }
       return c.json({ error: String(error) }, 500);
     }

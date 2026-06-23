@@ -679,6 +679,11 @@ function promptLimit(prompt: string): number | undefined {
     prompt,
   )?.[1];
   if (explicit) return Number.parseInt(explicit, 10);
+  const exact =
+    /(?:create|tạo)\s+(?:(?:exactly|chính xác|đúng)\s+)?(\d+)\s+(?:training\s+)?initiatives?/i.exec(
+      prompt,
+    )?.[1];
+  if (exact) return Number.parseInt(exact, 10);
   return /(?:create|tạo)\s+(?:only\s+|chỉ\s+)?(?:one|một|1)\s+(?:training\s+)?initiative/i.test(
     prompt,
   )
@@ -711,6 +716,13 @@ function requestedProficiency(prompt: string, employees: EvidenceIndexItem[]): s
 }
 
 function promptSkillScope(prompt: string): string {
+  const requestedTopicsSection =
+    /(?:requested\s+topics?|training\s+topics?|chủ\s+đề(?:\s+yêu\s+cầu)?)\s*:\s*([\s\S]*?)(?=\n\s*(?:constraints?|requirements?|rules?|ràng\s+buộc|yêu\s+cầu)\s*:|$)/i.exec(
+      prompt,
+    )?.[1];
+  if (requestedTopicsSection) {
+    return requestedTopicsSection.replace(/^\s*[-*]\s*/gm, ' ').trim();
+  }
   for (const pattern of [
     /(?:gồm|including|include)\s+(.+?)(?:,\s*(?:chỉ|only|using)|\s+cho|\s+for|\s+trong|\s+with|[.\n]|$)/i,
     /(?:tập trung|focused?\s+on)\s+(.+?)(?:,\s*(?:chỉ|only|using)|\s+cho|\s+for|\s+trong|\s+with|[.\n]|$)/i,
@@ -911,6 +923,38 @@ function selectionReason(candidate: TrainingCandidate): string {
   return `Selected from dynamic demand evidence: ${signals.join(', ')}.`;
 }
 
+function buildInitiativeEvidenceRefs(args: {
+  candidate: TrainingCandidate;
+  trainees: DataDrivenTrainee[];
+  trainerEvidence: IndexedEvidenceRef[];
+  evidenceIndex: EvidenceIndexItem[];
+}): IndexedEvidenceRef[] {
+  const selectedTraineeIds = new Set(args.trainees.map((trainee) => trainee.employeeId));
+  const demandEvidence = args.candidate.demandEvidenceRefs.filter((ref) => {
+    if (ref.sourceId === 'DS01') return selectedTraineeIds.has(ref.rowId);
+    if (ref.sourceId !== 'DS03') return true;
+    const survey = args.evidenceIndex.find(
+      (item) => item.sourceId === 'DS03' && item.rowId === ref.rowId,
+    );
+    const employeeId = survey ? valueFor(survey, 'employeeId') : '';
+    return !employeeId || selectedTraineeIds.has(employeeId);
+  });
+
+  return [
+    ...demandEvidence,
+    ...args.trainees.flatMap((trainee) => trainee.evidenceRefs),
+    ...args.trainerEvidence,
+  ].filter(
+    (ref, index, refs) =>
+      refs.findIndex(
+        (candidateRef) =>
+          candidateRef.sourceId === ref.sourceId &&
+          candidateRef.rowId === ref.rowId &&
+          candidateRef.field === ref.field,
+      ) === index,
+  );
+}
+
 export function runDataDrivenCoordinator(args: {
   dataDir: string;
   runId: string;
@@ -1033,19 +1077,12 @@ export function runDataDrivenCoordinator(args: {
       objectives: plan.objectives,
       prerequisites: plan.prerequisites,
       evaluationCriteria: plan.evaluationCriteria,
-      evidenceRefs: [
-        ...candidate.demandEvidenceRefs,
-        ...trainees.flatMap((trainee) => trainee.evidenceRefs),
-        ...trainerEvidence,
-      ].filter(
-        (ref, index, refs) =>
-          refs.findIndex(
-            (candidateRef) =>
-              candidateRef.sourceId === ref.sourceId &&
-              candidateRef.rowId === ref.rowId &&
-              candidateRef.field === ref.field,
-          ) === index,
-      ),
+      evidenceRefs: buildInitiativeEvidenceRefs({
+        candidate,
+        trainees,
+        trainerEvidence,
+        evidenceIndex,
+      }),
       scoreBreakdown: scored.breakdown,
       selectionReason: selectionReason(candidate),
       risks: fullTrainer || partialTrainer ? [] : ['Internal trainer availability gap'],

@@ -133,6 +133,83 @@ describe('data-driven training roadmap pipeline', () => {
     expect(initiative?.evidenceRefs.some((ref) => ref.sourceId === 'DS02')).toBe(true);
   });
 
+  it('limits initiative DS01 evidence to the trainees actually selected', () => {
+    const dataDir = fixtureDir();
+    writeFileSync(
+      join(dataDir, 'DS01_Employee_Skill_Profile.csv'),
+      [
+        'Staff_ID,Full_Name,Job_Title,Team,Skill_Set,Level,Development_Needs',
+        'EMP-X,Ada,Software Developer,Platform,ReactJS,Intermediate,Security Testing',
+        'EMP-Z,Grace,Software Developer,Platform,TypeScript,Intermediate,Security Testing',
+      ].join('\n'),
+    );
+
+    const result = runDataDrivenCoordinator({
+      dataDir,
+      runId: 'selected-evidence-run',
+      userPrompt:
+        'Create one Q3/2026 Security Testing initiative for Software Developer with up to 1 trainee.',
+    });
+    const initiative = result.roadmap.initiatives[0];
+    const selectedIds = new Set(initiative?.trainees.map((trainee) => trainee.employeeId));
+    const ds01EvidenceIds = initiative?.evidenceRefs
+      .filter((ref) => ref.sourceId === 'DS01')
+      .map((ref) => ref.rowId);
+
+    expect(selectedIds.size).toBe(1);
+    expect(new Set(ds01EvidenceIds)).toEqual(selectedIds);
+  });
+
+  it('honors an exact initiative count and a Requested topics section', () => {
+    const dataDir = fixtureDir();
+    writeFileSync(
+      join(dataDir, 'DS01_Employee_Skill_Profile.csv'),
+      [
+        'Staff_ID,Full_Name,Job_Title,Team,Skill_Set,Level,Development_Needs',
+        'EMP-X,Ada,Software Developer,Platform,ReactJS,Intermediate,Security Testing',
+        'EMP-Y,Lin,Software Developer,AI,Python,Beginner,Prompt Engineering',
+        'EMP-Z,Grace,Software Developer,Platform,TypeScript,Intermediate,Containerization',
+      ].join('\n'),
+    );
+    writeFileSync(
+      join(dataDir, 'DS02_Project_Roadmap.csv'),
+      [
+        'Project_Code,Technologies,Schedule',
+        'PRJ-X,Security Testing,Q3 2026',
+        'PRJ-Y,Prompt Engineering,Q3 2026',
+        'PRJ-Z,Containerization,Q3 2026',
+      ].join('\n'),
+    );
+
+    const result = runDataDrivenCoordinator({
+      dataDir,
+      runId: 'requested-topics-run',
+      userPrompt: [
+        'Create exactly 2 Q3/2026 training initiatives for Software Developer.',
+        '',
+        'Requested topics:',
+        '- Security Testing',
+        '- Prompt Engineering',
+        '',
+        'Constraints:',
+        '- Only include initiatives backed by DS01 trainee gaps.',
+        '- Do not add extra topics.',
+      ].join('\n'),
+    });
+
+    expect(result.roadmap.initiatives).toHaveLength(2);
+    expect(result.roadmap.initiatives.map((initiative) => initiative.topic).sort()).toEqual([
+      'Prompt Engineering',
+      'Security Testing',
+    ]);
+    expect(result.unselectedCandidates).toContainEqual(
+      expect.objectContaining({
+        candidate: 'Containerization',
+        reasonDropped: 'OUTSIDE_PROMPT_SCOPE',
+      }),
+    );
+  });
+
   it('uses a reasoned HITL fallback when a P1 skill has no internal trainer', () => {
     const result = runDataDrivenCoordinator({
       dataDir: fixtureDir({ trainerSkill: 'Unrelated Coaching' }),

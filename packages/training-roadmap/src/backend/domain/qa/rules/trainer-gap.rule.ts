@@ -38,14 +38,15 @@ export function checkTrainerGap(
       const specialized = /system design|kubernetes|security|machine learning|mlops/i.test(
         item.skill,
       );
+      const documented = Boolean(item.fallbackReason?.trim()) || Boolean(item.fallbackPlan);
       findings.push({
         type: 'TRAINER_NOT_FOUND',
-        severity: specialized ? 'MEDIUM' : 'LOW',
+        severity: documented ? (specialized ? 'MEDIUM' : 'LOW') : 'MEDIUM',
         skill: item.skill,
         relatedInitiativeId: item.initiativeId,
-        message: item.fallbackReason
-          ? `No internal trainer is assigned; ${item.trainerType} fallback ${item.fallbackReason} is documented.`
-          : `No internal trainer is assigned and the ${item.trainerType} fallback is not documented.`,
+        message: documented
+          ? `No internal trainer is assigned; the ${item.trainerType} fallback is documented and requires human approval.`
+          : `No internal trainer is assigned and no fallback is documented for ${item.trainerType} delivery.`,
         evidence: [
           { path: `roadmap.items[${itemIndex}].trainerType`, value: item.trainerType },
           {

@@ -4,6 +4,7 @@ import { dirname } from 'node:path';
 import type { SessionScope, StructuredAgentRuntime } from '@seta/core';
 import type { HumanFeedback, RoadmapResult, RoadmapVersion } from '../../types.ts';
 import { getRunScratchPath, withTrainingRoadmapRun } from '../scratch-storage.ts';
+import type { DataDrivenCoordinatorResult } from './data-driven-pipeline.ts';
 import { defaultTrainingDataDir, runDataDrivenCoordinator } from './data-driven-pipeline.ts';
 import { runTrainingRoadmapPipeline, toTrainingInitiatives } from './pipeline.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
@@ -17,12 +18,30 @@ import {
 
 export class TrainingRoadmapRunError extends Error {
   constructor(
-    readonly code: 'NO_EVIDENCE_BACKED_INITIATIVES',
+    readonly code: 'TRAINING_DATA_UNAVAILABLE' | 'NO_EVIDENCE_BACKED_INITIATIVES',
     message: string,
   ) {
     super(message);
     this.name = 'TrainingRoadmapRunError';
   }
+}
+
+async function saveDataFirstDiagnostics(
+  runId: string,
+  snapshot: DataDrivenCoordinatorResult,
+): Promise<void> {
+  await Promise.all([
+    writeJsonAtomic(getRunScratchPath(runId, 'data_inventory.json'), snapshot.inventory),
+    writeJsonAtomic(getRunScratchPath(runId, 'evidence_index.json'), snapshot.evidenceIndex),
+    writeJsonAtomic(getRunScratchPath(runId, 'skill_ontology.json'), snapshot.ontology),
+    writeJsonAtomic(getRunScratchPath(runId, 'training_candidates.json'), snapshot.candidates),
+    writeJsonAtomic(
+      getRunScratchPath(runId, 'unselected_candidates.json'),
+      snapshot.unselectedCandidates,
+    ),
+    writeJsonAtomic(getRunScratchPath(runId, 'coverage_report.json'), snapshot.coverageReport),
+    writeJsonAtomic(getRunScratchPath(runId, 'tool_trace.json'), snapshot.toolTrace),
+  ]);
 }
 
 async function writeJsonAtomic(filePath: string, value: unknown): Promise<void> {
@@ -109,10 +128,26 @@ export async function executeTrainingRoadmapRun(args: {
       runId: args.runId,
       userPrompt: prompt,
     });
+    await saveDataFirstDiagnostics(args.runId, snapshot);
     if (snapshot.roadmap.initiatives.length === 0) {
+      const ds01 = snapshot.inventory.find((source) => source.sourceId === 'DS01');
+      if (!ds01 || ds01.validRows === 0) {
+        throw new TrainingRoadmapRunError(
+          'TRAINING_DATA_UNAVAILABLE',
+          `Training roadmap source data is unavailable: DS01 has no valid employee skill-gap rows in ${dataDir}.`,
+        );
+      }
+      const dropSummary = Object.entries(
+        snapshot.unselectedCandidates.reduce<Record<string, number>>((summary, item) => {
+          summary[item.reasonDropped] = (summary[item.reasonDropped] ?? 0) + 1;
+          return summary;
+        }, {}),
+      )
+        .map(([reason, count]) => `${reason}=${count}`)
+        .join(', ');
       throw new TrainingRoadmapRunError(
         'NO_EVIDENCE_BACKED_INITIATIVES',
-        'The data-first coordinator produced no evidence-backed training initiatives.',
+        `The data-first coordinator produced no evidence-backed training initiatives${dropSummary ? ` (${dropSummary})` : ''}.`,
       );
     }
 
