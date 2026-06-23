@@ -16,11 +16,14 @@ export function buildExportProposal(result: RoadmapResult): RoadmapExportProposa
   if (result.qaDecision === 'PASS_WITH_WARNINGS' && !result.approvalNotes?.trim()) {
     throw new Error('Cannot export: approve-with-risks requires an approval note.');
   }
+  if (!result.approvalToken?.trim()) {
+    throw new Error('Cannot export: human approval token required.');
+  }
 
   return {
     runId: result.runId,
     exportedAt: new Date().toISOString(),
-    approvalToken: result.approvalToken ?? null,
+    approvalToken: result.approvalToken,
     qaDecision: result.qaDecision,
     riskLevel: result.riskLevel,
     qaFindings: result.qaFindings,

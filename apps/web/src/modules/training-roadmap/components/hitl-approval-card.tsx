@@ -64,10 +64,7 @@ export function HitlApprovalCard({
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0 gap-3">
-        <div>
-          <CardTitle>Human Review Gate</CardTitle>
-          <div className="mt-1 text-caption text-ink-subtle">Run {runId}</div>
-        </div>
+        <CardTitle>Human Review</CardTitle>
         <Badge variant={statusVariant[reviewStatus]}>{statusLabel[reviewStatus]}</Badge>
       </CardHeader>
       <CardContent>

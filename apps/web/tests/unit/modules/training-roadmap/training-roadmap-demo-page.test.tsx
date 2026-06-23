@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TrainingRoadmapDemoPage } from '../../../../src/modules/training-roadmap/pages/training-roadmap-demo-page';
@@ -25,7 +25,7 @@ afterEach(() => {
 });
 
 describe('TrainingRoadmapDemoPage', () => {
-  it('renders the deterministic Member 1 dataset snapshot', () => {
+  it('renders the prepared dataset without internal workflow messaging', () => {
     render(<TrainingRoadmapDemoPage />);
 
     expect(screen.getByLabelText('Constraints Prompt')).toBeInTheDocument();
@@ -36,6 +36,8 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(
       screen.getByText('119 active responses; 22 older responses retained for audit'),
     ).toBeInTheDocument();
+    expect(screen.queryByText(/Member 1|Member 2/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Execution Log')).not.toBeInTheDocument();
   });
 
   it('sends the user prompt through the canonical generation and QA endpoint', async () => {
@@ -90,8 +92,7 @@ describe('TrainingRoadmapDemoPage', () => {
     await user.type(screen.getByLabelText('Constraints Prompt'), 'React testing in Q3');
     await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
 
-    expect(await screen.findByText('API connected')).toBeInTheDocument();
-    expect(screen.getByText('Review Pack')).toBeInTheDocument();
+    expect(await screen.findByText('Review Pack')).toBeInTheDocument();
     expect(screen.getByText('React testing')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
@@ -128,7 +129,7 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(panelUi.setPendingPrompt).toHaveBeenCalledWith({ text: userPrompt, autoSend: true });
     expect(panelUi.setPanelOpen).toHaveBeenCalledWith(true);
     expect(await screen.findByText(/task-assignment request/i)).toBeInTheDocument();
-    expect(screen.queryByText('API connected')).not.toBeInTheDocument();
+    expect(screen.queryByText('Review Pack')).not.toBeInTheDocument();
   });
 
   it('generates on Enter and keeps Shift+Enter for a new line', async () => {
@@ -146,7 +147,7 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
-  it('shows an animated workflow status while Agent 1 and Agent 2 are running', async () => {
+  it('shows a compact loading state without exposing internal workflow details', async () => {
     let resolveRun: ((response: Response) => void) | undefined;
     vi.stubGlobal(
       'fetch',
@@ -162,8 +163,10 @@ describe('TrainingRoadmapDemoPage', () => {
 
     await user.type(screen.getByLabelText('Constraints Prompt'), 'Kubernetes roadmap{enter}');
 
+    expect(screen.getByRole('button', { name: 'Generating roadmap' })).toBeDisabled();
     expect(screen.getByRole('status', { name: 'Generating roadmap' })).toBeInTheDocument();
-    expect(screen.getByText('Agent workflow in progress')).toBeInTheDocument();
+    expect(screen.getByText('Generating your roadmap')).toBeInTheDocument();
+    expect(screen.queryByText(/Agent 1|Agent 2|Member 1|Member 2/i)).not.toBeInTheDocument();
 
     resolveRun?.(
       new Response(JSON.stringify({ error: 'Stopped' }), {
@@ -171,9 +174,11 @@ describe('TrainingRoadmapDemoPage', () => {
         headers: { 'content-type': 'application/json' },
       }),
     );
+    expect(await screen.findByText('Stopped')).toBeInTheDocument();
   });
 
   it('sends revision feedback through the same canonical pipeline before reopening review', async () => {
+    let resolveRevision: ((response: Response) => void) | undefined;
     const roadmapResult = {
       runId: 'agent-1-run',
       reviewStatus: 'pending_review',
@@ -207,14 +212,11 @@ describe('TrainingRoadmapDemoPage', () => {
           headers: { 'content-type': 'application/json' },
         }),
       )
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            ...roadmapResult,
-            executionLog: ['Applied human feedback.', 'Paused at Human Review Gate.'],
+      .mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveRevision = resolve;
           }),
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ),
       );
     vi.stubGlobal('fetch', fetchMock);
     const user = userEvent.setup();
@@ -229,7 +231,9 @@ describe('TrainingRoadmapDemoPage', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Submit & Regenerate' }));
 
-    expect(await screen.findByText('Applied human feedback.')).toBeInTheDocument();
+    expect(screen.getByRole('status', { name: 'Updating roadmap' })).toBeInTheDocument();
+    expect(screen.getByText('Updating your roadmap')).toBeInTheDocument();
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     expect(fetchMock).toHaveBeenNthCalledWith(
       2,
       '/api/training-roadmap/feedback',
@@ -241,6 +245,19 @@ describe('TrainingRoadmapDemoPage', () => {
         }),
       }),
     );
+
+    resolveRevision?.(
+      new Response(
+        JSON.stringify({
+          ...roadmapResult,
+          executionLog: ['Applied human feedback.', 'Paused at Human Review Gate.'],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+    await waitFor(() => {
+      expect(screen.queryByRole('status', { name: 'Updating roadmap' })).not.toBeInTheDocument();
+    });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(screen.getByText('Pending Review')).toBeInTheDocument();
   });
@@ -274,7 +291,7 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(screen.queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument();
   });
 
-  it('keeps the Agent 1 draft visible when QA returns no final initiatives', async () => {
+  it('keeps the generated draft visible when QA returns no final initiatives', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -330,7 +347,7 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(await screen.findByText('Security Testing')).toBeInTheDocument();
     expect(
       screen.getByText(
-        'Showing the original Agent 1 draft because QA feedback did not keep any final initiatives visible yet.',
+        'Showing the generated draft because quality review has not produced final initiatives yet.',
       ),
     ).toBeInTheDocument();
   });

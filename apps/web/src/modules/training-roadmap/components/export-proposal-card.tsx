@@ -64,7 +64,7 @@ export function ExportProposalCard({
             {result.qaDecision === 'BLOCKED'
               ? 'QA blocked this roadmap.'
               : result.qaDecision === 'REVISE_REQUIRED'
-                ? 'Agent 1 revision is required before export.'
+                ? 'A revision is required before export.'
                 : result.qaDecision === 'PASS_WITH_WARNINGS'
                   ? 'Warnings require explicit approve-with-risks.'
                   : 'Human approval is required before export.'}
@@ -84,9 +84,6 @@ export function ExportProposalCard({
             )}
             Export JSON
           </Button>
-          {approvalToken && (
-            <span className="font-mono text-caption text-ink-subtle">{approvalToken}</span>
-          )}
         </div>
       </CardContent>
     </Card>

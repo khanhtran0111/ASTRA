@@ -2,7 +2,6 @@ import {
   Alert,
   AlertDescription,
   AlertTitle,
-  Badge,
   Button,
   EmptyState,
   PageChrome,
@@ -12,25 +11,23 @@ import {
   TabsTrigger,
   Textarea,
 } from '@seta/shared-ui';
-import { AlertCircle, BarChart3, Database, Play, Route, ShieldCheck } from 'lucide-react';
+import { AlertCircle, BarChart3, Database, Loader2, Play, Route } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import { usePanelUI } from '@/modules/agent/chat-experience/agent-provider';
 import {
   runTrainingRoadmap,
   submitReviewDecision,
   submitRevisionFeedback,
-  type TrainingRoadmapDataSource,
   TrainingRoadmapIntentHandoffError,
 } from '../api/training-roadmap-client.ts';
 import { AnalysisKpiStrip } from '../components/analysis-kpi-strip.tsx';
 import { DataCoveragePanel } from '../components/data-coverage-panel.tsx';
 import { DatasetReadinessPanel } from '../components/dataset-readiness-panel.tsx';
-import { ExecutionLogPanel } from '../components/execution-log-panel.tsx';
 import { ExportProposalCard } from '../components/export-proposal-card.tsx';
 import { HitlApprovalCard } from '../components/hitl-approval-card.tsx';
 import { PriorityScoreTable } from '../components/priority-score-table.tsx';
 import { QaFindingsPanel } from '../components/qa-findings-panel.tsx';
-import { RoadmapGenerationStatus } from '../components/roadmap-generation-status.tsx';
+import { RoadmapProgressStatus } from '../components/roadmap-progress-status.tsx';
 import { RoadmapTable } from '../components/roadmap-table.tsx';
 import { SkillGapTable } from '../components/skill-gap-table.tsx';
 import { TrainerReadinessPanel } from '../components/trainer-readiness-panel.tsx';
@@ -43,13 +40,6 @@ import type {
 } from '../types.ts';
 
 type View = 'data' | 'analysis' | 'roadmap';
-
-const decisionLog: Record<ApprovalDecision, string> = {
-  approved: 'Human reviewer approved the roadmap.',
-  approved_with_risks: 'Human reviewer approved the roadmap with acknowledged risks.',
-  revision_requested: 'Human reviewer requested a revision.',
-  rejected: 'Human reviewer rejected the roadmap.',
-};
 
 function flattenDraftRoadmap(draft?: DraftRoadmapOutput): TrainingInitiative[] {
   if (!draft) return [];
@@ -75,10 +65,10 @@ export function TrainingRoadmapDemoPage() {
   const { setPanelOpen, setPendingPrompt } = usePanelUI();
   const [result, setResult] = useState<RoadmapResult | null>(null);
   const [approvalToken, setApprovalToken] = useState<string | null>(null);
-  const [dataSource, setDataSource] = useState<TrainingRoadmapDataSource | null>(null);
   const [view, setView] = useState<View>('data');
   const [loading, setLoading] = useState(false);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [revisionSubmitting, setRevisionSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [handoffMessage, setHandoffMessage] = useState<string | null>(null);
   const [userPrompt, setUserPrompt] = useState<string>('');
@@ -93,7 +83,7 @@ export function TrainingRoadmapDemoPage() {
     Boolean(result && result.initiatives.length === 0) && visibleInitiatives.length > 0;
 
   const handleRun = useCallback(async () => {
-    if (loading || reviewSubmitting) return;
+    if (loading || reviewSubmitting || revisionSubmitting) return;
     setLoading(true);
     setError(null);
     setHandoffMessage(null);
@@ -103,7 +93,6 @@ export function TrainingRoadmapDemoPage() {
     try {
       const response = await runTrainingRoadmap(userPrompt);
       setResult(response.data);
-      setDataSource(response.source);
     } catch (err) {
       if (err instanceof TrainingRoadmapIntentHandoffError) {
         setHandoffMessage(err.message);
@@ -115,7 +104,7 @@ export function TrainingRoadmapDemoPage() {
     } finally {
       setLoading(false);
     }
-  }, [loading, reviewSubmitting, setPanelOpen, setPendingPrompt, userPrompt]);
+  }, [loading, reviewSubmitting, revisionSubmitting, setPanelOpen, setPendingPrompt, userPrompt]);
 
   const handleDecision = useCallback(
     async (decision: Exclude<ApprovalDecision, 'revision_requested'>, approvalNote?: string) => {
@@ -127,7 +116,6 @@ export function TrainingRoadmapDemoPage() {
       try {
         const response = await submitReviewDecision(result.runId, decision, approvalNote);
         setApprovalToken(response.data.approvalToken);
-        setDataSource(response.source);
         setResult((current) =>
           current
             ? {
@@ -137,7 +125,6 @@ export function TrainingRoadmapDemoPage() {
                 approvalNotes: response.data.approvalNotes,
                 approvedBy: response.data.approvedBy,
                 approvedAt: response.data.approvedAt,
-                executionLog: [...current.executionLog, decisionLog[response.data.reviewStatus]],
               }
             : current,
         );
@@ -154,18 +141,17 @@ export function TrainingRoadmapDemoPage() {
     async (feedback: string) => {
       if (!result) return;
 
-      setReviewSubmitting(true);
+      setRevisionSubmitting(true);
       setError(null);
       setApprovalToken(null);
 
       try {
         const response = await submitRevisionFeedback(result.runId, feedback);
         setResult(response.data);
-        setDataSource(response.source);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to regenerate training roadmap');
       } finally {
-        setReviewSubmitting(false);
+        setRevisionSubmitting(false);
       }
     },
     [result],
@@ -177,9 +163,9 @@ export function TrainingRoadmapDemoPage() {
       title="Training Roadmap"
       subtitle="Data readiness, evidence-backed analysis, and human review"
       actions={
-        <Button onClick={handleRun} disabled={loading || reviewSubmitting}>
-          <Play aria-hidden />
-          {result ? 'Generate Again' : 'Generate Roadmap'}
+        <Button onClick={handleRun} disabled={loading || reviewSubmitting || revisionSubmitting}>
+          {loading ? <Loader2 className="animate-spin" aria-hidden /> : <Play aria-hidden />}
+          {loading ? 'Generating roadmap' : result ? 'Generate Again' : 'Generate Roadmap'}
         </Button>
       }
     >
@@ -206,16 +192,6 @@ export function TrainingRoadmapDemoPage() {
             Agent Chat
           </div>
         </div>
-        <Alert variant="info">
-          <ShieldCheck aria-hidden className="size-4" />
-          <AlertTitle>Member 1 snapshot is ready</AlertTitle>
-          <AlertDescription>
-            Pipeline {member1AnalysisSnapshot.pipelineVersion} · run date{' '}
-            {member1AnalysisSnapshot.runDate} · all five source files validated. The bundled
-            snapshot keeps this demo stable while Member 2 completes roadmap generation.
-          </AlertDescription>
-        </Alert>
-
         <Tabs value={view} onValueChange={(value) => setView(value as View)}>
           <TabsList className="flex-wrap">
             <TabsTrigger value="data">
@@ -270,37 +246,26 @@ export function TrainingRoadmapDemoPage() {
               </Alert>
             )}
 
-            {loading && <RoadmapGenerationStatus />}
+            {loading && <RoadmapProgressStatus mode="generate" />}
+            {revisionSubmitting && <RoadmapProgressStatus mode="revision" />}
 
             {!loading && !result && (
               <EmptyState
                 icon={<Route className="size-6" />}
-                title="Analysis ready for roadmap generation"
-                description="Generate a provisional draft now. Member 2 can replace the mock response without changing the review UI."
+                title="Ready to generate a roadmap"
+                description="Enter the training constraints, then generate a draft for review."
                 action={{ label: 'Generate Roadmap', onClick: handleRun }}
               />
             )}
 
             {!loading && result && (
               <div className="grid gap-4">
-                <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-hairline bg-canvas px-4 py-3">
-                  <div>
-                    <div className="font-medium text-ink">Roadmap run {result.runId}</div>
-                    <div className="text-caption text-ink-subtle">
-                      Response received from the training-roadmap API.
-                    </div>
-                  </div>
-                  <Badge variant={dataSource === 'api' ? 'success' : 'secondary'}>
-                    API connected
-                  </Badge>
-                </div>
-                <ExecutionLogPanel logs={result.executionLog} />
                 <DataCoveragePanel result={result} />
                 {showingDraftFallback && (
                   <Alert variant="info">
                     <AlertDescription>
-                      Showing the original Agent 1 draft because QA feedback did not keep any final
-                      initiatives visible yet.
+                      Showing the generated draft because quality review has not produced final
+                      initiatives yet.
                     </AlertDescription>
                   </Alert>
                 )}
@@ -324,7 +289,7 @@ export function TrainingRoadmapDemoPage() {
                     reviewPack={result.reviewPack}
                     onDecision={handleDecision}
                     onRevision={handleRevision}
-                    disabled={reviewSubmitting}
+                    disabled={reviewSubmitting || revisionSubmitting}
                   />
                   <ExportProposalCard result={result} approvalToken={approvalToken} />
                 </div>

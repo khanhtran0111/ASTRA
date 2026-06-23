@@ -35,6 +35,7 @@ describe('training roadmap export guard', () => {
     const proposal = buildExportProposal(
       result({
         reviewStatus: 'approved',
+        approvalToken: 'APPROVAL-run-1-1',
         approvedBy: 'user-1',
         approvedAt: '2026-06-22T01:00:00.000Z',
       }),
@@ -46,6 +47,12 @@ describe('training roadmap export guard', () => {
       approvedBy: 'user-1',
       revisionCount: 0,
     });
+  });
+
+  it('denies an approved result without a human approval token', () => {
+    expect(() => buildExportProposal(result({ reviewStatus: 'approved' }))).toThrow(
+      'Cannot export: human approval token required.',
+    );
   });
 
   it.each([
@@ -67,6 +74,7 @@ describe('training roadmap export guard', () => {
         qaDecision: 'PASS_WITH_WARNINGS',
         approvalRequirement: 'APPROVE_WITH_RISKS',
         reviewStatus: 'approved_with_risks',
+        approvalToken: 'APPROVAL-run-1-2',
         approvalNotes: 'Accepted for the pilot with L&D oversight.',
         approvedAt: '2026-06-22T01:00:00.000Z',
       }),

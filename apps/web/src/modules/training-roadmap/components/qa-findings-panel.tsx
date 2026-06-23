@@ -78,7 +78,7 @@ export function QaFindingsPanel({
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between space-y-0 gap-3">
-        <CardTitle>Agent 2 Quality Gate</CardTitle>
+        <CardTitle>Quality Review</CardTitle>
         <div className="flex flex-wrap items-center justify-end gap-1">
           <Badge variant={decisionVariant[qaDecision]}>{qaDecision}</Badge>
           <Badge variant={riskVariant[riskLevel]}>
@@ -118,7 +118,7 @@ export function QaFindingsPanel({
             <div className="mb-2 flex items-center gap-2">
               <RotateCcw className="size-4 text-ink-subtle" aria-hidden />
               <h3 id="revision-instructions-title" className="font-medium text-ink">
-                Agent 1 Revision Instructions ({revisionInstructions.length})
+                Revision Instructions ({revisionInstructions.length})
               </h3>
             </div>
             <ul className="space-y-2">

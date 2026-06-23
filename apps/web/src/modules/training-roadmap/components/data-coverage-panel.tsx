@@ -82,23 +82,6 @@ export function DataCoveragePanel({ result }: { result: RoadmapResult }) {
           </div>
         )}
 
-        {result.toolTrace && (
-          <section aria-labelledby="data-tool-trace-title">
-            <h3 id="data-tool-trace-title" className="mb-2 font-medium text-ink">
-              Deterministic Tool Trace
-            </h3>
-            <ol className="space-y-1 text-body-sm">
-              {result.toolTrace.map((entry, index) => (
-                <li key={entry.tool} className="flex gap-2">
-                  <span className="font-mono text-ink-subtle">{index + 1}.</span>
-                  <span className="font-medium text-ink">{entry.tool}</span>
-                  <span className="text-ink-subtle">{entry.detail}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-        )}
-
         {result.unselectedCandidates && result.unselectedCandidates.length > 0 && (
           <section aria-labelledby="unselected-candidates-title">
             <h3 id="unselected-candidates-title" className="mb-2 font-medium text-ink">

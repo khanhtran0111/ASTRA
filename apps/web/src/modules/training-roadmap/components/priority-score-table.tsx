@@ -27,8 +27,7 @@ export function PriorityScoreTable({ priorities }: { priorities: PriorityAnalysi
       <CardHeader>
         <CardTitle>Priority scoring</CardTitle>
         <CardDescription>
-          Evidence-backed initiatives produced by Member 1. Final scheduling remains owned by Member
-          2.
+          Evidence-backed initiatives ranked for final scheduling and review.
         </CardDescription>
       </CardHeader>
       <CardContent>

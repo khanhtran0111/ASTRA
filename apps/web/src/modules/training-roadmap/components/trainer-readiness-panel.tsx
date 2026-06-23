@@ -1,14 +1,4 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-  Badge,
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@seta/shared-ui';
+import { Badge, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@seta/shared-ui';
 import { AlertTriangle, UsersRound } from 'lucide-react';
 import type { ComponentProps } from 'react';
 import type { Priority, TrainingAnalysisSnapshot } from '../types.ts';
@@ -66,15 +56,6 @@ export function TrainerReadinessPanel({ snapshot }: { snapshot: TrainingAnalysis
             </div>
           ))}
         </div>
-
-        <Alert variant="warning">
-          <AlertTriangle aria-hidden className="size-4" />
-          <AlertTitle>Waiting for matching—not waiting for UI</AlertTitle>
-          <AlertDescription>
-            Member 2 can return trainer assignments and fallback reasons through the agreed roadmap
-            contract without changing this screen structure.
-          </AlertDescription>
-        </Alert>
       </CardContent>
     </Card>
   );

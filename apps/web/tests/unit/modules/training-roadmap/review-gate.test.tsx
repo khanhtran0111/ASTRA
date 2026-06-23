@@ -35,6 +35,25 @@ function result(overrides: Partial<RoadmapResult> = {}): RoadmapResult {
 }
 
 describe('training roadmap human quality gate', () => {
+  it('offers human approval when QA passes', async () => {
+    const onDecision = vi.fn().mockResolvedValue(undefined);
+    const user = userEvent.setup();
+    render(
+      <HitlApprovalCard
+        runId="run-1"
+        reviewStatus="pending_review"
+        qaDecision="PASS"
+        approvalRequirement="HUMAN_APPROVAL"
+        reviewPack={reviewPack}
+        onDecision={onDecision}
+        onRevision={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Approve' }));
+    expect(onDecision).toHaveBeenCalledWith('approved');
+  });
+
   it('requires a note before approve-with-risks', async () => {
     const onDecision = vi.fn().mockResolvedValue(undefined);
     const user = userEvent.setup();
@@ -87,6 +106,13 @@ describe('training roadmap human quality gate', () => {
         approvalToken="APPROVAL-run-1"
       />,
     );
+
+    expect(screen.getByRole('button', { name: 'Export JSON' })).toBeDisabled();
+    expect(screen.getByText('Locked')).toBeInTheDocument();
+  });
+
+  it('locks export until human approval produces a token', () => {
+    render(<ExportProposalCard result={result({ reviewStatus: 'approved' })} />);
 
     expect(screen.getByRole('button', { name: 'Export JSON' })).toBeDisabled();
     expect(screen.getByText('Locked')).toBeInTheDocument();
