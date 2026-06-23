@@ -14,11 +14,13 @@ import {
 } from '@seta/shared-ui';
 import { AlertCircle, BarChart3, Database, Play, Route, ShieldCheck } from 'lucide-react';
 import { useCallback, useState } from 'react';
+import { usePanelUI } from '@/modules/agent/chat-experience/agent-provider';
 import {
   runTrainingRoadmap,
   submitReviewDecision,
   submitRevisionFeedback,
   type TrainingRoadmapDataSource,
+  TrainingRoadmapIntentHandoffError,
 } from '../api/training-roadmap-client.ts';
 import { AnalysisKpiStrip } from '../components/analysis-kpi-strip.tsx';
 import { DataCoveragePanel } from '../components/data-coverage-panel.tsx';
@@ -70,6 +72,7 @@ function flattenDraftRoadmap(draft?: DraftRoadmapOutput): TrainingInitiative[] {
 }
 
 export function TrainingRoadmapDemoPage() {
+  const { setPanelOpen, setPendingPrompt } = usePanelUI();
   const [result, setResult] = useState<RoadmapResult | null>(null);
   const [approvalToken, setApprovalToken] = useState<string | null>(null);
   const [dataSource, setDataSource] = useState<TrainingRoadmapDataSource | null>(null);
@@ -77,6 +80,7 @@ export function TrainingRoadmapDemoPage() {
   const [loading, setLoading] = useState(false);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [handoffMessage, setHandoffMessage] = useState<string | null>(null);
   const [userPrompt, setUserPrompt] = useState<string>('');
   const visibleInitiatives = !result
     ? []
@@ -92,6 +96,7 @@ export function TrainingRoadmapDemoPage() {
     if (loading || reviewSubmitting) return;
     setLoading(true);
     setError(null);
+    setHandoffMessage(null);
     setApprovalToken(null);
     setView('roadmap');
 
@@ -100,11 +105,17 @@ export function TrainingRoadmapDemoPage() {
       setResult(response.data);
       setDataSource(response.source);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to run training roadmap pipeline');
+      if (err instanceof TrainingRoadmapIntentHandoffError) {
+        setHandoffMessage(err.message);
+        setPendingPrompt({ text: userPrompt, autoSend: true });
+        setPanelOpen(true);
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to run training roadmap pipeline');
+      }
     } finally {
       setLoading(false);
     }
-  }, [loading, reviewSubmitting, userPrompt]);
+  }, [loading, reviewSubmitting, setPanelOpen, setPendingPrompt, userPrompt]);
 
   const handleDecision = useCallback(
     async (decision: Exclude<ApprovalDecision, 'revision_requested'>, approvalNote?: string) => {
@@ -191,7 +202,8 @@ export function TrainingRoadmapDemoPage() {
             rows={3}
           />
           <div className="text-caption text-ink-subtle">
-            Press Enter to generate · Shift+Enter for a new line
+            Press Enter to generate · Shift+Enter for a new line · Task and people requests open
+            Agent Chat
           </div>
         </div>
         <Alert variant="info">
@@ -247,6 +259,14 @@ export function TrainingRoadmapDemoPage() {
               <Alert variant="destructive">
                 <AlertCircle aria-hidden className="size-4" />
                 <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            {handoffMessage && (
+              <Alert variant="info">
+                <Route aria-hidden className="size-4" />
+                <AlertTitle>Prompt routed to Agent Chat</AlertTitle>
+                <AlertDescription>{handoffMessage}</AlertDescription>
               </Alert>
             )}
 

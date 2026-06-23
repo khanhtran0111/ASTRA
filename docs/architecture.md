@@ -469,6 +469,8 @@ answer, and all of it no-ops on the queued runner (no chat thread).
 
 `POST /api/training-roadmap/feedback` re-enters the same controller with the original prompt, previous artifact, and reviewer feedback, preserves the `runId`, and returns the newly QA-reviewed `RoadmapResult`. `/qa` remains a non-mutating debug/re-audit surface for an existing artifact; it never revises Agent 1 output. Approval and export read only the persisted `qa_result.json`, so neither can bypass the QA decision. The registered coordinator/QA specs describe agent behavior, but their `delegates` metadata is not treated as an executable transport; service orchestration owns the handoff.
 
+Before `/run` creates a run or reads DS01–DS05, a deterministic high-confidence intent gate rejects explicit task search, task assignment, people search, and general-assistant prompts with `PROMPT_INTENT_MISMATCH`. The web preserves the original text and hands it to the existing Agent Chat surface, whose injected `staffing.orchestrator` owns task lookup, candidate recommendation, availability checks, and assignment HITL. `training-roadmap` never imports or calls `staffing` directly.
+
 ---
 
 ## 13. Embeddings & retrieval

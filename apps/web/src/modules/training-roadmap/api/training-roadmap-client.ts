@@ -12,15 +12,58 @@ export type TrainingRoadmapClientResult<T> = {
   source: TrainingRoadmapDataSource;
 };
 
+type PromptIntentMismatchBody = {
+  error: string;
+  code: 'PROMPT_INTENT_MISMATCH';
+  detectedIntent: string;
+  destination: 'AGENT_CHAT';
+  targetPath: string;
+};
+
+export class TrainingRoadmapIntentHandoffError extends Error {
+  readonly code = 'PROMPT_INTENT_MISMATCH';
+  readonly detectedIntent: string;
+  readonly targetPath: string;
+
+  constructor(message: string, detectedIntent: string, targetPath: string) {
+    super(message);
+    this.name = 'TrainingRoadmapIntentHandoffError';
+    this.detectedIntent = detectedIntent;
+    this.targetPath = targetPath;
+  }
+}
+
 async function parseJsonOrThrow<T>(response: Response, fallbackMessage: string): Promise<T> {
   if (!response.ok) {
     let message = fallbackMessage;
 
     try {
-      const body = (await response.json()) as { error?: unknown; message?: unknown };
+      const body = (await response.json()) as {
+        error?: unknown;
+        message?: unknown;
+        code?: unknown;
+        detectedIntent?: unknown;
+        destination?: unknown;
+        targetPath?: unknown;
+      };
+      if (
+        body.code === 'PROMPT_INTENT_MISMATCH' &&
+        typeof body.error === 'string' &&
+        typeof body.detectedIntent === 'string' &&
+        body.destination === 'AGENT_CHAT' &&
+        typeof body.targetPath === 'string'
+      ) {
+        const mismatch = body as PromptIntentMismatchBody;
+        throw new TrainingRoadmapIntentHandoffError(
+          mismatch.error,
+          mismatch.detectedIntent,
+          mismatch.targetPath,
+        );
+      }
       if (typeof body.error === 'string') message = body.error;
       if (typeof body.message === 'string') message = body.message;
-    } catch {
+    } catch (error) {
+      if (error instanceof TrainingRoadmapIntentHandoffError) throw error;
       // Keep the fallback message when the server did not return JSON.
     }
 

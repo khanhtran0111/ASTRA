@@ -9,6 +9,7 @@ import {
 } from '../domain/execute-training-roadmap-run.ts';
 import { buildExportProposal } from '../domain/export-proposal.ts';
 import { runTrainingRoadmapPipeline } from '../domain/pipeline.ts';
+import { classifyTrainingRoadmapPrompt } from '../domain/prompt-intent.ts';
 import type { RoadmapOutputAgent } from '../domain/qa/roadmap-output-loader.ts';
 import { loadQaInputFromRoadmapOutput } from '../domain/qa/roadmap-output-loader.ts';
 import { getRunScratchPath, readJsonFileOrDefault } from '../scratch-storage.ts';
@@ -56,6 +57,25 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
   routes.post('/run', async (c) => {
     const body = await readJsonBody(c);
     const userPrompt = typeof body.userPrompt === 'string' ? body.userPrompt : '';
+    const classification = classifyTrainingRoadmapPrompt(userPrompt);
+    if (classification.destination === 'AGENT_CHAT') {
+      const requestLabel =
+        classification.intent === 'TASK_ASSIGNMENT'
+          ? 'task-assignment'
+          : classification.intent.toLowerCase().replaceAll('_', ' ');
+      return c.json(
+        {
+          error: `This is a ${requestLabel} request, not a training-roadmap request. Continuing in Agent Chat.`,
+          code: 'PROMPT_INTENT_MISMATCH',
+          detectedIntent: classification.intent,
+          destination: classification.destination,
+          targetPath: '/agent/chat',
+          targetAgent: 'staffing.orchestrator',
+          reason: classification.reason,
+        },
+        422,
+      );
+    }
     const runId = createRunId();
 
     try {

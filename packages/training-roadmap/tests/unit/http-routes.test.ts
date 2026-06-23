@@ -95,6 +95,31 @@ describe('training roadmap routes', () => {
     await expect(res.json()).resolves.toMatchObject({ ok: true, module: 'training-roadmap' });
   });
 
+  it('hands task-assignment prompts to agent chat without running roadmap generation', async () => {
+    calls.length = 0;
+    toolCalls.length = 0;
+    generatedPrompts.length = 0;
+
+    const userPrompt =
+      'Find the task `Audit Kubernetes cluster security and RBAC policies`, then suggest the best person to assign it to.';
+    const res = await app.request('/api/training-roadmap/run', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ userPrompt }),
+    });
+
+    expect(res.status).toBe(422);
+    await expect(res.json()).resolves.toMatchObject({
+      code: 'PROMPT_INTENT_MISMATCH',
+      detectedIntent: 'TASK_ASSIGNMENT',
+      destination: 'AGENT_CHAT',
+      targetPath: '/agent/chat',
+    });
+    expect(calls).toEqual([]);
+    expect(toolCalls).toEqual([]);
+    expect(generatedPrompts).toEqual([]);
+  });
+
   it('runs data-first generation and QA through one canonical endpoint', async () => {
     calls.length = 0;
     toolCalls.length = 0;

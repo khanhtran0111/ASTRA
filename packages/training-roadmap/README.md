@@ -11,6 +11,8 @@ Evidence-backed training-roadmap generation and review. The module owns a determ
 
 Agent 1 and QA exchange `roadmap_output_agent.json` under the run-scoped `ASTRA_SCRATCH_DIR`; they do not rely on conversational delegation.
 
+`/run` first applies a deterministic domain-intent gate. Explicit task, assignee, people-search, and general-assistant requests return `PROMPT_INTENT_MISMATCH` before a run or artifact is created, allowing the web to hand the unchanged prompt to Agent Chat and its staffing orchestrator.
+
 When QA requests revision, the controller reruns the deterministic coordinator from source data and records a new artifact revision. Resolved alignment/fallback warnings remain visible to human reviewers but are excluded from QA score deductions.
 
 ## Public surface

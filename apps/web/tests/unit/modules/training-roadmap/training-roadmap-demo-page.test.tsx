@@ -3,7 +3,23 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TrainingRoadmapDemoPage } from '../../../../src/modules/training-roadmap/pages/training-roadmap-demo-page';
 
+const panelUi = vi.hoisted(() => ({
+  setPanelOpen: vi.fn(),
+  setPendingPrompt: vi.fn(),
+}));
+
+vi.mock('../../../../src/modules/agent/chat-experience/agent-provider', () => ({
+  usePanelUI: () => ({
+    panelOpen: false,
+    pendingPrompt: null,
+    setPanelOpen: panelUi.setPanelOpen,
+    setPendingPrompt: panelUi.setPendingPrompt,
+  }),
+}));
+
 afterEach(() => {
+  panelUi.setPanelOpen.mockReset();
+  panelUi.setPendingPrompt.mockReset();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
@@ -83,6 +99,36 @@ describe('TrainingRoadmapDemoPage', () => {
       expect.objectContaining({ body: JSON.stringify({ userPrompt: 'React testing in Q3' }) }),
     );
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('hands a task-assignment prompt to the staffing assistant instead of showing a roadmap', async () => {
+    const userPrompt =
+      'Find the task `Audit Kubernetes cluster security and RBAC policies`, then suggest the best person to assign it to.';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: 'This is a task-assignment request. Continuing in Agent Chat.',
+            code: 'PROMPT_INTENT_MISMATCH',
+            detectedIntent: 'TASK_ASSIGNMENT',
+            destination: 'AGENT_CHAT',
+            targetPath: '/agent/chat',
+          }),
+          { status: 422, headers: { 'content-type': 'application/json' } },
+        ),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.type(screen.getByLabelText('Constraints Prompt'), userPrompt);
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+
+    expect(panelUi.setPendingPrompt).toHaveBeenCalledWith({ text: userPrompt, autoSend: true });
+    expect(panelUi.setPanelOpen).toHaveBeenCalledWith(true);
+    expect(await screen.findByText(/task-assignment request/i)).toBeInTheDocument();
+    expect(screen.queryByText('API connected')).not.toBeInTheDocument();
   });
 
   it('generates on Enter and keeps Shift+Enter for a new line', async () => {
