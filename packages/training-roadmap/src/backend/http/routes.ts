@@ -11,7 +11,6 @@ import { buildExportProposal } from '../domain/export-proposal.ts';
 import { runTrainingRoadmapPipeline } from '../domain/pipeline.ts';
 import type { RoadmapOutputAgent } from '../domain/qa/roadmap-output-loader.ts';
 import { loadQaInputFromRoadmapOutput } from '../domain/qa/roadmap-output-loader.ts';
-import { reviseRoadmap } from '../domain/revise-roadmap.ts';
 import { getRunScratchPath, readJsonFileOrDefault } from '../scratch-storage.ts';
 
 function isApprovalDecision(value: unknown): value is ApprovalDecision {
@@ -154,29 +153,14 @@ export function buildTrainingRoadmapRouteHandlers(deps: {
     }
 
     try {
-      let { source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId);
-      let result: RoadmapResult;
-
-      while (true) {
-        result = await runTrainingRoadmapPipeline({
-          source,
-          qaInput,
-          agents: deps.agents,
-          abortSignal: c.req.raw.signal,
-          session: c.get('user'),
-        });
-
-        if (result.qaDecision !== 'REVISE_REQUIRED' || source.revisionCount >= 2) break;
-
-        source = reviseRoadmap(source, result.revisionInstructions);
-
-        fs.writeFileSync(
-          getRunScratchPath(source.runId, 'roadmap_output_agent.json'),
-          JSON.stringify(source, null, 2),
-        );
-
-        ({ source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId));
-      }
+      const { source, qaInput } = await loadQaInputFromRoadmapOutput(body.runId);
+      const result: RoadmapResult = await runTrainingRoadmapPipeline({
+        source,
+        qaInput,
+        agents: deps.agents,
+        abortSignal: c.req.raw.signal,
+        session: c.get('user'),
+      });
 
       fs.writeFileSync(
         getRunScratchPath(result.runId, 'qa_result.json'),

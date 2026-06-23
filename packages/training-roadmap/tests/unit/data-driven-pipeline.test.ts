@@ -210,6 +210,34 @@ describe('data-driven training roadmap pipeline', () => {
     );
   });
 
+  it('allocates only trainees matching an explicit role and proficiency', () => {
+    const dataDir = fixtureDir();
+    writeFileSync(
+      join(dataDir, 'DS01_Employee_Skill_Profile.csv'),
+      [
+        'Staff_ID,Full_Name,Job_Title,Team,Skill_Set,Level,Development_Needs',
+        'EMP-X,Ada,Software Developer,Platform,ReactJS,Intermediate,Security Testing',
+        'EMP-Y,Lin,Software Developer,Platform,ReactJS,Beginner,Security Testing',
+        'EMP-Z,Grace,QA Engineer,Quality,Selenium,Intermediate,Security Testing',
+      ].join('\n'),
+    );
+
+    const result = runDataDrivenCoordinator({
+      dataDir,
+      runId: 'role-proficiency-run',
+      userPrompt:
+        'Create one Q3/2026 Security Testing initiative for Software Developer, proficiency Intermediate.',
+    });
+
+    expect(result.roadmap.initiatives[0]?.trainees).toEqual([
+      expect.objectContaining({
+        employeeId: 'EMP-X',
+        role: 'Software Developer',
+        proficiency: 'Intermediate',
+      }),
+    ]);
+  });
+
   it('uses a reasoned HITL fallback when a P1 skill has no internal trainer', () => {
     const result = runDataDrivenCoordinator({
       dataDir: fixtureDir({ trainerSkill: 'Unrelated Coaching' }),

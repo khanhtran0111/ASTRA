@@ -6,10 +6,12 @@ Evidence-backed training-roadmap generation and review. The module owns a determ
 
 - `POST /api/training-roadmap/run` runs generation and QA as one controller flow and returns the final `RoadmapResult`.
 - `POST /api/training-roadmap/feedback` reruns that same flow for the existing `runId` and creates a new final version.
-- `POST /api/training-roadmap/qa` re-audits an existing artifact for debugging; it is not the primary UI journey.
+- `POST /api/training-roadmap/qa` re-audits an existing artifact without mutating it; it is not the primary UI journey.
 - `POST /api/training-roadmap/approve` and `/export` consume the persisted QA result and cannot bypass its decision.
 
 Agent 1 and QA exchange `roadmap_output_agent.json` under the run-scoped `ASTRA_SCRATCH_DIR`; they do not rely on conversational delegation.
+
+When QA requests revision, the controller reruns the deterministic coordinator from source data and records a new artifact revision. Resolved alignment/fallback warnings remain visible to human reviewers but are excluded from QA score deductions.
 
 ## Public surface
 

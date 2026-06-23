@@ -25,29 +25,20 @@ function initiativeFor(
   );
 }
 
-function isResolvedMissingProject(
-  finding: QaFinding,
-  initiatives: QaRoadmapItem[],
-  revisionCount: number,
-): boolean {
+function isResolvedMissingProject(finding: QaFinding, initiatives: QaRoadmapItem[]): boolean {
   const initiative = initiativeFor(finding, initiatives);
   return (
-    revisionCount > 0 &&
     initiative?.alignmentType === 'BOD_AND_SURVEY_ONLY' &&
     initiative.approvalRequired === true &&
     Boolean(initiative.alignmentNote?.trim())
   );
 }
 
-function toInstruction(
-  finding: QaFinding,
-  initiatives: QaRoadmapItem[],
-  revisionCount: number,
-): RevisionInstruction {
+function toInstruction(finding: QaFinding, initiatives: QaRoadmapItem[]): RevisionInstruction {
   const initiativeId = finding.relatedInitiativeId ?? 'ROADMAP';
 
   if (finding.type === 'MISSING_PROJECT_REQUIREMENT') {
-    if (isResolvedMissingProject(finding, initiatives, revisionCount)) {
+    if (isResolvedMissingProject(finding, initiatives)) {
       return {
         initiativeId,
         issueType: finding.type,
@@ -146,8 +137,26 @@ function isFallbackPlanComplete(plan: unknown): boolean {
 }
 
 function hasDocumentedTrainerFallback(initiative: QaRoadmapItem | undefined): boolean {
-  if (!initiative?.fallbackReason) return false;
-  return initiative.trainerType !== 'internal' || isFallbackPlanComplete(initiative.fallbackPlan);
+  return Boolean(initiative?.fallbackReason) && isFallbackPlanComplete(initiative?.fallbackPlan);
+}
+
+export function partitionQaFindings(args: {
+  findings: QaFinding[];
+  initiatives: QaRoadmapItem[];
+}): { unresolvedFindings: QaFinding[]; resolvedWarnings: QaFinding[] } {
+  const unresolvedFindings: QaFinding[] = [];
+  const resolvedWarnings: QaFinding[] = [];
+
+  for (const finding of args.findings) {
+    const initiative = initiativeFor(finding, args.initiatives);
+    const resolved =
+      (finding.type === 'MISSING_PROJECT_REQUIREMENT' &&
+        isResolvedMissingProject(finding, args.initiatives)) ||
+      (finding.type === 'TRAINER_NOT_FOUND' && hasDocumentedTrainerFallback(initiative));
+    (resolved ? resolvedWarnings : unresolvedFindings).push(finding);
+  }
+
+  return { unresolvedFindings, resolvedWarnings };
 }
 
 export function buildQaReviewResult(args: {
@@ -157,23 +166,22 @@ export function buildQaReviewResult(args: {
   initiatives: QaRoadmapItem[];
   revisionCount: number;
 }): QaReviewResult {
-  const blockingIssues = args.findings.filter(
+  const { unresolvedFindings, resolvedWarnings } = partitionQaFindings({
+    findings: args.findings,
+    initiatives: args.initiatives,
+  });
+  const blockingIssues = unresolvedFindings.filter(
     (finding) =>
       BLOCKING_TYPES.has(finding.type) ||
       (finding.type === 'NO_TRAINEE_EVIDENCE' && args.revisionCount >= 2),
   );
 
-  const needsRevision = args.findings.some((finding) => {
+  const needsRevision = unresolvedFindings.some((finding) => {
     if (BLOCKING_TYPES.has(finding.type)) return false;
     if (finding.type === 'NO_TRAINEE_EVIDENCE') return args.revisionCount < 2;
     if (REVISION_TYPES.has(finding.type)) return true;
-    if (finding.type === 'MISSING_PROJECT_REQUIREMENT') {
-      return !isResolvedMissingProject(finding, args.initiatives, args.revisionCount);
-    }
-    if (finding.type === 'TRAINER_NOT_FOUND') {
-      const initiative = initiativeFor(finding, args.initiatives);
-      return !hasDocumentedTrainerFallback(initiative);
-    }
+    if (finding.type === 'MISSING_PROJECT_REQUIREMENT') return true;
+    if (finding.type === 'TRAINER_NOT_FOUND') return true;
     return finding.severity === 'HIGH' && !BLOCKING_TYPES.has(finding.type);
   });
 
@@ -183,14 +191,14 @@ export function buildQaReviewResult(args: {
   else if (args.findings.length > 0) qaDecision = 'PASS_WITH_WARNINGS';
   else qaDecision = 'PASS';
 
-  const revisionInstructions = args.findings.map((finding) =>
-    toInstruction(finding, args.initiatives, args.revisionCount),
+  const revisionInstructions = unresolvedFindings.map((finding) =>
+    toInstruction(finding, args.initiatives),
   );
   const summary =
     qaDecision === 'PASS'
       ? 'QA passed with no unresolved findings. Human approval is required before export.'
       : qaDecision === 'PASS_WITH_WARNINGS'
-        ? `${args.findings.length} warning(s) require explicit human approval with risks.`
+        ? `${args.findings.length} warning(s), including ${resolvedWarnings.length} resolved by documented controls, require explicit human approval with risks.`
         : qaDecision === 'REVISE_REQUIRED'
           ? `${revisionInstructions.length} revision instruction(s) must return to Agent 1.`
           : `${blockingIssues.length} blocking issue(s) prevent approval and export.`;

@@ -9,7 +9,7 @@ import { defaultTrainingDataDir, runDataDrivenCoordinator } from './data-driven-
 import { runTrainingRoadmapPipeline, toTrainingInitiatives } from './pipeline.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
 import { loadQaInputFromRoadmapOutput } from './qa/roadmap-output-loader.ts';
-import { reviseRoadmap } from './revise-roadmap.ts';
+import { recordDataFirstRevision } from './revise-roadmap.ts';
 import {
   buildTrainingRoadmapPrompt,
   toDraftRoadmapOutput,
@@ -105,7 +105,7 @@ export async function executeTrainingRoadmapRun(args: {
   }
   const dataDir = args.dataDir ?? defaultTrainingDataDir();
   const autoRevisionEnabled =
-    args.autoRevisionEnabled ?? process.env.TRAINING_ROADMAP_AUTO_REVISION === 'true';
+    args.autoRevisionEnabled ?? process.env.TRAINING_ROADMAP_AUTO_REVISION !== 'false';
   const prompt = buildTrainingRoadmapPrompt(args.userPrompt, args.feedback);
   if (args.previousSource && args.previousSource.runId !== args.runId) {
     throw new Error(
@@ -176,7 +176,24 @@ export async function executeTrainingRoadmapRun(args: {
       result.qaDecision === 'REVISE_REQUIRED' &&
       source.revisionCount < maxQaRevisions
     ) {
-      source = reviseRoadmap(source, result.revisionInstructions);
+      const previousSource = source;
+      const revisionSnapshot = runDataDrivenCoordinator({
+        dataDir,
+        runId: args.runId,
+        userPrompt: prompt,
+      });
+      await saveDataFirstDiagnostics(args.runId, revisionSnapshot);
+      const regeneratedSource = toRoadmapOutputAgent({
+        snapshot: revisionSnapshot,
+        userPrompt: args.userPrompt,
+        ...(args.feedback ? { feedback: args.feedback } : {}),
+        previousSource,
+      });
+      source = recordDataFirstRevision({
+        regeneratedSource,
+        previousSource,
+        instructions: result.revisionInstructions,
+      });
       await writeJsonAtomic(artifactPath, source);
       ({ qaInput } = await loadQaInputFromRoadmapOutput(args.runId, { dataDir }));
       result = await runTrainingRoadmapPipeline({

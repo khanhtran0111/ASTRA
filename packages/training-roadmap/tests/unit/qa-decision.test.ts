@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { buildQaReviewResult } from '../../src/backend/domain/qa/qa-decision.ts';
+import {
+  buildQaReviewResult,
+  partitionQaFindings,
+} from '../../src/backend/domain/qa/qa-decision.ts';
+import { calculateQaScore } from '../../src/backend/domain/qa/qa-score.ts';
 import type { QaFinding, QaRoadmapItem } from '../../src/backend/domain/qa/qa-types.ts';
 
 function finding(overrides: Partial<QaFinding> = {}): QaFinding {
@@ -25,6 +29,15 @@ function initiative(overrides: Partial<QaRoadmapItem> = {}): QaRoadmapItem {
     ...overrides,
   };
 }
+
+const completeFallbackPlan = {
+  learningMode: 'external' as const,
+  pic: 'L&D Coordinator',
+  materials: ['Approved external course'],
+  milestones: [{ week: 1, description: 'Start course', deliverable: 'Enrollment proof' }],
+  estimatedHours: 16,
+  evaluationCriteria: 'Pass the practical assessment.',
+};
 
 describe('training roadmap QA decision gate', () => {
   it('passes a clean evidence-backed roadmap', () => {
@@ -85,6 +98,56 @@ describe('training roadmap QA decision gate', () => {
     });
   });
 
+  it('does not deduct resolved alignment and complete fallback warnings from the score', () => {
+    const findings = [
+      finding(),
+      finding({
+        type: 'TRAINER_NOT_FOUND',
+        severity: 'MEDIUM',
+        message: 'No internal trainer is assigned.',
+      }),
+    ];
+    const initiatives = [
+      initiative({
+        trainerType: 'external',
+        fallbackReason: 'SKILL_NOT_FOUND_INTERNAL',
+        fallbackPlan: completeFallbackPlan,
+        alignmentType: 'BOD_AND_SURVEY_ONLY',
+        approvalRequired: true,
+        alignmentNote: 'No direct DS02 project exists; human risk approval is required.',
+      }),
+    ];
+
+    expect(partitionQaFindings({ findings, initiatives })).toEqual({
+      unresolvedFindings: [],
+      resolvedWarnings: findings,
+    });
+    expect(
+      calculateQaScore(partitionQaFindings({ findings, initiatives }).unresolvedFindings),
+    ).toMatchObject({ score: 100, riskLevel: 'LOW' });
+  });
+
+  it('keeps an unresolved timeline mismatch in the revision path', () => {
+    const result = buildQaReviewResult({
+      findings: [
+        finding({
+          type: 'TIMELINE_MISMATCH',
+          severity: 'MEDIUM',
+          message: 'Q4 is outside the requested Q3 window.',
+        }),
+      ],
+      score: 90,
+      riskLevel: 'LOW',
+      initiatives: [initiative({ quarter: 'Q4 2026' })],
+      revisionCount: 0,
+    });
+
+    expect(result).toMatchObject({
+      qaDecision: 'REVISE_REQUIRED',
+      revisionInstructions: [expect.objectContaining({ issueType: 'TIMELINE_MISMATCH' })],
+    });
+  });
+
   it('requests trainee reallocation before blocking missing DS01 evidence', () => {
     const issue = finding({
       type: 'NO_TRAINEE_EVIDENCE',
@@ -128,7 +191,11 @@ describe('training roadmap QA decision gate', () => {
       score: 95,
       riskLevel: 'LOW',
       initiatives: [
-        initiative({ trainerType: 'external', fallbackReason: 'SKILL_NOT_FOUND_INTERNAL' }),
+        initiative({
+          trainerType: 'external',
+          fallbackReason: 'SKILL_NOT_FOUND_INTERNAL',
+          fallbackPlan: completeFallbackPlan,
+        }),
       ],
       revisionCount: 0,
     });

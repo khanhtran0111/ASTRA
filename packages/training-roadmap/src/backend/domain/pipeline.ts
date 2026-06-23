@@ -3,7 +3,7 @@ import { z } from 'zod';
 import type { QaFinding, RoadmapResult, TrainingInitiative } from '../../types.ts';
 import { TRAINING_QA_AGENT_ID } from '../agent-specs.ts';
 import { QA_TOOL_IDS } from '../agent-tools.ts';
-import { buildQaReviewResult } from './qa/qa-decision.ts';
+import { buildQaReviewResult, partitionQaFindings } from './qa/qa-decision.ts';
 import {
   assertQaScoreMatches,
   assertQaToolsCalled,
@@ -57,11 +57,10 @@ type QaAgentOutput = Omit<z.infer<typeof qaAgentOutputSchema>, 'findings'> & {
 
 type DataRevisionAction = NonNullable<RoadmapResult['dataRevisionActions']>[number];
 
-function auditDataFirstSource(source: RoadmapOutputAgent): {
+export function auditDataFirstSource(source: RoadmapOutputAgent): {
   findings: QaFinding[];
   revisionActions: DataRevisionAction[];
 } {
-  if (!source.dataInventory) return { findings: [], revisionActions: [] };
   const findings: QaFinding[] = [];
   const revisionActions: DataRevisionAction[] = [];
   const add = (args: {
@@ -87,6 +86,18 @@ function auditDataFirstSource(source: RoadmapOutputAgent): {
       expectedFix: args.expectedFix,
     });
   };
+
+  if (!source.dataInventory) {
+    add({
+      issueCode: 'SOURCE_NOT_AUDITED',
+      affectedItemId: 'ROADMAP',
+      message: 'Canonical Agent 1 artifact is missing dataInventory.',
+      requiredToolToRerun: 'ingestAllSourcesTool',
+      expectedFix: 'Regenerate the artifact through the deterministic data-first controller.',
+      evidence: [{ path: 'dataInventory', value: null }],
+    });
+    return { findings, revisionActions };
+  }
 
   for (const sourceId of ['DS01', 'DS02', 'DS03', 'DS04', 'DS05'] as const) {
     const inventory = source.dataInventory.find((item) => item.sourceId === sourceId);
@@ -237,6 +248,7 @@ export async function runTrainingRoadmapPipeline(args: {
   const toolRunId = createQaToolRun(args.qaInput);
   let reviewed: QaAgentOutput;
   let scored: ReturnType<typeof getQaScoreCall>;
+  let resolvedWarnings: QaFinding[] = [];
   try {
     const checkToolIds = Object.values(QA_TOOL_IDS).filter(
       (toolId) => toolId !== QA_TOOL_IDS.score,
@@ -329,7 +341,12 @@ export async function runTrainingRoadmapPipeline(args: {
         findingKeys.add(key);
       }
     }
-    recordQaFinalFindings(toolRunId, reviewed.findings);
+    const partitioned = partitionQaFindings({
+      findings: reviewed.findings,
+      initiatives: args.qaInput.roadmap?.items ?? [],
+    });
+    resolvedWarnings = partitioned.resolvedWarnings;
+    recordQaFinalFindings(toolRunId, partitioned.unresolvedFindings);
     await args.agents.callTool({
       agentId: TRAINING_QA_AGENT_ID,
       toolName: QA_TOOL_IDS.score,
@@ -340,7 +357,7 @@ export async function runTrainingRoadmapPipeline(args: {
     assertQaToolsCalled(toolRunId, Object.values(QA_TOOL_IDS));
     scored = getQaScoreCall(toolRunId);
     assertQaScoreMatches(toolRunId, {
-      findings: reviewed.findings,
+      findings: partitioned.unresolvedFindings,
       score: scored.result.score,
       riskLevel: scored.result.riskLevel,
       riskReason: scored.result.reason,
@@ -393,6 +410,7 @@ export async function runTrainingRoadmapPipeline(args: {
     evidencePack: {
       revisionHistory: args.source.revisionHistory,
       semanticSummary: reviewed.semanticSummary,
+      resolvedWarnings,
       findings: reviewed.findings.map((finding) => ({
         type: finding.type,
         relatedInitiativeId: finding.relatedInitiativeId,

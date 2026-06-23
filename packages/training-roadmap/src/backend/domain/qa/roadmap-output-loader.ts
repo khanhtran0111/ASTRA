@@ -278,87 +278,6 @@ const normalizedDataSchema = z.object({
   ),
 });
 
-type NormalizedData = z.infer<typeof normalizedDataSchema>;
-
-function normalizedSkill(value: string): string {
-  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
-}
-
-function enrichLegacyEvidence(
-  source: RoadmapOutputAgent,
-  normalized: NormalizedData,
-): RoadmapOutputAgent {
-  return {
-    ...source,
-    initiatives: source.initiatives.map((initiative) => {
-      const evidence = initiative.evidence.map((ref): EvidenceRef => {
-        if (ref.field !== 'legacy_reference') return ref;
-        if (ref.source === 'DS02') {
-          const project = normalized.projects.find((item) => item.project_id === ref.recordId);
-          return {
-            ...ref,
-            field: 'Required_Skills',
-            value: project?.required_skills.join('; ') ?? ref.value,
-            reason: `Legacy project reference normalized for ${initiative.topic}.`,
-          };
-        }
-        if (ref.source === 'DS05') {
-          const goal = normalized.goals.find((item) => item.goal_id === ref.recordId);
-          return {
-            ...ref,
-            field: 'Goal_Description',
-            value: goal?._raw_description ?? goal?.required_skills.join('; ') ?? ref.value,
-            reason: `Legacy BOD goal reference normalized for ${initiative.topic}.`,
-          };
-        }
-        return ref;
-      });
-
-      for (const traineeId of initiative.targetTrainees) {
-        if (evidence.some((ref) => ref.source === 'DS01' && ref.recordId === traineeId)) continue;
-        const employee = normalized.employees.find((item) => item.employee_id === traineeId);
-        const topic = normalizedSkill(initiative.topic);
-        const matchesGap = employee?.self_reported_gaps.some((gap) => {
-          const normalizedGap = normalizedSkill(gap);
-          return (
-            normalizedGap === topic ||
-            normalizedGap.includes(topic) ||
-            topic.includes(normalizedGap)
-          );
-        });
-        if (employee && matchesGap) {
-          evidence.push({
-            source: 'DS01',
-            recordId: traineeId,
-            field: 'Skill_Gap',
-            value: employee.self_reported_gaps.join('; '),
-            reason: `${employee.position ?? 'Employee'} (${employee.proficiency_level ?? 'unknown proficiency'}) has a direct recorded gap matching ${initiative.topic}.`,
-          });
-        }
-      }
-
-      if (
-        initiative.trainerName &&
-        !evidence.some((ref) => ref.source === 'DS04' && ref.recordId === initiative.trainerName)
-      ) {
-        const trainer = normalized.trainers.find(
-          (item) => item.trainer_id === initiative.trainerName,
-        );
-        if (trainer) {
-          evidence.push({
-            source: 'DS04',
-            recordId: trainer.trainer_id,
-            field: 'Skills;Available_Hours_Per_Month',
-            value: `${trainer.skills.join('; ')} | ${trainer.available_hours_per_month}h/month`,
-            reason: `Trainer record normalized for the ${initiative.topic} assignment.`,
-          });
-        }
-      }
-      return { ...initiative, evidence };
-    }),
-  };
-}
-
 async function firstExisting(candidates: string[]): Promise<string> {
   for (const candidate of candidates) {
     try {
@@ -433,12 +352,11 @@ export async function loadQaInputFromRoadmapOutput(
     readJson(roadmapPath),
     readJson(normalizedPath),
   ]);
-  let source = roadmapOutputAgentSchema.parse(sourceRaw);
+  const source = roadmapOutputAgentSchema.parse(sourceRaw);
   if (runId && source.runId !== runId) {
     throw new Error(`Agent 1 artifact belongs to run ${source.runId}, not ${runId}`);
   }
   const normalized = normalizedDataSchema.parse(normalizedRaw);
-  source = enrichLegacyEvidence(source, normalized);
   const quarters = [...new Set(source.initiatives.map((initiative) => initiative.quarter))];
 
   const qaInput: QaInput = {

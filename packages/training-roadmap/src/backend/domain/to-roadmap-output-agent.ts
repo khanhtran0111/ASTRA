@@ -4,6 +4,7 @@ import type {
   DataDrivenFormat,
   IndexedEvidenceRef,
 } from './data-driven-pipeline.ts';
+import { generateFallbackPlan } from './fallback-plan.ts';
 import type { RoadmapOutputAgent } from './qa/roadmap-output-loader.ts';
 
 type ArtifactFormat = RoadmapOutputAgent['initiatives'][number]['format'];
@@ -109,6 +110,17 @@ export function toRoadmapOutputAgent(args: {
     initiatives: args.snapshot.roadmap.initiatives.map((initiative) => {
       const projectBacked = initiative.evidenceRefs.some((ref) => ref.sourceId === 'DS02');
       const objective = initiative.objectives.join(' ').trim();
+      const fallbackPlan = initiative.fallbackReason
+        ? generateFallbackPlan({
+            skillName: initiative.topic,
+            fallbackReason:
+              initiative.fallbackReason === 'ERR_NO_CAPACITY'
+                ? 'CAPACITY_EXCEEDED'
+                : 'TRAINER_NOT_FOUND',
+            estimatedHours: initiative.totalHours,
+            traineeCount: initiative.trainees.length,
+          })
+        : undefined;
       return {
         id: initiative.id,
         topic: initiative.topic,
@@ -160,6 +172,7 @@ export function toRoadmapOutputAgent(args: {
         estimatedHours: initiative.totalHours,
         evidence: evidenceRefs(initiative.evidenceRefs),
         ...(initiative.fallbackReason ? { fallbackReason: initiative.fallbackReason } : {}),
+        ...(fallbackPlan ? { fallbackPlan } : {}),
         alignmentType: projectBacked
           ? ('PROJECT_BACKED' as const)
           : ('BOD_AND_SURVEY_ONLY' as const),

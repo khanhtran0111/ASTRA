@@ -227,7 +227,7 @@ describe('training roadmap routes', () => {
     }
   });
 
-  it('passes the Agent 1 artifact through the QA agent pipeline', async () => {
+  it('blocks a legacy Agent 1 artifact that lacks the data-first inventory contract', async () => {
     calls.length = 0;
     toolCalls.length = 0;
     generatedPrompts.length = 0;
@@ -240,8 +240,11 @@ describe('training roadmap routes', () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body.reviewStatus).toBe('pending_review');
-    expect(body.qaDecision).toBe('PASS_WITH_WARNINGS');
+    expect(body.reviewStatus).toBe('blocked');
+    expect(body.qaDecision).toBe('BLOCKED');
+    expect(body.qaFindings).toContainEqual(
+      expect.objectContaining({ message: expect.stringContaining('SOURCE_NOT_AUDITED') }),
+    );
     expect(body.executionLog).toContain('Loaded roadmap_output_agent.json.');
     expect(body.initiatives).toHaveLength(22);
     expect(body.qaScore).toBeGreaterThanOrEqual(0);
@@ -271,7 +274,7 @@ describe('training roadmap routes', () => {
     await expect(res.json()).resolves.toEqual({ error: 'runId is required' });
   });
 
-  it('loops Agent 2 findings back to Agent 1 and re-audits the revised roadmap', async () => {
+  it('keeps /qa as a non-mutating debug audit surface', async () => {
     const runId = 'fixture-missing-project-qa';
     const runDirectory = getScratchPath('training-roadmap-runs', runId);
     rmSync(runDirectory, { recursive: true, force: true });
@@ -287,16 +290,14 @@ describe('training roadmap routes', () => {
 
       expect(res.status).toBe(200);
       expect(body).toMatchObject({
-        qaDecision: 'PASS_WITH_WARNINGS',
-        reviewStatus: 'pending_review',
-        revisionCount: 1,
-        approvalRequirement: 'APPROVE_WITH_RISKS',
+        qaDecision: 'BLOCKED',
+        reviewStatus: 'blocked',
+        revisionCount: 0,
+        approvalRequirement: 'BLOCKED',
       });
-      expect(body.initiatives[0]).toMatchObject({
-        alignmentType: 'BOD_AND_SURVEY_ONLY',
-        approvalRequired: true,
-      });
-      expect(body.executionLog).toContain('Agent 1 revised the roadmap from Agent 2 instructions.');
+      expect(body.executionLog).not.toContain(
+        'Agent 1 re-ran the deterministic data-first coordinator from source data.',
+      );
     } finally {
       vi.stubEnv('TRAINING_ROADMAP_OUTPUT_FILE', roadmapFixture);
       rmSync(runDirectory, { recursive: true, force: true });
@@ -350,68 +351,80 @@ describe('training roadmap routes', () => {
   });
 
   it('returns a token only for approved decisions', async () => {
-    await app.request('/api/training-roadmap/qa', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
-    });
-
-    const lockedExport = await app.request('/api/training-roadmap/export', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
-    });
-    expect(lockedExport.status).toBe(409);
-
-    const missingNote = await app.request('/api/training-roadmap/approve', {
+    vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', dataFirstFixturesDir);
+    const generated = await app.request('/api/training-roadmap/run', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        runId: 'fixture-roadmap-run',
-        decision: 'approved_with_risks',
+        userPrompt: 'Create one Q3/2026 Security Testing initiative for Software Engineer.',
       }),
     });
-    expect(missingNote.status).toBe(400);
+    const generatedBody = await generated.json();
+    const runId = generatedBody.runId as string;
 
-    const approved = await app.request('/api/training-roadmap/approve', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        runId: 'fixture-roadmap-run',
-        decision: 'approved_with_risks',
-        approvalNote: 'Accepted test fixture fallbacks.',
-      }),
-    });
-    const approvedBody = await approved.json();
+    try {
+      expect(generated.status).toBe(200);
+      const lockedExport = await app.request('/api/training-roadmap/export', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId }),
+      });
+      expect(lockedExport.status).toBe(409);
 
-    expect(approved.status).toBe(200);
-    expect(approvedBody.approvalToken).toMatch(/^APPROVAL-fixture-roadmap-run-/);
+      const decision = generatedBody.qaDecision === 'PASS' ? 'approved' : 'approved_with_risks';
+      if (decision === 'approved_with_risks') {
+        const missingNote = await app.request('/api/training-roadmap/approve', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ runId, decision }),
+        });
+        expect(missingNote.status).toBe(400);
+      }
 
-    const exported = await app.request('/api/training-roadmap/export', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
-    });
-    expect(exported.status).toBe(200);
-    await expect(exported.json()).resolves.toMatchObject({
-      qaDecision: 'PASS_WITH_WARNINGS',
-      approvalNotes: 'Accepted test fixture fallbacks.',
-    });
+      const approved = await app.request('/api/training-roadmap/approve', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          runId,
+          decision,
+          ...(decision === 'approved_with_risks'
+            ? { approvalNote: 'Accepted test fixture fallbacks.' }
+            : {}),
+        }),
+      });
+      const approvedBody = await approved.json();
 
-    await app.request('/api/training-roadmap/qa', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
-    });
+      expect(approved.status).toBe(200);
+      expect(approvedBody.approvalToken).toMatch(new RegExp(`^APPROVAL-${runId}-\\d+$`));
 
-    const rejected = await app.request('/api/training-roadmap/approve', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run', decision: 'rejected' }),
-    });
+      const exported = await app.request('/api/training-roadmap/export', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId }),
+      });
+      expect(exported.status).toBe(200);
+      await expect(exported.json()).resolves.toMatchObject({
+        qaDecision: generatedBody.qaDecision,
+      });
 
-    expect(rejected.status).toBe(200);
-    await expect(rejected.json()).resolves.toMatchObject({ approvalToken: null });
+      await app.request('/api/training-roadmap/qa', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId }),
+      });
+
+      const rejected = await app.request('/api/training-roadmap/approve', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId, decision: 'rejected' }),
+      });
+
+      expect(rejected.status).toBe(200);
+      await expect(rejected.json()).resolves.toMatchObject({ approvalToken: null });
+    } finally {
+      rmSync(getScratchPath('training-roadmap-runs', runId), { recursive: true, force: true });
+      vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+    }
   });
 
   it('does not approve an unknown or demo run', async () => {
@@ -426,30 +439,41 @@ describe('training roadmap routes', () => {
   });
 
   it('rejects feedback once the run has already been approved', async () => {
-    await app.request('/api/training-roadmap/qa', {
+    vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', dataFirstFixturesDir);
+    const generated = await app.request('/api/training-roadmap/run', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run' }),
+      body: JSON.stringify({
+        userPrompt: 'Create one Q3/2026 Security Testing initiative for Software Engineer.',
+      }),
     });
+    const generatedBody = await generated.json();
+    const runId = generatedBody.runId as string;
+    const decision = generatedBody.qaDecision === 'PASS' ? 'approved' : 'approved_with_risks';
     await app.request('/api/training-roadmap/approve', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        runId: 'fixture-roadmap-run',
-        decision: 'approved_with_risks',
-        approvalNote: 'Accepted for this test.',
+        runId,
+        decision,
+        ...(decision === 'approved_with_risks' ? { approvalNote: 'Accepted for this test.' } : {}),
       }),
     });
 
-    const res = await app.request('/api/training-roadmap/feedback', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ runId: 'fixture-roadmap-run', feedback: 'Please redo this.' }),
-    });
+    try {
+      const res = await app.request('/api/training-roadmap/feedback', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ runId, feedback: 'Please redo this.' }),
+      });
 
-    expect(res.status).toBe(409);
-    await expect(res.json()).resolves.toEqual({
-      error: 'Run fixture-roadmap-run is already approved_with_risks',
-    });
+      expect(res.status).toBe(409);
+      await expect(res.json()).resolves.toEqual({
+        error: `Run ${runId} is already ${decision === 'approved' ? 'approved' : 'approved_with_risks'}`,
+      });
+    } finally {
+      rmSync(getScratchPath('training-roadmap-runs', runId), { recursive: true, force: true });
+      vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+    }
   });
 });

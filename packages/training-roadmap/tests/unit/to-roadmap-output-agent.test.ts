@@ -194,4 +194,34 @@ describe('toRoadmapOutputAgent', () => {
       },
     });
   });
+
+  it('adds a complete deterministic fallback plan when no internal trainer is selected', () => {
+    const externalSnapshot = structuredClone(snapshot);
+    const initiative = externalSnapshot.roadmap.initiatives[0];
+    if (!initiative) throw new Error('Expected test initiative');
+    initiative.format = 'EXTERNAL_TRAINER';
+    initiative.selectedTrainer = null;
+    initiative.trainerCandidates = [];
+    initiative.fallbackReason = 'ERR_NO_INTERNAL_SKILL';
+    initiative.requiresHumanApproval = true;
+
+    const source = toRoadmapOutputAgent({
+      snapshot: externalSnapshot,
+      userPrompt: 'Create one Security Testing initiative.',
+    });
+
+    expect(source.initiatives[0]).toMatchObject({
+      trainerName: null,
+      fallbackReason: 'ERR_NO_INTERNAL_SKILL',
+      fallbackPlan: {
+        pic: expect.any(String),
+        materials: expect.arrayContaining([expect.any(String)]),
+        milestones: expect.arrayContaining([
+          expect.objectContaining({ week: expect.any(Number), deliverable: expect.any(String) }),
+        ]),
+        estimatedHours: 24,
+        evaluationCriteria: expect.any(String),
+      },
+    });
+  });
 });
