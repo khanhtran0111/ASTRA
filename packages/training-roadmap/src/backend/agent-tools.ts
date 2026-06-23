@@ -1,11 +1,9 @@
 import { type AgentTool, defineAgentTool } from '@seta/agent-sdk';
 import { z } from 'zod';
 import {
-  lndAssignLearningFormats,
-  lndCompileQuarterlyRoadmap,
-  lndFindAndAssignTrainer,
-  lndGetPendingSkills,
-} from './agent-tools/roadmap-tools.ts';
+  DATA_FIRST_TOOL_IDS,
+  dataDrivenTrainingRoadmapTools,
+} from './agent-tools/data-driven-tools.ts';
 import { calculateQaScore } from './domain/qa/qa-score.ts';
 import {
   getQaFinalFindings,
@@ -36,19 +34,21 @@ export const QA_TOOL_IDS = {
   score: 'trainingRoadmap_calculateQaScore',
 } as const;
 
+export { DATA_FIRST_TOOL_IDS };
+
 const runInputSchema = z.object({ runId: z.string().min(1) });
 const evidenceSchema = z.object({ path: z.string().min(1), value: z.string() });
 const findingSchema = z.object({
   type: z.enum([
-    'INVALID_TRAINEE',
-    'TRAINER_GAP',
-    'MISSING_EVIDENCE',
+    'NO_TRAINEE_EVIDENCE',
+    'UNSUPPORTED_INITIATIVE',
     'BOD_ALIGNMENT_RISK',
     'MISSING_PROJECT_REQUIREMENT',
-    'TRAINEE_MISMATCH',
-    'TIMELINE_RISK',
+    'TRAINER_NOT_FOUND',
+    'TIMELINE_MISMATCH',
+    'COVERAGE_SHORTFALL',
     'TRACEABILITY_GAP',
-    'REQUEST_SCOPE_MISMATCH',
+    'PROMPT_SCOPE_VIOLATION',
   ]),
   severity: z.enum(['HIGH', 'MEDIUM', 'LOW']),
   message: z.string(),
@@ -126,7 +126,11 @@ const traineeDesireTool = ruleTool(
   'Compare every assigned trainee target-skill list with the roadmap initiative skill.',
   (runId) => {
     const input = getQaToolRun(runId);
-    return checkTraineeMismatch(input.roadmap ?? { items: [] }, input.normalizedData);
+    return checkTraineeMismatch(
+      input.roadmap ?? { items: [] },
+      input.normalizedData,
+      input.request?.userPrompt,
+    );
   },
 );
 
@@ -140,6 +144,7 @@ const timelineTool = ruleTool(
       input.roadmap ?? { items: [] },
       input.priorityResult,
       input.normalizedData,
+      input.request?.userPrompt,
     );
   },
 );
@@ -278,8 +283,5 @@ export const trainingRoadmapAgentTools: AgentTool[] = [
   timelineTool,
   traceabilityTool,
   scoreTool,
-  lndGetPendingSkills as unknown as AgentTool,
-  lndFindAndAssignTrainer as unknown as AgentTool,
-  lndAssignLearningFormats as unknown as AgentTool,
-  lndCompileQuarterlyRoadmap as unknown as AgentTool,
+  ...dataDrivenTrainingRoadmapTools,
 ];

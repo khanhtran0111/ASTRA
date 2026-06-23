@@ -3,7 +3,7 @@ import { calculateQaScore } from '../../src/backend/domain/qa/qa-score.ts';
 import type { QaFinding } from '../../src/backend/domain/qa/qa-types.ts';
 
 const finding = (severity: QaFinding['severity']): QaFinding => ({
-  type: 'MISSING_EVIDENCE',
+  type: 'UNSUPPORTED_INITIATIVE',
   severity,
   message: 'Evidence missing.',
   evidence: [{ path: 'priorityResult.initiatives[0]', value: null }],

@@ -11,11 +11,11 @@ export function checkInvalidTrainee(
     item.traineeIds?.forEach((traineeId, traineeIndex) => {
       if (!employeeIds.has(traineeId)) {
         findings.push({
-          type: 'INVALID_TRAINEE',
+          type: 'NO_TRAINEE_EVIDENCE',
           severity: 'HIGH',
           skill: item.skill,
           relatedInitiativeId: item.initiativeId,
-          message: `${traineeId} does not exist in normalized employee data.`,
+          message: `${traineeId} has no DS01 employee record.`,
           evidence: [
             {
               path: `roadmap.items[${itemIndex}].traineeIds[${traineeIndex}]`,

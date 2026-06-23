@@ -1,15 +1,31 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { TrainingRoadmapDemoPage } from '../../../../src/modules/training-roadmap/pages/training-roadmap-demo-page';
 
+const panelUi = vi.hoisted(() => ({
+  setPanelOpen: vi.fn(),
+  setPendingPrompt: vi.fn(),
+}));
+
+vi.mock('../../../../src/modules/agent/chat-experience/agent-provider', () => ({
+  usePanelUI: () => ({
+    panelOpen: false,
+    pendingPrompt: null,
+    setPanelOpen: panelUi.setPanelOpen,
+    setPendingPrompt: panelUi.setPendingPrompt,
+  }),
+}));
+
 afterEach(() => {
+  panelUi.setPanelOpen.mockReset();
+  panelUi.setPendingPrompt.mockReset();
   vi.restoreAllMocks();
   vi.unstubAllGlobals();
 });
 
 describe('TrainingRoadmapDemoPage', () => {
-  it('renders the deterministic Member 1 dataset snapshot', () => {
+  it('renders the prepared dataset without internal workflow messaging', () => {
     render(<TrainingRoadmapDemoPage />);
 
     expect(screen.getByLabelText('Constraints Prompt')).toBeInTheDocument();
@@ -20,40 +36,55 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(
       screen.getByText('119 active responses; 22 older responses retained for audit'),
     ).toBeInTheDocument();
+    expect(screen.queryByText(/Member 1|Member 2/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Execution Log')).not.toBeInTheDocument();
   });
 
-  it('sends the user prompt to Agent 1 before requesting Agent 2 QA', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ runId: 'agent-1-run' }), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        }),
-      )
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            runId: 'agent-1-run',
-            reviewStatus: 'pending',
-            executionLog: ['Loaded roadmap_output_agent.json.'],
-            initiatives: [],
-            qaFindings: [],
-            qaScore: 100,
-            riskLevel: 'LOW',
-            riskReason: 'No findings.',
-            evidencePack: {},
-            reviewPack: {
-              request: { userPrompt: 'React testing in Q3' },
-              generatedAt: '2026-06-21T00:00:00.000Z',
-              initiativeCount: 0,
-              semanticSummary: [],
-              findings: [],
+  it('sends the user prompt through the canonical generation and QA endpoint', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          runId: 'agent-1-run',
+          reviewStatus: 'pending_review',
+          executionLog: ['Loaded roadmap_output_agent.json.'],
+          initiatives: [],
+          draftInitiatives: [
+            {
+              id: 'draft-1',
+              topic: 'React testing',
+              priority: 'P1',
+              score: 90,
+              quarter: 'Q3 2026',
+              targetTrainees: ['EMP-001'],
+              trainerName: 'TRN-001',
+              format: 'internal',
+              estimatedHours: 16,
+              evidence: [],
+              riskFlags: [],
             },
-          }),
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ),
-      );
+          ],
+          qaDecision: 'PASS',
+          qaFindings: [],
+          blockingIssues: [],
+          revisionInstructions: [],
+          approvalRequirement: 'HUMAN_APPROVAL',
+          qaSummary: 'QA passed.',
+          qaScore: 100,
+          riskLevel: 'LOW',
+          riskReason: 'No findings.',
+          revisionCount: 0,
+          evidencePack: {},
+          reviewPack: {
+            request: { userPrompt: 'React testing in Q3' },
+            generatedAt: '2026-06-21T00:00:00.000Z',
+            initiativeCount: 0,
+            semanticSummary: [],
+            findings: [],
+          },
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
     vi.stubGlobal('fetch', fetchMock);
     const user = userEvent.setup();
     render(<TrainingRoadmapDemoPage />);
@@ -61,21 +92,174 @@ describe('TrainingRoadmapDemoPage', () => {
     await user.type(screen.getByLabelText('Constraints Prompt'), 'React testing in Q3');
     await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
 
-    expect(await screen.findByText('API connected')).toBeInTheDocument();
-    expect(screen.getByText('Review Pack')).toBeInTheDocument();
+    expect(await screen.findByText('Review Pack')).toBeInTheDocument();
+    expect(screen.getByText('React testing')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/training-roadmap/run',
       expect.objectContaining({ body: JSON.stringify({ userPrompt: 'React testing in Q3' }) }),
     );
-    expect(fetchMock).toHaveBeenNthCalledWith(
-      2,
-      '/api/training-roadmap/qa',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ runId: 'agent-1-run' }),
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('hands a task-assignment prompt to the staffing assistant instead of showing a roadmap', async () => {
+    const userPrompt =
+      'Find the task `Audit Kubernetes cluster security and RBAC policies`, then suggest the best person to assign it to.';
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: 'This is a task-assignment request. Continuing in Agent Chat.',
+            code: 'PROMPT_INTENT_MISMATCH',
+            detectedIntent: 'TASK_ASSIGNMENT',
+            destination: 'AGENT_CHAT',
+            targetPath: '/agent/chat',
+          }),
+          { status: 422, headers: { 'content-type': 'application/json' } },
+        ),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.type(screen.getByLabelText('Constraints Prompt'), userPrompt);
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+
+    expect(panelUi.setPendingPrompt).toHaveBeenCalledWith({ text: userPrompt, autoSend: true });
+    expect(panelUi.setPanelOpen).toHaveBeenCalledWith(true);
+    expect(await screen.findByText(/task-assignment request/i)).toBeInTheDocument();
+    expect(screen.queryByText('Review Pack')).not.toBeInTheDocument();
+  });
+
+  it('generates on Enter and keeps Shift+Enter for a new line', async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new TypeError('Stopped after submit'));
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+    const prompt = screen.getByLabelText('Constraints Prompt');
+
+    await user.type(prompt, 'Frontend roadmap');
+    await user.keyboard('{Shift>}{Enter}{/Shift}');
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    await user.keyboard('{Enter}');
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows a compact loading state without exposing internal workflow details', async () => {
+    let resolveRun: ((response: Response) => void) | undefined;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockImplementation(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveRun = resolve;
+          }),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.type(screen.getByLabelText('Constraints Prompt'), 'Kubernetes roadmap{enter}');
+
+    expect(screen.getByRole('button', { name: 'Generating roadmap' })).toBeDisabled();
+    expect(screen.getByRole('status', { name: 'Generating roadmap' })).toBeInTheDocument();
+    expect(screen.getByText('Generating your roadmap')).toBeInTheDocument();
+    expect(screen.queryByText(/Agent 1|Agent 2|Member 1|Member 2/i)).not.toBeInTheDocument();
+
+    resolveRun?.(
+      new Response(JSON.stringify({ error: 'Stopped' }), {
+        status: 500,
+        headers: { 'content-type': 'application/json' },
       }),
     );
+    expect(await screen.findByText('Stopped')).toBeInTheDocument();
+  });
+
+  it('sends revision feedback through the same canonical pipeline before reopening review', async () => {
+    let resolveRevision: ((response: Response) => void) | undefined;
+    const roadmapResult = {
+      runId: 'agent-1-run',
+      reviewStatus: 'pending_review',
+      executionLog: ['Paused at Human Review Gate.'],
+      initiatives: [],
+      draftInitiatives: [],
+      qaDecision: 'PASS',
+      qaFindings: [],
+      blockingIssues: [],
+      revisionInstructions: [],
+      approvalRequirement: 'HUMAN_APPROVAL',
+      qaSummary: 'QA passed.',
+      qaScore: 100,
+      riskLevel: 'LOW',
+      riskReason: 'No findings.',
+      revisionCount: 0,
+      evidencePack: {},
+      reviewPack: {
+        request: { userPrompt: 'React testing in Q3' },
+        generatedAt: '2026-06-21T00:00:00.000Z',
+        initiativeCount: 0,
+        semanticSummary: [],
+        findings: [],
+      },
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify(roadmapResult), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        }),
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveRevision = resolve;
+          }),
+      );
+    vi.stubGlobal('fetch', fetchMock);
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+    await screen.findByText('Review Pack');
+    await user.click(screen.getByRole('button', { name: 'Request Revision' }));
+    await user.type(
+      screen.getByLabelText('Revision feedback'),
+      'Move React testing to Q3 and shorten the workshop.',
+    );
+    await user.click(screen.getByRole('button', { name: 'Submit & Regenerate' }));
+
+    expect(screen.getByRole('status', { name: 'Updating roadmap' })).toBeInTheDocument();
+    expect(screen.getByText('Updating your roadmap')).toBeInTheDocument();
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      '/api/training-roadmap/feedback',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({
+          runId: 'agent-1-run',
+          feedback: 'Move React testing to Q3 and shorten the workshop.',
+        }),
+      }),
+    );
+
+    resolveRevision?.(
+      new Response(
+        JSON.stringify({
+          ...roadmapResult,
+          executionLog: ['Applied human feedback.', 'Paused at Human Review Gate.'],
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
+    await waitFor(() => {
+      expect(screen.queryByRole('status', { name: 'Updating roadmap' })).not.toBeInTheDocument();
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(screen.getByText('Pending Review')).toBeInTheDocument();
   });
 
   it('shows skill gaps, priorities, and trainer readiness without calling the API', async () => {
@@ -105,6 +289,67 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(screen.queryByText('Stable demo fallback')).not.toBeInTheDocument();
     expect(screen.queryByText('Kubernetes Enablement')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the generated draft visible when QA returns no final initiatives', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            runId: 'agent-1-run',
+            reviewStatus: 'pending_review',
+            executionLog: ['Loaded roadmap_output_agent.json.'],
+            initiatives: [],
+            draftInitiatives: [
+              {
+                id: 'draft-1',
+                topic: 'Security Testing',
+                priority: 'P1',
+                score: 92,
+                quarter: 'Q3 2026',
+                targetTrainees: ['EMP-001'],
+                trainerName: 'TRN-001',
+                format: 'internal',
+                estimatedHours: 24,
+                evidence: [],
+                riskFlags: [],
+              },
+            ],
+            qaDecision: 'REVISE_REQUIRED',
+            qaFindings: [],
+            blockingIssues: [],
+            revisionInstructions: [],
+            approvalRequirement: 'REVISION_REQUIRED',
+            qaSummary: 'Needs revision.',
+            qaScore: 62,
+            riskLevel: 'MEDIUM',
+            riskReason: 'Scope review still pending.',
+            revisionCount: 0,
+            evidencePack: {},
+            reviewPack: {
+              request: { userPrompt: 'Security testing roadmap' },
+              generatedAt: '2026-06-21T00:00:00.000Z',
+              initiativeCount: 0,
+              semanticSummary: [],
+              findings: [],
+            },
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+
+    expect(await screen.findByText('Security Testing')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Showing the generated draft because quality review has not produced final initiatives yet.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('surfaces contract errors instead of hiding them behind the demo fallback', async () => {

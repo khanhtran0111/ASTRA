@@ -168,6 +168,15 @@ describe('matchTrainers', () => {
           projectIds: ['PRJ-011'],
           surveyIds: ['SUR_2025_Q4'],
         },
+        evidenceRefs: [
+          {
+            source: 'DS01',
+            recordId: 'EMP-100',
+            field: 'Skill_Gap',
+            value: 'React',
+            reason: 'Direct employee skill gap.',
+          },
+        ],
       }),
     ];
     const trainers = [makeTrainer({ expertise: ['React'], availabilityHoursPerMonth: 8 })];
@@ -177,6 +186,12 @@ describe('matchTrainers', () => {
     expect(result[0]!.trainees).toEqual(['EMP-100', 'EMP-200']);
     expect(result[0]!.targetQuarter).toBe('Q4_2026');
     expect(result[0]!.evidence.bodGoals).toEqual(['GOAL-2026-03']);
+    expect(result[0]!.evidenceRefs).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ source: 'DS01', recordId: 'EMP-100' }),
+        expect.objectContaining({ source: 'DS04', recordId: 'TRN-TEST' }),
+      ]),
+    );
     expect(result[0]!.priorityScore).toBe(80);
     expect(result[0]!.estimatedHours).toBe(16);
   });

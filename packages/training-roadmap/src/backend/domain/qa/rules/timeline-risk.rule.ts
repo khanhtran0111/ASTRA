@@ -20,9 +20,11 @@ export function checkTimelineRisk(
   roadmap: QaRoadmap,
   priorityResult: QaPriorityResult,
   normalizedData: QaNormalizedData,
+  userPrompt = '',
 ): QaFinding[] {
   const findings: QaFinding[] = [];
   const horizon = new Set(quarterTokens(normalizedData.planningHorizon));
+  const requested = new Set(quarterTokens(userPrompt));
 
   roadmap.items.forEach((item, itemIndex) => {
     const initiativeQuarter = quarterTokens(item.quarter);
@@ -39,8 +41,8 @@ export function checkTimelineRisk(
 
     if (initiativeQuarter.length === 0) {
       findings.push({
-        type: 'TIMELINE_RISK',
-        severity: 'LOW',
+        type: 'TIMELINE_MISMATCH',
+        severity: 'HIGH',
         skill: item.skill,
         relatedInitiativeId: item.initiativeId ?? priority?.id,
         message: 'Initiative has no machine-readable quarter for timeline validation.',
@@ -49,19 +51,23 @@ export function checkTimelineRisk(
       return;
     }
 
-    const fits = initiativeQuarter.some(
+    const fitsRequested =
+      requested.size === 0 || initiativeQuarter.some((quarter) => requested.has(quarter));
+    const fitsEvidence = initiativeQuarter.some(
       (quarter) => horizon.has(quarter) || projectQuarters.has(quarter),
     );
+    const fits = fitsRequested && fitsEvidence;
     if (!fits) {
       findings.push({
-        type: 'TIMELINE_RISK',
-        severity: 'MEDIUM',
+        type: 'TIMELINE_MISMATCH',
+        severity: fitsRequested ? 'MEDIUM' : 'HIGH',
         skill: item.skill,
         relatedInitiativeId: item.initiativeId ?? priority?.id,
         message: `${item.quarter} does not match the planning horizon or supporting project timeline.`,
         evidence: [
           { path: `roadmap.items[${itemIndex}].quarter`, value: item.quarter },
           { path: 'normalizedData.planningHorizon', value: normalizedData.planningHorizon ?? null },
+          { path: 'request.userPrompt', value: userPrompt },
           { path: 'normalizedData.projects', value: supportingProjects },
         ],
       });

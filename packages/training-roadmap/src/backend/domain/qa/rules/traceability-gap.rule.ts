@@ -5,13 +5,17 @@ export function checkTraceabilityGap(
   normalizedData: QaNormalizedData,
 ): QaFinding[] {
   const validIds = new Set([
+    ...(normalizedData.employees?.map((employee) => employee.id) ?? []),
+    ...(normalizedData.trainers?.map((trainer) => trainer.id) ?? []),
     ...(normalizedData.projects?.map((project) => project.id) ?? []),
     ...(normalizedData.bodGoals?.map((goal) => goal.id) ?? []),
   ]);
   const findings: QaFinding[] = [];
 
   roadmap.items.forEach((item, itemIndex) => {
-    const unknownIds = (item.evidence ?? []).filter((id) => !validIds.has(id));
+    const unknownIds = (item.evidence ?? [])
+      .filter((evidence) => evidence.source !== 'DS03' && !validIds.has(evidence.recordId))
+      .map((evidence) => evidence.recordId);
     if (unknownIds.length > 0) {
       findings.push({
         type: 'TRACEABILITY_GAP',

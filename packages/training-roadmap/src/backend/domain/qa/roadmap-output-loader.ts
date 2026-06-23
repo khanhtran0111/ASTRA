@@ -2,8 +2,82 @@ import { access, readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
+import type { EvidenceRef } from '../../../types.ts';
 import { getRunScratchPath, getScratchPath } from '../../scratch-storage.ts';
 import type { QaInput } from '../qa/qa-validate-roadmap.ts';
+
+const evidenceRefSchema = z.object({
+  source: z.enum(['DS01', 'DS02', 'DS03', 'DS04', 'DS05']),
+  recordId: z.string().min(1),
+  field: z.string().min(1),
+  value: z.string(),
+  reason: z.string().min(1),
+});
+
+const allocatedTraineeSchema = z.object({
+  employeeId: z.string().min(1),
+  employeeName: z.string().min(1).optional(),
+  position: z.string().min(1),
+  team: z.string().min(1).optional(),
+  proficiencyLevel: z.string().min(1),
+  matchedSkillGap: z.array(z.string().min(1)),
+  evidenceRefs: z.array(evidenceRefSchema),
+  reason: z.string().min(1),
+});
+
+const trainerCandidateSchema = z.object({
+  trainerId: z.string().min(1),
+  fitScore: z.number(),
+  matchedSkills: z.array(z.string()),
+  missingSkills: z.array(z.string()),
+  capacityStatus: z.enum(['FULL', 'PARTIAL', 'NONE']),
+  availabilityHoursPerMonth: z.number(),
+  evidenceRefs: z.array(evidenceRefSchema),
+});
+
+const scoreBreakdownSchema = z.object({
+  bodAlignment: z.number(),
+  projectUrgency: z.number(),
+  traineeGapImpact: z.number(),
+  surveyDemand: z.number(),
+  feasibility: z.number(),
+  marketTrend: z.number(),
+  riskPenalty: z.number(),
+});
+
+function legacyEvidenceRef(recordId: string): EvidenceRef {
+  const source = recordId.startsWith('EMP-')
+    ? 'DS01'
+    : recordId.startsWith('PRJ-')
+      ? 'DS02'
+      : recordId.startsWith('SUR-') || recordId.startsWith('SUR_')
+        ? 'DS03'
+        : recordId.startsWith('TRN-')
+          ? 'DS04'
+          : 'DS05';
+  return {
+    source,
+    recordId,
+    field: 'legacy_reference',
+    value: recordId,
+    reason: 'Legacy fixture reference normalized into the granular evidence contract.',
+  };
+}
+
+const fallbackMilestoneSchema = z.object({
+  week: z.number(),
+  description: z.string(),
+  deliverable: z.string(),
+});
+
+const fallbackPlanSchema = z.object({
+  learningMode: z.enum(['self-study', 'external', 'study-group', 'blended', 'lab-based']),
+  pic: z.string(),
+  materials: z.array(z.string()),
+  milestones: z.array(fallbackMilestoneSchema),
+  estimatedHours: z.number(),
+  evaluationCriteria: z.string(),
+});
 
 const initiativeSchema = z.object({
   id: z.string().min(1),
@@ -12,6 +86,19 @@ const initiativeSchema = z.object({
   score: z.number(),
   quarter: z.string().min(1),
   targetTrainees: z.array(z.string()),
+  traineeDetails: z.array(allocatedTraineeSchema).optional(),
+  canonicalSkillId: z.string().min(1).optional(),
+  trainerCandidates: z.array(trainerCandidateSchema).optional(),
+  selectedTrainer: z.string().nullable().optional(),
+  totalHours: z.number().positive().optional(),
+  trainerContactHours: z.number().nonnegative().optional(),
+  selfStudyHours: z.number().nonnegative().optional(),
+  labHours: z.number().nonnegative().optional(),
+  scoreBreakdown: scoreBreakdownSchema.optional(),
+  selectionReason: z.string().min(1).optional(),
+  risks: z.array(z.string()).optional(),
+  requiresHumanApproval: z.boolean().optional(),
+  deliveryFormat: z.string().min(1).optional(),
   trainerName: z.string().nullable(),
   objective: z.string().min(1).optional(),
   prerequisites: z.array(z.string()).optional(),
@@ -33,8 +120,35 @@ const initiativeSchema = z.object({
     })
     .optional(),
   estimatedHours: z.number().positive(),
-  evidence: z.array(z.string()),
+  evidence: z
+    .array(z.union([evidenceRefSchema, z.string().min(1)]))
+    .transform((items) =>
+      items.map((item) => (typeof item === 'string' ? legacyEvidenceRef(item) : item)),
+    ),
   fallbackReason: z.string().optional(),
+  fallbackPlan: fallbackPlanSchema.optional(),
+  alignmentType: z.enum(['PROJECT_BACKED', 'BOD_AND_SURVEY_ONLY']).optional(),
+  approvalRequired: z.boolean().optional(),
+  alignmentNote: z.string().min(1).optional(),
+});
+
+const revisionInstructionSchema = z.object({
+  initiativeId: z.string().min(1),
+  issueType: z.string().min(1),
+  action: z.enum([
+    'ADD_EVIDENCE',
+    'ALLOCATE_TRAINEES',
+    'FILTER_SCOPE',
+    'ADD_SUPPORTING_PROJECT',
+    'RETRY_TRAINER_MATCH_WITH_ALIASES',
+    'DOWNGRADE_PRIORITY',
+    'CHANGE_ALIGNMENT_TYPE',
+    'REMOVE_EXTRA_INITIATIVE',
+    'REMOVE_INITIATIVE',
+    'ADD_FALLBACK',
+    'REQUEST_HUMAN_CONFIRMATION',
+  ]),
+  message: z.string().min(1),
 });
 
 const roadmapOutputAgentSchema = z.object({
@@ -45,7 +159,87 @@ const roadmapOutputAgentSchema = z.object({
     })
     .optional(),
   executionLog: z.array(z.string()),
-  initiatives: z.array(initiativeSchema).min(1),
+  initiatives: z.array(initiativeSchema),
+  revisionCount: z.number().int().min(0).default(0),
+  revisionHistory: z
+    .array(
+      z.object({
+        revision: z.number().int().positive(),
+        revisedAt: z.string().min(1),
+        instructions: z.array(revisionInstructionSchema),
+      }),
+    )
+    .default([]),
+  coverageResult: z
+    .object({
+      targetGroup: z.string(),
+      totalEligibleEmployees: z.number(),
+      requiredCoveragePercent: z.number(),
+      requiredTraineeCount: z.number(),
+      selectedTraineeCount: z.number(),
+      achievedCoveragePercent: z.number(),
+      coverageStatus: z.enum(['MET', 'NOT_MET']),
+      missingTraineeCount: z.number(),
+    })
+    .optional(),
+  dataInventory: z
+    .array(
+      z.object({
+        sourceId: z.enum(['DS01', 'DS02', 'DS03', 'DS04', 'DS05', 'MARKET']),
+        fileName: z.string(),
+        rowCount: z.number().int().nonnegative(),
+        validRows: z.number().int().nonnegative(),
+        invalidRows: z.number().int().nonnegative(),
+        skippedRows: z.number().int().nonnegative(),
+        detectedColumns: z.array(z.string()),
+        warnings: z.array(z.string()),
+      }),
+    )
+    .optional(),
+  dataCoverageReport: z
+    .object({
+      totalRecordsBySource: z.record(z.string(), z.number()),
+      validRecordsBySource: z.record(z.string(), z.number()),
+      candidateCount: z.number().int().nonnegative(),
+      selectedCount: z.number().int().nonnegative(),
+      droppedCount: z.number().int().nonnegative(),
+      unmatchedSkills: z.array(z.string()),
+      unmatchedTraineeRows: z.array(z.string()),
+      unmatchedTrainerRows: z.array(z.string()),
+      warnings: z.array(z.string()),
+      coverageResult: z
+        .object({
+          targetGroup: z.string(),
+          totalEligibleEmployees: z.number(),
+          requiredCoveragePercent: z.number(),
+          requiredTraineeCount: z.number(),
+          selectedTraineeCount: z.number(),
+          achievedCoveragePercent: z.number(),
+          coverageStatus: z.enum(['MET', 'NOT_MET']),
+          missingTraineeCount: z.number(),
+        })
+        .optional(),
+    })
+    .optional(),
+  unselectedCandidates: z
+    .array(
+      z.object({
+        candidate: z.string(),
+        reasonDropped: z.string(),
+        evidenceRefs: z.array(evidenceRefSchema),
+        suggestedFix: z.string(),
+      }),
+    )
+    .optional(),
+  toolTrace: z
+    .array(
+      z.object({
+        tool: z.string(),
+        status: z.literal('completed'),
+        detail: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export type RoadmapOutputAgent = z.infer<typeof roadmapOutputAgentSchema>;
@@ -103,7 +297,7 @@ async function readJson(path: string): Promise<unknown> {
 function roadmapCandidates(runId?: string): string[] {
   const configured = process.env.TRAINING_ROADMAP_OUTPUT_FILE;
   if (runId) {
-    return [configured, getRunScratchPath(runId, 'roadmap_output_agent.json')].filter(
+    return [getRunScratchPath(runId, 'roadmap_output_agent.json'), configured].filter(
       (value): value is string => Boolean(value),
     );
   }
@@ -118,10 +312,13 @@ function roadmapCandidates(runId?: string): string[] {
   ].filter((value): value is string => Boolean(value));
 }
 
-function normalizedDataCandidates(): string[] {
+function normalizedDataCandidates(dataDir?: string): string[] {
   const configured = process.env.TRAINING_ROADMAP_DATA_DIR;
   return [
+    dataDir ? resolve(dataDir, 'normalized_data.json') : null,
+    dataDir ? resolve(dataDir, 'processed/normalized_data.json') : null,
     configured ? resolve(configured, 'normalized_data.json') : null,
+    configured ? resolve(configured, 'processed/normalized_data.json') : null,
     resolve(process.cwd(), 'data/processed/normalized_data.json'),
     resolve(process.cwd(), '../../data/processed/normalized_data.json'),
     fileURLToPath(
@@ -140,13 +337,16 @@ function trainerType(format: RoadmapOutputAgent['initiatives'][number]['format']
       : ('external' as const);
 }
 
-export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
+export async function loadQaInputFromRoadmapOutput(
+  runId?: string,
+  options: { dataDir?: string } = {},
+): Promise<{
   source: RoadmapOutputAgent;
   qaInput: QaInput;
 }> {
   const [roadmapPath, normalizedPath] = await Promise.all([
     firstExisting(roadmapCandidates(runId)),
-    firstExisting(normalizedDataCandidates()),
+    firstExisting(normalizedDataCandidates(options.dataDir)),
   ]);
   const [sourceRaw, normalizedRaw] = await Promise.all([
     readJson(roadmapPath),
@@ -166,11 +366,19 @@ export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
         initiativeId: initiative.id,
         skill: initiative.topic,
         traineeIds: initiative.targetTrainees,
-        trainerType: trainerType(initiative.format),
+        trainerType: initiative.trainerName ? 'internal' : trainerType(initiative.format),
+        trainerId: initiative.trainerName,
+        fallbackReason:
+          initiative.fallbackReason ??
+          (initiative.trainerName === null && trainerType(initiative.format) !== 'internal'
+            ? `${trainerType(initiative.format).toUpperCase()}_FALLBACK`
+            : undefined),
         quarter: initiative.quarter,
-        evidence: initiative.evidence.filter(
-          (id) => id.startsWith('PRJ-') || id.startsWith('GOAL-'),
-        ),
+        evidence: initiative.evidence,
+        alignmentType: initiative.alignmentType,
+        approvalRequired: initiative.approvalRequired,
+        alignmentNote: initiative.alignmentNote,
+        fallbackPlan: initiative.fallbackPlan,
       })),
     },
     priorityResult: {
@@ -179,10 +387,19 @@ export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
         skill: initiative.topic,
         target_employees: initiative.targetTrainees,
         internal_trainer_available: initiative.trainerName !== null,
-        supporting_projects: initiative.evidence.filter((id) => id.startsWith('PRJ-')),
-        supporting_bod_goals: initiative.evidence.filter((id) => id.startsWith('GOAL-')),
+        supporting_projects: initiative.evidence
+          .filter((evidence) => evidence.source === 'DS02')
+          .map((evidence) => evidence.recordId),
+        supporting_bod_goals: initiative.evidence
+          .filter((evidence) => evidence.source === 'DS05')
+          .map((evidence) => evidence.recordId),
         evidence_summary: initiative.formatExplanation,
+        evidence: initiative.evidence,
         quarter: initiative.quarter,
+        alignmentType: initiative.alignmentType,
+        approvalRequired: initiative.approvalRequired,
+        alignmentNote: initiative.alignmentNote,
+        fallbackPlan: initiative.fallbackPlan,
       })),
     },
     normalizedData: {

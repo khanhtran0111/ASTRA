@@ -1,6 +1,5 @@
+import { matchesSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaPriorityResult, QaRoadmap } from '../qa-types.ts';
-
-const normalize = (value: string) => value.trim().toLowerCase();
 
 export function checkProjectRequirement(
   roadmap: QaRoadmap,
@@ -14,24 +13,49 @@ export function checkProjectRequirement(
       (initiative) => initiative.skill === item.skill,
     );
     const supportingIds = new Set(priority?.supporting_projects ?? []);
+    const supportingGoalIds = new Set(priority?.supporting_bod_goals ?? []);
+    const traineeIds = new Set([...(item.traineeIds ?? []), ...(priority?.target_employees ?? [])]);
     const matchingProjects = (normalizedData.projects ?? []).filter(
       (project) =>
         supportingIds.has(project.id) &&
-        (project.requiredSkills ?? []).some((skill) => normalize(skill) === normalize(item.skill)),
+        (project.requiredSkills ?? []).some((skill) => matchesSkill(skill, item.skill)),
+    );
+    const matchingGoals = (normalizedData.bodGoals ?? []).filter(
+      (goal) =>
+        supportingGoalIds.has(goal.id) &&
+        [...(goal.requiredSkills ?? []), goal.description ?? ''].some((value) =>
+          matchesSkill(value, item.skill),
+        ),
+    );
+    const matchingEmployees = (normalizedData.employees ?? []).filter(
+      (employee) =>
+        traineeIds.has(employee.id) &&
+        employee.targetSkills.some((skill) => matchesSkill(skill, item.skill)),
     );
 
     if (matchingProjects.length === 0) {
+      const hasAlternativeDemand = matchingGoals.length > 0 || matchingEmployees.length > 0;
       findings.push({
         type: 'MISSING_PROJECT_REQUIREMENT',
-        severity: 'MEDIUM',
+        severity: hasAlternativeDemand ? 'MEDIUM' : 'HIGH',
         skill: item.skill,
         relatedInitiativeId: item.initiativeId ?? priority?.id,
-        message: 'No referenced supporting project requires this initiative skill.',
+        message: hasAlternativeDemand
+          ? 'No referenced DS02 project requires this skill, but DS01 or DS05 evidence supports a reviewable alignment.'
+          : 'No referenced DS02 project, DS01 trainee gap, or DS05 goal supports this initiative skill.',
         evidence: [
           { path: `roadmap.items[${itemIndex}].skill`, value: item.skill },
           {
             path: `priorityResult.initiatives[skill=${item.skill}].supporting_projects`,
             value: [...supportingIds],
+          },
+          {
+            path: `priorityResult.initiatives[skill=${item.skill}].supporting_bod_goals`,
+            value: [...supportingGoalIds],
+          },
+          {
+            path: `roadmap.items[${itemIndex}].traineeIds`,
+            value: [...traineeIds],
           },
           { path: 'normalizedData.projects', value: normalizedData.projects ?? [] },
         ],

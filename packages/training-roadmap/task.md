@@ -1,8 +1,8 @@
-# QA Agent (QA-only task)
+# Training Roadmap Controller and QA Contract
 
 ## Purpose
 
-Phiên bản này thu gọn scope để chỉ thực hiện phần QA (QA Agent) trên đầu vào `roadmap_output_agent.json` do Agent 1 sinh ra.
+POC chạy theo một controller thống nhất: data-first Agent 1 sinh `roadmap_output_agent.json`, QA đọc đúng artifact theo `runId`, controller sở hữu revision loop, versioning và final `RoadmapResult`.
 
 Mục tiêu: nhận đầu vào mock (priority results + normalized data), chạy chỉ bước QA — so khớp roadmap/initiatives với:
 
@@ -24,7 +24,7 @@ Agent đầu ra: danh sách `QaFinding` kèm `evidence` cho từng finding, tổ
 
 ## Inputs
 
-- `roadmap_output_agent.json` — nguồn roadmap/initiatives chính để QA audit; QA không chạy lại Agent 1.
+- `roadmap_output_agent.json` — canonical handoff artifact do data-first coordinator sinh ra; QA không tự chạy lại Agent 1.
 - `data/processed/normalized_data.json` — dữ liệu đối chiếu employee, trainer, project và BOD goal.
 - `priorityResult` được derive từ evidence và metadata có sẵn trong từng initiative của roadmap output.
 
@@ -121,4 +121,4 @@ type QaFinding = {
 
 ## Current Scope
 
-Implement only the QA checks described above (no roadmap generation). This file documents the expected behaviour for the QA-only implementation.
+Implement the controller-driven POC end to end: deterministic generation, canonical artifact handoff, QA, at most two deterministic revision passes, feedback/versioning, approval, and export guards. Literal agent-to-agent chat or executable `delegates` behavior is outside this scope.

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildRequestScopeFindings } from '../../src/backend/domain/qa/request-scope.ts';
 
 describe('request scope QA', () => {
-  it('rejects an initiative that the QA agent found unrelated to the user prompt', () => {
+  it('requests revision at medium severity for an extra topic', () => {
     const findings = buildRequestScopeFindings({
       userPrompt: 'Create a Q3 roadmap for Frontend focused on React and TypeScript.',
       initiatives: [{ id: 'CLS-K8S', topic: 'Kubernetes' }],
@@ -19,24 +19,35 @@ describe('request scope QA', () => {
 
     expect(findings).toEqual([
       expect.objectContaining({
-        type: 'REQUEST_SCOPE_MISMATCH',
-        severity: 'HIGH',
+        type: 'PROMPT_SCOPE_VIOLATION',
+        severity: 'MEDIUM',
         relatedInitiativeId: 'CLS-K8S',
       }),
     ]);
   });
 
-  it('fails closed when an initiative was not assessed against a non-empty prompt', () => {
+  it('does not invent a scope violation when semantic QA omitted a decision', () => {
     const findings = buildRequestScopeFindings({
       userPrompt: 'Frontend roadmap',
       initiatives: [{ id: 'CLS-REACT', topic: 'React' }],
       decisions: [],
     });
 
-    expect(findings[0]).toMatchObject({
-      type: 'REQUEST_SCOPE_MISMATCH',
-      severity: 'HIGH',
-      relatedInitiativeId: 'CLS-REACT',
+    expect(findings).toEqual([]);
+  });
+
+  it('classifies a missing requested roadmap as a coverage shortfall', () => {
+    const findings = buildRequestScopeFindings({
+      userPrompt: 'Frontend roadmap focused on React',
+      initiatives: [],
+      decisions: [],
     });
+
+    expect(findings).toEqual([
+      expect.objectContaining({
+        type: 'COVERAGE_SHORTFALL',
+        severity: 'HIGH',
+      }),
+    ]);
   });
 });

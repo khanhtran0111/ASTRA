@@ -75,6 +75,15 @@ describe('generateDraftRoadmap', () => {
         projectIds: ['PRJ-009'],
         surveyIds: ['SUR_2025_Q4'],
       },
+      evidenceRefs: [
+        {
+          source: 'DS01',
+          recordId: 'EMP-036',
+          field: 'Skill_Gap',
+          value: 'Kubernetes',
+          reason: 'Direct employee skill gap.',
+        },
+      ],
     });
 
     const result = generateDraftRoadmap([cls]);
@@ -92,6 +101,7 @@ describe('generateDraftRoadmap', () => {
     expect(entry.estimatedHours).toBe(16);
     expect(entry.alignmentEvidence.bodGoals).toEqual(['GOAL-2026-07']);
     expect(entry.alignmentEvidence.projects).toEqual(['PRJ-009']);
+    expect(entry.evidence[0]).toMatchObject({ source: 'DS01', recordId: 'EMP-036' });
     expect(entry.resource.trainerId).toBe('TRN-004');
     expect(entry.resource.isExternalRequired).toBe(false);
     expect(entry.resource.fallbackReason).toBeNull();

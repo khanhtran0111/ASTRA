@@ -9,7 +9,7 @@ export function DatasetReadinessPanel({ snapshot }: { snapshot: TrainingAnalysis
         <div>
           <CardTitle>Dataset readiness</CardTitle>
           <CardDescription className="mt-1">
-            Normalized output supplied by Member 1. Every source passed the preprocessing check.
+            Every source has been normalized and passed the preprocessing check.
           </CardDescription>
         </div>
         <Badge variant="success">5 / 5 ready</Badge>

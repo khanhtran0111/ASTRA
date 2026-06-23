@@ -463,6 +463,14 @@ The chat runtime wires two working-memory mechanisms (factories in `packages/age
 Both mechanisms are best-effort: memory failures never break a staffing
 answer, and all of it no-ops on the queued runner (no chat thread).
 
+### Training roadmap POC controller
+
+`packages/training-roadmap` uses one controller-driven, artifact-driven HTTP flow. `POST /api/training-roadmap/run` creates a `runId`, executes the deterministic data-first coordinator, maps its snapshot through the single `toRoadmapOutputAgent` adapter, and atomically persists `training-roadmap-runs/<runId>/roadmap_output_agent.json` under `ASTRA_SCRATCH_DIR`. QA loads that exact artifact by `runId`; the controller owns up to two deterministic revision passes, and every pass reruns the coordinator from DS01–DS05 instead of patching initiative fields in the previous artifact. QA retains resolved warnings for human review but sends only unresolved findings to the score tool. The controller then persists `qa_result.json` and a numbered final version. The endpoint returns the final `RoadmapResult`, so the web does not make a second `/qa` request.
+
+`POST /api/training-roadmap/feedback` re-enters the same controller with the original prompt, previous artifact, and reviewer feedback, preserves the `runId`, and returns the newly QA-reviewed `RoadmapResult`. `/qa` remains a non-mutating debug/re-audit surface for an existing artifact; it never revises Agent 1 output. Approval and export read only the persisted `qa_result.json`, so neither can bypass the QA decision. The registered coordinator/QA specs describe agent behavior, but their `delegates` metadata is not treated as an executable transport; service orchestration owns the handoff.
+
+Before `/run` creates a run or reads DS01–DS05, a deterministic high-confidence intent gate rejects explicit task search, task assignment, people search, and general-assistant prompts with `PROMPT_INTENT_MISMATCH`. The web preserves the original text and hands it to the existing Agent Chat surface, whose injected `staffing.orchestrator` owns task lookup, candidate recommendation, availability checks, and assignment HITL. `training-roadmap` never imports or calls `staffing` directly.
+
 ---
 
 ## 13. Embeddings & retrieval

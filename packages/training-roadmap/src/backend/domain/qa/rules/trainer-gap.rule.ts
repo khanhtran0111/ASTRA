@@ -1,6 +1,5 @@
+import { matchesSkill } from '../../skill-aliases.ts';
 import type { QaFinding, QaNormalizedData, QaPriorityResult, QaRoadmap } from '../qa-types.ts';
-
-const normalize = (value: string) => value.trim().toLowerCase();
 
 export function checkTrainerGap(
   roadmap: QaRoadmap,
@@ -10,19 +9,58 @@ export function checkTrainerGap(
   const findings: QaFinding[] = [];
 
   roadmap.items.forEach((item, itemIndex) => {
-    if (item.trainerType !== 'internal') return;
     const priority = priorityResult.initiatives.find(
       (initiative) => initiative.skill === item.skill,
     );
     const qualifiedTrainers = (normalizedData.trainers ?? []).filter(
       (trainer) =>
         trainer.availableHours > 0 &&
-        trainer.skills.some((skill) => normalize(skill) === normalize(item.skill)),
+        trainer.skills.some((skill) => matchesSkill(skill, item.skill)),
     );
+
+    const hasDs04Evidence = (item.evidence ?? []).some(
+      (evidence) => evidence.source === 'DS04' && evidence.recordId === item.trainerId,
+    );
+
+    if (item.trainerId && !hasDs04Evidence) {
+      findings.push({
+        type: 'UNSUPPORTED_INITIATIVE',
+        severity: 'HIGH',
+        skill: item.skill,
+        relatedInitiativeId: item.initiativeId,
+        message: `Assigned trainer ${item.trainerId} has no DS04 evidence record.`,
+        evidence: [{ path: `roadmap.items[${itemIndex}].trainerId`, value: item.trainerId }],
+      });
+      return;
+    }
+
+    if (item.trainerType !== 'internal') {
+      const specialized = /system design|kubernetes|security|machine learning|mlops/i.test(
+        item.skill,
+      );
+      const documented = Boolean(item.fallbackReason?.trim()) || Boolean(item.fallbackPlan);
+      findings.push({
+        type: 'TRAINER_NOT_FOUND',
+        severity: documented ? (specialized ? 'MEDIUM' : 'LOW') : 'MEDIUM',
+        skill: item.skill,
+        relatedInitiativeId: item.initiativeId,
+        message: documented
+          ? `No internal trainer is assigned; the ${item.trainerType} fallback is documented and requires human approval.`
+          : `No internal trainer is assigned and no fallback is documented for ${item.trainerType} delivery.`,
+        evidence: [
+          { path: `roadmap.items[${itemIndex}].trainerType`, value: item.trainerType },
+          {
+            path: `roadmap.items[${itemIndex}].fallbackReason`,
+            value: item.fallbackReason ?? null,
+          },
+        ],
+      });
+      return;
+    }
 
     if (!priority?.internal_trainer_available || qualifiedTrainers.length === 0) {
       findings.push({
-        type: 'TRAINER_GAP',
+        type: 'TRAINER_NOT_FOUND',
         severity: 'HIGH',
         skill: item.skill,
         relatedInitiativeId: item.initiativeId,

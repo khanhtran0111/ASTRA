@@ -5,6 +5,9 @@
  * the Coordinator (this module), and the QA Agent (Member 4).
  */
 
+import type { AlignmentType, AllocatedTrainee, EvidenceRef } from '../../types.ts';
+import type { FallbackPlan } from './fallback-plan.ts';
+
 // ---------------------------------------------------------------------------
 // Fallback reasons — deterministic, no LLM guessing
 // ---------------------------------------------------------------------------
@@ -41,6 +44,9 @@ export interface ScoredTrainingNeed {
     projectIds: string[];
     surveyIds: string[];
   };
+  /** Granular record/field evidence carried into the Agent 1 artifact. */
+  evidenceRefs?: EvidenceRef[];
+  allocatedTrainees?: AllocatedTrainee[];
 }
 
 // ---------------------------------------------------------------------------
@@ -63,10 +69,13 @@ export interface MatchedTrainingClass {
   classId: string;
   skillName: string;
   trainees: string[];
+  traineeDetails?: AllocatedTrainee[];
   /** Assigned trainer ID, or null when external resource is needed */
   assignedTrainer: string | null;
   isExternalRequired: boolean;
   fallbackReason?: FallbackReason;
+  /** Structured fallback learning plan when no trainer is available */
+  fallbackPlan?: FallbackPlan;
   learningFormat?: LearningFormat;
   targetQuarter: string;
   evidence: {
@@ -74,6 +83,7 @@ export interface MatchedTrainingClass {
     projectIds: string[];
     surveyIds: string[];
   };
+  evidenceRefs?: EvidenceRef[];
   /** Carried from the original ScoredTrainingNeed for roadmap generation */
   priorityScore: number;
   estimatedHours: number;
@@ -98,8 +108,10 @@ export interface RoadmapClassEntry {
     bodGoals: string[];
     projects: string[];
   };
+  evidence: EvidenceRef[];
   traineeCount: number;
   trainees: string[];
+  traineeDetails?: AllocatedTrainee[];
   estimatedHours: number;
   objective?: string;
   prerequisites?: string[];
@@ -109,6 +121,10 @@ export interface RoadmapClassEntry {
   durationWeeks?: number;
   startWeek?: number;
   endWeek?: number;
+  alignmentType?: AlignmentType;
+  approvalRequired?: boolean;
+  alignmentNote?: string;
+  fallbackPlan?: FallbackPlan;
   resource: {
     trainerId: string | null;
     isExternalRequired: boolean;
