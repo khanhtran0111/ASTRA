@@ -108,7 +108,7 @@ describe('Agent 1 roadmap revision', () => {
     );
   });
 
-  it('still removes an initiative when QA owns semantic scope classification', () => {
+  it('keeps the initiative visible with human review when prompt scope is ambiguous', () => {
     const revised = reviseRoadmap(source, [
       {
         initiativeId: 'CLS-001',
@@ -118,6 +118,14 @@ describe('Agent 1 roadmap revision', () => {
       },
     ]);
 
-    expect(revised.initiatives).toEqual([]);
+    expect(revised.initiatives).toMatchObject([
+      {
+        id: 'CLS-001',
+        approvalRequired: true,
+        requiresHumanApproval: true,
+        alignmentNote: 'Remove the semantically out-of-scope initiative.',
+        risks: ['PROMPT_SCOPE_VIOLATION_REQUIRES_HUMAN_REVIEW'],
+      },
+    ]);
   });
 });

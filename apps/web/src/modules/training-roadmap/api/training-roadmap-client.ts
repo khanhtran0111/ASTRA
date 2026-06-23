@@ -39,22 +39,8 @@ export async function runTrainingRoadmap(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ userPrompt }),
   });
-  const generated = await parseJsonOrThrow<{ runId?: unknown }>(
-    generationResponse,
-    'Failed to generate training roadmap',
-  );
-  if (typeof generated.runId !== 'string' || generated.runId.length === 0) {
-    throw new Error('Agent 1 response is missing runId');
-  }
-
-  const response = await fetch('/api/training-roadmap/qa', {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ runId: generated.runId }),
-  });
   const data = await parseJsonOrThrow<RoadmapResult>(
-    response,
+    generationResponse,
     'Failed to run training roadmap pipeline',
   );
   return { data, source: 'api' };
@@ -98,23 +84,12 @@ export async function submitRevisionFeedback(
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ runId, feedback }),
   });
-  const regeneration = await parseJsonOrThrow<{ runId?: unknown }>(
+  const data = await parseJsonOrThrow<RoadmapResult>(
     feedbackResponse,
     'Failed to regenerate the training roadmap',
   );
-  if (regeneration.runId !== runId) {
+  if (data.runId !== runId) {
     throw new Error('Regenerated roadmap response does not match the current run');
   }
-
-  const qaResponse = await fetch('/api/training-roadmap/qa', {
-    method: 'POST',
-    credentials: 'include',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ runId }),
-  });
-  const data = await parseJsonOrThrow<RoadmapResult>(
-    qaResponse,
-    'Failed to QA the regenerated training roadmap',
-  );
   return { data, source: 'api' };
 }

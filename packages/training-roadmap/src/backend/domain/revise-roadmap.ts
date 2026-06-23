@@ -132,7 +132,15 @@ export function reviseRoadmap(
         ) {
           continue;
         }
-        return [];
+        revised.approvalRequired = true;
+        revised.requiresHumanApproval = true;
+        revised.alignmentNote =
+          instruction.message || 'Potential scope mismatch flagged by Agent 2.';
+        revised.risks = [
+          ...(revised.risks ?? []),
+          'PROMPT_SCOPE_VIOLATION_REQUIRES_HUMAN_REVIEW',
+        ].filter((risk, index, risks) => risks.indexOf(risk) === index);
+        continue;
       }
 
       if (instruction.action === 'DOWNGRADE_PRIORITY') {

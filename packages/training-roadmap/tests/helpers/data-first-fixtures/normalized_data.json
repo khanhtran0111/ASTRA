@@ -1,0 +1,33 @@
+{
+  "employees": [
+    {
+      "employee_id": "EMP-001",
+      "position": "Software Engineer",
+      "proficiency_level": "Intermediate",
+      "current_skills": ["Testing"],
+      "self_reported_gaps": ["Security Testing"]
+    }
+  ],
+  "trainers": [
+    {
+      "trainer_id": "TRN-001",
+      "skills": ["Security Testing"],
+      "available_hours_per_month": 40
+    }
+  ],
+  "projects": [
+    {
+      "project_id": "PRJ-001",
+      "required_skills": ["Security Testing"],
+      "_raw_timeline": "Q3 2026",
+      "deadline": "2026-09-30"
+    }
+  ],
+  "goals": [
+    {
+      "goal_id": "GOAL-001",
+      "required_skills": ["Security Testing"],
+      "_raw_description": "Build strategic Security Testing capability"
+    }
+  ]
+}

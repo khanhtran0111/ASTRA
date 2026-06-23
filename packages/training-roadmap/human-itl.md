@@ -79,9 +79,13 @@ POST /api/training-roadmap/feedback
 ```json
 {
   "runId": "abc123",
-  "status": "reprocessing"
+  "reviewStatus": "pending_review",
+  "qaDecision": "PASS_WITH_WARNINGS",
+  "initiatives": []
 }
 ```
+
+The response is the complete, newly generated and QA-reviewed `RoadmapResult`; the client does not call `/qa` again.
 
 ---
 
@@ -110,10 +114,10 @@ When feedback is submitted:
 2. Load original prompt.
 3. Load previous roadmap result.
 4. Load human feedback.
-5. Re-run Agent 1.
-6. Re-run Agent 2.
-7. Re-run QA Agent.
-8. Produce a new roadmap version.
+5. Re-run the deterministic data-first coordinator.
+6. Persist the canonical Agent 1 artifact under the same `runId`.
+7. Re-run QA and the bounded deterministic revision loop.
+8. Persist and return the new final roadmap version.
 
 ---
 

@@ -11,9 +11,12 @@ import {
   recordQaScoreCall,
 } from '../../src/backend/domain/qa/qa-tool-context.ts';
 import { buildTrainingRoadmapRoutes } from '../../src/backend/http/index.ts';
-import { getScratchPath } from '../../src/backend/scratch-storage.ts';
+import { getScratchPath, readJsonFileOrDefault } from '../../src/backend/scratch-storage.ts';
 
 const fixturesDir = fileURLToPath(new URL('../helpers/fixtures', import.meta.url));
+const dataFirstFixturesDir = fileURLToPath(
+  new URL('../helpers/data-first-fixtures', import.meta.url),
+);
 const roadmapFixture = fileURLToPath(
   new URL('../helpers/fixtures/roadmap_output_agent.json', import.meta.url),
 );
@@ -90,6 +93,138 @@ describe('training roadmap routes', () => {
 
     expect(res.status).toBe(200);
     await expect(res.json()).resolves.toMatchObject({ ok: true, module: 'training-roadmap' });
+  });
+
+  it('runs data-first generation and QA through one canonical endpoint', async () => {
+    calls.length = 0;
+    toolCalls.length = 0;
+    generatedPrompts.length = 0;
+    vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', dataFirstFixturesDir);
+
+    const res = await app.request('/api/training-roadmap/run', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        userPrompt: 'Create one Q3/2026 Security Testing initiative for Software Engineer.',
+      }),
+    });
+    const body = await res.json();
+
+    try {
+      expect(res.status).toBe(200);
+      expect(body).toMatchObject({
+        reviewStatus: expect.stringMatching(/pending_review|blocked/),
+        initiatives: [
+          expect.objectContaining({
+            topic: 'Security Testing',
+            targetTrainees: ['EMP-001'],
+          }),
+        ],
+        draftInitiatives: [
+          expect.objectContaining({
+            topic: 'Security Testing',
+            targetTrainees: ['EMP-001'],
+          }),
+        ],
+        draftRoadmap: {
+          status: 'DRAFT',
+          quarters: {
+            Q3_2026: [expect.objectContaining({ topic: 'Security Testing' })],
+          },
+        },
+        reviewPack: {
+          request: {
+            userPrompt: 'Create one Q3/2026 Security Testing initiative for Software Engineer.',
+          },
+        },
+      });
+      expect(body).toHaveProperty('qaDecision');
+      expect(toolCalls).toEqual(Object.values(QA_TOOL_IDS));
+      expect(
+        await import('node:fs/promises').then(({ access }) =>
+          Promise.all([
+            access(
+              getScratchPath('training-roadmap-runs', body.runId, 'roadmap_output_agent.json'),
+            ),
+            access(getScratchPath('training-roadmap-runs', body.runId, 'qa_result.json')),
+            access(
+              getScratchPath('training-roadmap-runs', body.runId, 'versions', 'version-1.json'),
+            ),
+          ]),
+        ),
+      ).toBeDefined();
+    } finally {
+      if (typeof body.runId === 'string') {
+        rmSync(getScratchPath('training-roadmap-runs', body.runId), {
+          recursive: true,
+          force: true,
+        });
+      }
+      vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+    }
+  });
+
+  it('reuses the canonical pipeline for feedback and persists a new final version', async () => {
+    vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', dataFirstFixturesDir);
+    const generated = await app.request('/api/training-roadmap/run', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        userPrompt: 'Create one Q3/2026 Security Testing initiative for Software Engineer.',
+      }),
+    });
+    const initial = await generated.json();
+
+    try {
+      expect(generated.status).toBe(200);
+      const feedback = await app.request('/api/training-roadmap/feedback', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          runId: initial.runId,
+          feedback: 'Keep Security Testing in Q3/2026 with the evidence-backed cohort.',
+        }),
+      });
+      const revised = await feedback.json();
+
+      expect(feedback.status).toBe(200);
+      expect(revised).toMatchObject({
+        runId: initial.runId,
+        draftInitiatives: [expect.objectContaining({ topic: 'Security Testing' })],
+        reviewPack: {
+          request: {
+            userPrompt: expect.stringContaining('Reviewer feedback:'),
+          },
+        },
+      });
+      const version = readJsonFileOrDefault(
+        getScratchPath('training-roadmap-runs', initial.runId, 'versions', 'version-2.json'),
+        null,
+      );
+      expect(version).toMatchObject({
+        runId: initial.runId,
+        version: 2,
+        feedback: 'Keep Security Testing in Q3/2026 with the evidence-backed cohort.',
+        roadmap: { runId: initial.runId },
+      });
+      expect(
+        readJsonFileOrDefault(
+          getScratchPath('training-roadmap-runs', initial.runId, 'human_feedback.json'),
+          null,
+        ),
+      ).toMatchObject({
+        runId: initial.runId,
+        feedback: 'Keep Security Testing in Q3/2026 with the evidence-backed cohort.',
+      });
+    } finally {
+      if (typeof initial.runId === 'string') {
+        rmSync(getScratchPath('training-roadmap-runs', initial.runId), {
+          recursive: true,
+          force: true,
+        });
+      }
+      vi.stubEnv('TRAINING_ROADMAP_DATA_DIR', fixturesDir);
+    }
   });
 
   it('passes the Agent 1 artifact through the QA agent pipeline', async () => {

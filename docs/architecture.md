@@ -463,6 +463,12 @@ The chat runtime wires two working-memory mechanisms (factories in `packages/age
 Both mechanisms are best-effort: memory failures never break a staffing
 answer, and all of it no-ops on the queued runner (no chat thread).
 
+### Training roadmap POC controller
+
+`packages/training-roadmap` uses one controller-driven, artifact-driven HTTP flow. `POST /api/training-roadmap/run` creates a `runId`, executes the deterministic data-first coordinator, maps its snapshot through the single `toRoadmapOutputAgent` adapter, and atomically persists `training-roadmap-runs/<runId>/roadmap_output_agent.json` under `ASTRA_SCRATCH_DIR`. QA loads that exact artifact by `runId`; the controller owns up to two deterministic revision passes, then persists `qa_result.json` and a numbered final version. The endpoint returns the final `RoadmapResult`, so the web does not make a second `/qa` request.
+
+`POST /api/training-roadmap/feedback` re-enters the same controller with the original prompt, previous artifact, and reviewer feedback, preserves the `runId`, and returns the newly QA-reviewed `RoadmapResult`. `/qa` remains a debug/re-audit surface for an existing artifact. Approval and export read only the persisted `qa_result.json`, so neither can bypass the QA decision. The registered coordinator/QA specs describe agent behavior, but their `delegates` metadata is not treated as an executable transport; service orchestration owns the handoff.
+
 ---
 
 ## 13. Embeddings & retrieval

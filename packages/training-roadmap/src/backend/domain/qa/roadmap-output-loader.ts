@@ -393,10 +393,13 @@ function roadmapCandidates(runId?: string): string[] {
   ].filter((value): value is string => Boolean(value));
 }
 
-function normalizedDataCandidates(): string[] {
+function normalizedDataCandidates(dataDir?: string): string[] {
   const configured = process.env.TRAINING_ROADMAP_DATA_DIR;
   return [
+    dataDir ? resolve(dataDir, 'normalized_data.json') : null,
+    dataDir ? resolve(dataDir, 'processed/normalized_data.json') : null,
     configured ? resolve(configured, 'normalized_data.json') : null,
+    configured ? resolve(configured, 'processed/normalized_data.json') : null,
     resolve(process.cwd(), 'data/processed/normalized_data.json'),
     resolve(process.cwd(), '../../data/processed/normalized_data.json'),
     fileURLToPath(
@@ -415,13 +418,16 @@ function trainerType(format: RoadmapOutputAgent['initiatives'][number]['format']
       : ('external' as const);
 }
 
-export async function loadQaInputFromRoadmapOutput(runId?: string): Promise<{
+export async function loadQaInputFromRoadmapOutput(
+  runId?: string,
+  options: { dataDir?: string } = {},
+): Promise<{
   source: RoadmapOutputAgent;
   qaInput: QaInput;
 }> {
   const [roadmapPath, normalizedPath] = await Promise.all([
     firstExisting(roadmapCandidates(runId)),
-    firstExisting(normalizedDataCandidates()),
+    firstExisting(normalizedDataCandidates(options.dataDir)),
   ]);
   const [sourceRaw, normalizedRaw] = await Promise.all([
     readJson(roadmapPath),

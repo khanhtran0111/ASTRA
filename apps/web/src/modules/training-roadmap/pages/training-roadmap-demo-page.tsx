@@ -33,7 +33,12 @@ import { RoadmapTable } from '../components/roadmap-table.tsx';
 import { SkillGapTable } from '../components/skill-gap-table.tsx';
 import { TrainerReadinessPanel } from '../components/trainer-readiness-panel.tsx';
 import { member1AnalysisSnapshot } from '../data/member1-analysis-snapshot.ts';
-import type { ApprovalDecision, RoadmapResult } from '../types.ts';
+import type {
+  ApprovalDecision,
+  DraftRoadmapOutput,
+  RoadmapResult,
+  TrainingInitiative,
+} from '../types.ts';
 
 type View = 'data' | 'analysis' | 'roadmap';
 
@@ -44,6 +49,26 @@ const decisionLog: Record<ApprovalDecision, string> = {
   rejected: 'Human reviewer rejected the roadmap.',
 };
 
+function flattenDraftRoadmap(draft?: DraftRoadmapOutput): TrainingInitiative[] {
+  if (!draft) return [];
+
+  return Object.entries(draft.quarters).flatMap(([quarter, items]) =>
+    items.map((item) => ({
+      id: item.classId,
+      topic: item.topic,
+      priority: item.priorityScore >= 85 ? 'P1' : item.priorityScore >= 65 ? 'P2' : ('P3' as const),
+      score: item.priorityScore,
+      quarter: quarter.replace(/_/g, ' '),
+      targetTrainees: item.trainees,
+      trainerName: item.resource.trainerId,
+      format: item.resource.isExternalRequired ? 'external' : 'internal',
+      estimatedHours: item.estimatedHours,
+      evidence: item.evidence,
+      riskFlags: [],
+    })),
+  );
+}
+
 export function TrainingRoadmapDemoPage() {
   const [result, setResult] = useState<RoadmapResult | null>(null);
   const [approvalToken, setApprovalToken] = useState<string | null>(null);
@@ -53,6 +78,15 @@ export function TrainingRoadmapDemoPage() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [userPrompt, setUserPrompt] = useState<string>('');
+  const visibleInitiatives = !result
+    ? []
+    : result.initiatives.length > 0
+      ? result.initiatives
+      : result.draftInitiatives?.length
+        ? result.draftInitiatives
+        : flattenDraftRoadmap(result.draftRoadmap);
+  const showingDraftFallback =
+    Boolean(result && result.initiatives.length === 0) && visibleInitiatives.length > 0;
 
   const handleRun = useCallback(async () => {
     if (loading || reviewSubmitting) return;
@@ -242,7 +276,15 @@ export function TrainingRoadmapDemoPage() {
                 </div>
                 <ExecutionLogPanel logs={result.executionLog} />
                 <DataCoveragePanel result={result} />
-                <RoadmapTable initiatives={result.initiatives} />
+                {showingDraftFallback && (
+                  <Alert variant="info">
+                    <AlertDescription>
+                      Showing the original Agent 1 draft because QA feedback did not keep any final
+                      initiatives visible yet.
+                    </AlertDescription>
+                  </Alert>
+                )}
+                <RoadmapTable initiatives={visibleInitiatives} />
                 <QaFindingsPanel
                   findings={result.qaFindings}
                   score={result.qaScore}

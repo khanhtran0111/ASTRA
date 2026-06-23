@@ -22,44 +22,51 @@ describe('TrainingRoadmapDemoPage', () => {
     ).toBeInTheDocument();
   });
 
-  it('sends the user prompt to Agent 1 before requesting Agent 2 QA', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ runId: 'agent-1-run' }), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        }),
-      )
-      .mockResolvedValueOnce(
-        new Response(
-          JSON.stringify({
-            runId: 'agent-1-run',
-            reviewStatus: 'pending_review',
-            executionLog: ['Loaded roadmap_output_agent.json.'],
-            initiatives: [],
-            qaDecision: 'PASS',
-            qaFindings: [],
-            blockingIssues: [],
-            revisionInstructions: [],
-            approvalRequirement: 'HUMAN_APPROVAL',
-            qaSummary: 'QA passed.',
-            qaScore: 100,
-            riskLevel: 'LOW',
-            riskReason: 'No findings.',
-            revisionCount: 0,
-            evidencePack: {},
-            reviewPack: {
-              request: { userPrompt: 'React testing in Q3' },
-              generatedAt: '2026-06-21T00:00:00.000Z',
-              initiativeCount: 0,
-              semanticSummary: [],
-              findings: [],
+  it('sends the user prompt through the canonical generation and QA endpoint', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      new Response(
+        JSON.stringify({
+          runId: 'agent-1-run',
+          reviewStatus: 'pending_review',
+          executionLog: ['Loaded roadmap_output_agent.json.'],
+          initiatives: [],
+          draftInitiatives: [
+            {
+              id: 'draft-1',
+              topic: 'React testing',
+              priority: 'P1',
+              score: 90,
+              quarter: 'Q3 2026',
+              targetTrainees: ['EMP-001'],
+              trainerName: 'TRN-001',
+              format: 'internal',
+              estimatedHours: 16,
+              evidence: [],
+              riskFlags: [],
             },
-          }),
-          { status: 200, headers: { 'content-type': 'application/json' } },
-        ),
-      );
+          ],
+          qaDecision: 'PASS',
+          qaFindings: [],
+          blockingIssues: [],
+          revisionInstructions: [],
+          approvalRequirement: 'HUMAN_APPROVAL',
+          qaSummary: 'QA passed.',
+          qaScore: 100,
+          riskLevel: 'LOW',
+          riskReason: 'No findings.',
+          revisionCount: 0,
+          evidencePack: {},
+          reviewPack: {
+            request: { userPrompt: 'React testing in Q3' },
+            generatedAt: '2026-06-21T00:00:00.000Z',
+            initiativeCount: 0,
+            semanticSummary: [],
+            findings: [],
+          },
+        }),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      ),
+    );
     vi.stubGlobal('fetch', fetchMock);
     const user = userEvent.setup();
     render(<TrainingRoadmapDemoPage />);
@@ -69,19 +76,13 @@ describe('TrainingRoadmapDemoPage', () => {
 
     expect(await screen.findByText('API connected')).toBeInTheDocument();
     expect(screen.getByText('Review Pack')).toBeInTheDocument();
+    expect(screen.getByText('React testing')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/training-roadmap/run',
       expect.objectContaining({ body: JSON.stringify({ userPrompt: 'React testing in Q3' }) }),
     );
-    expect(fetchMock).toHaveBeenNthCalledWith(
-      2,
-      '/api/training-roadmap/qa',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ runId: 'agent-1-run' }),
-      }),
-    );
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
   it('generates on Enter and keeps Shift+Enter for a new line', async () => {
@@ -126,12 +127,13 @@ describe('TrainingRoadmapDemoPage', () => {
     );
   });
 
-  it('sends revision feedback through regeneration and QA before reopening review', async () => {
+  it('sends revision feedback through the same canonical pipeline before reopening review', async () => {
     const roadmapResult = {
       runId: 'agent-1-run',
       reviewStatus: 'pending_review',
       executionLog: ['Paused at Human Review Gate.'],
       initiatives: [],
+      draftInitiatives: [],
       qaDecision: 'PASS',
       qaFindings: [],
       blockingIssues: [],
@@ -154,19 +156,7 @@ describe('TrainingRoadmapDemoPage', () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ runId: 'agent-1-run' }), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        }),
-      )
-      .mockResolvedValueOnce(
         new Response(JSON.stringify(roadmapResult), {
-          status: 200,
-          headers: { 'content-type': 'application/json' },
-        }),
-      )
-      .mockResolvedValueOnce(
-        new Response(JSON.stringify({ runId: 'agent-1-run', status: 'reprocessing' }), {
           status: 200,
           headers: { 'content-type': 'application/json' },
         }),
@@ -195,7 +185,7 @@ describe('TrainingRoadmapDemoPage', () => {
 
     expect(await screen.findByText('Applied human feedback.')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
-      3,
+      2,
       '/api/training-roadmap/feedback',
       expect.objectContaining({
         method: 'POST',
@@ -205,14 +195,7 @@ describe('TrainingRoadmapDemoPage', () => {
         }),
       }),
     );
-    expect(fetchMock).toHaveBeenNthCalledWith(
-      4,
-      '/api/training-roadmap/qa',
-      expect.objectContaining({
-        method: 'POST',
-        body: JSON.stringify({ runId: 'agent-1-run' }),
-      }),
-    );
+    expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(screen.getByText('Pending Review')).toBeInTheDocument();
   });
 
@@ -243,6 +226,67 @@ describe('TrainingRoadmapDemoPage', () => {
     expect(screen.queryByText('Stable demo fallback')).not.toBeInTheDocument();
     expect(screen.queryByText('Kubernetes Enablement')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Approve' })).not.toBeInTheDocument();
+  });
+
+  it('keeps the Agent 1 draft visible when QA returns no final initiatives', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            runId: 'agent-1-run',
+            reviewStatus: 'pending_review',
+            executionLog: ['Loaded roadmap_output_agent.json.'],
+            initiatives: [],
+            draftInitiatives: [
+              {
+                id: 'draft-1',
+                topic: 'Security Testing',
+                priority: 'P1',
+                score: 92,
+                quarter: 'Q3 2026',
+                targetTrainees: ['EMP-001'],
+                trainerName: 'TRN-001',
+                format: 'internal',
+                estimatedHours: 24,
+                evidence: [],
+                riskFlags: [],
+              },
+            ],
+            qaDecision: 'REVISE_REQUIRED',
+            qaFindings: [],
+            blockingIssues: [],
+            revisionInstructions: [],
+            approvalRequirement: 'REVISION_REQUIRED',
+            qaSummary: 'Needs revision.',
+            qaScore: 62,
+            riskLevel: 'MEDIUM',
+            riskReason: 'Scope review still pending.',
+            revisionCount: 0,
+            evidencePack: {},
+            reviewPack: {
+              request: { userPrompt: 'Security testing roadmap' },
+              generatedAt: '2026-06-21T00:00:00.000Z',
+              initiativeCount: 0,
+              semanticSummary: [],
+              findings: [],
+            },
+          }),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        ),
+      ),
+    );
+    const user = userEvent.setup();
+    render(<TrainingRoadmapDemoPage />);
+
+    await user.click(screen.getByRole('button', { name: 'Generate Roadmap' }));
+
+    expect(await screen.findByText('Security Testing')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Showing the original Agent 1 draft because QA feedback did not keep any final initiatives visible yet.',
+      ),
+    ).toBeInTheDocument();
   });
 
   it('surfaces contract errors instead of hiding them behind the demo fallback', async () => {

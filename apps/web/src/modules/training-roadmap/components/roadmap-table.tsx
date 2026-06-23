@@ -137,7 +137,9 @@ export function RoadmapTable({ initiatives }: { initiatives: TrainingInitiative[
                 </TableCell>
                 <TableCell>
                   <div className="capitalize">
-                    {initiative.format.replace(/_/g, ' ').toLowerCase()}
+                    {(initiative.deliveryFormat ?? initiative.format)
+                      .replace(/_/g, ' ')
+                      .toLowerCase()}
                   </div>
                   {initiative.formatExplanation && (
                     <div className="mt-1 text-caption text-ink-subtle">

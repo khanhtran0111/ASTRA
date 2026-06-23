@@ -226,11 +226,35 @@ export type TrainingInitiative = {
   riskFlags: QaFinding[];
 };
 
+export interface DraftRoadmapItem {
+  classId: string;
+  topic: string;
+  priorityScore: number;
+  estimatedHours: number;
+  traineeCount: number;
+  trainees: string[];
+  evidence: EvidenceRef[];
+  resource: {
+    trainerId: string | null;
+    isExternalRequired: boolean;
+    fallbackReason: string | null;
+  };
+}
+
+export interface DraftRoadmapOutput {
+  roadmapId: string;
+  status: 'DRAFT';
+  generatedAt: string;
+  quarters: Record<string, DraftRoadmapItem[]>;
+}
+
 export type RoadmapResult = {
   runId: string;
   reviewStatus: ReviewStatus;
   executionLog: string[];
   initiatives: TrainingInitiative[];
+  draftInitiatives?: TrainingInitiative[];
+  draftRoadmap?: DraftRoadmapOutput;
   qaDecision: QaDecision;
   qaFindings: QaFinding[];
   blockingIssues: QaFinding[];
