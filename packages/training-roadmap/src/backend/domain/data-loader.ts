@@ -19,7 +19,6 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { EvidenceRef } from '../../types.ts';
-import { matchesSkill, normalizeSkill } from './skill-aliases.ts';
 import type { EmployeeProfile, ProjectProfile } from './trainee-allocator.ts';
 import type { InternalTrainer, ScoredTrainingNeed } from './types.ts';
 
@@ -197,7 +196,13 @@ export function loadEmployeeProfiles(): EmployeeProfile[] {
   const header = getCSVHeader(rows, source);
   const idIdx = getColumnIndex(header, 'Employee_ID', source);
 
-  // DS01 exports current skills under either column name depending on fixture/source vintage.
+  // Actually, we can get current_skills from the normalized_data.json if needed, or parse DS01 directly.
+  // Let's check what fields loadEmployeeScopeProfiles parses:
+  // employeeId, position, proficiency, skillGaps (from Skill_Gap), rawSkillGap.
+  // Wait, does it load current_skills? Let's check DS01 columns:
+  // idIdx = Employee_ID, roleIdx = Position, proficiencyIdx = Proficiency_Level, skillGapIdx = Skill_Gap.
+  // What about current skills? In normalized_data.json preview, EMP-001 has current_skills: ["C#", "Python", "React", "Angular", "SQL"], and _raw_skills: "C#; Python; ReactJS; Angular; SQL".
+  // So current skills column is named "Skills" in DS01. Let's look at getColumnIndex for "Skills".
   const skillsIndex =
     header.indexOf('Skills') !== -1 ? header.indexOf('Skills') : header.indexOf('Current_Skills');
 
@@ -339,8 +344,18 @@ function normalizeProficiency(value: string): string {
   return normalized;
 }
 
+function normalizeSkill(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
 function hasDirectSkillGap(profile: EmployeeScopeProfile, skillName: string): boolean {
-  return profile.skillGaps.some((gap) => matchesSkill(gap, skillName));
+  const requested = normalizeSkill(skillName);
+  return profile.skillGaps.some((gap) => {
+    const candidate = normalizeSkill(gap);
+    return (
+      candidate === requested || candidate.includes(requested) || requested.includes(candidate)
+    );
+  });
 }
 
 function loadProjectEvidence(): Map<string, { value: string }> {
@@ -364,58 +379,23 @@ export function loadProjectProfiles(): ProjectProfile[] {
   const idIdx = getColumnIndex(header, 'Project_ID', source);
   const skillsIdx = getColumnIndex(header, 'Required_Skills', source);
 
-  return rows
-    .slice(1)
-    .map((row) => {
-      const projectId = row[idIdx]?.trim();
-      if (!projectId) return null;
+  return rows.slice(1).flatMap((row) => {
+    const projectId = row[idIdx]?.trim();
 
-      const skillsRaw = row[skillsIdx] ?? '';
-      const requiredSkills = skillsRaw
-        ? skillsRaw
-            .split(/[;,]/)
-            .map((s) => s.trim())
-            .filter(Boolean)
-        : [];
-      return { projectId, requiredSkills };
-    })
-    .filter((project): project is ProjectProfile => project !== null);
-}
+    if (!projectId) {
+      return [];
+    }
 
-export function loadRequestedEvidenceRefs(args: {
-  skillName: string;
-  projectIds?: string[];
-  goalIds?: string[];
-}): EvidenceRef[] {
-  const refs: EvidenceRef[] = [];
-  const projects = loadProjectEvidence();
-  const goals = loadGoalEvidence();
+    const skillsRaw = row[skillsIdx] ?? '';
+    const requiredSkills = skillsRaw
+      ? skillsRaw
+          .split(/[;,]/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
 
-  for (const projectId of args.projectIds ?? []) {
-    const project = projects.get(projectId);
-    if (!project || !matchesSkill(project.value, args.skillName)) continue;
-    refs.push({
-      source: 'DS02',
-      recordId: projectId,
-      field: 'Required_Skills',
-      value: project.value,
-      reason: `${projectId} requires skills aligned with ${args.skillName}.`,
-    });
-  }
-
-  for (const goalId of args.goalIds ?? []) {
-    const goal = goals.get(goalId);
-    if (!goal || !matchesSkill(goal.value, args.skillName)) continue;
-    refs.push({
-      source: 'DS05',
-      recordId: goalId,
-      field: 'Goal_Description',
-      value: goal.value,
-      reason: `${args.skillName} is aligned with the requested BOD goal ${goalId}.`,
-    });
-  }
-
-  return refs;
+    return [{ projectId, requiredSkills }];
+  });
 }
 
 function loadGoalEvidence(): Map<string, { value: string }> {
@@ -472,7 +452,6 @@ function buildEvidenceRefs(
   for (const projectId of need.evidence.projectIds) {
     const project = projects.get(projectId);
     if (!project) continue;
-    if (!matchesSkill(project.value, need.skillName)) continue;
     refs.push({
       source: 'DS02',
       recordId: projectId,
@@ -500,7 +479,6 @@ function buildEvidenceRefs(
   for (const goalId of need.evidence.bodGoals) {
     const goal = goals.get(goalId);
     if (!goal) continue;
-    if (!matchesSkill(goal.value, need.skillName)) continue;
     refs.push({
       source: 'DS05',
       recordId: goalId,

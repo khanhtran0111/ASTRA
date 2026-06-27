@@ -67,7 +67,7 @@ jobs:
     needs: [prepare, ensure-ecr]
     timeout-minutes: 30
     strategy:
-      fail-fast: false          # let the other image finish even if one fails
+      fail-fast: false
       matrix:
         include:
           - service:    server
@@ -98,7 +98,7 @@ jobs:
           file:      ${{ matrix.dockerfile }}
           platforms: linux/amd64
           push:      true
-          provenance: false      # avoid attestation manifest that confuses some ECR clients
+          provenance: false
           tags: |
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ matrix.service }}-${{ needs.prepare.outputs.tag }}
             ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ matrix.service }}-latest
@@ -214,6 +214,10 @@ jobs:
             sudo chown "$(id -u):$(id -g)" /opt/seta/.env
             chmod 600 /opt/seta/.env
 
+            echo "=== Runtime model env ==="
+            grep '^AGENT_MODELS=' /opt/seta/.env || true
+            grep '^AGENT_MODEL_DEFAULT=' /opt/seta/.env || true
+
             sudo mkdir -p /opt/platform
             sudo chown -R "$(id -u):$(id -g)" /opt/platform
             cd /opt/platform
@@ -265,9 +269,29 @@ jobs:
 
             # 5. Start app containers and wait until every healthcheck passes.
             echo "=== Starting stack ==="
+            set +e
             docker compose --env-file /opt/seta/.env up -d \
               --remove-orphans --wait --wait-timeout 180 \
               proxy server web worker
+            STATUS=$?
+            set -e
+
+            if [ "$STATUS" -ne 0 ]; then
+              echo "=== docker compose ps ==="
+              docker compose --env-file /opt/seta/.env ps || true
+
+              echo "=== server logs ==="
+              docker logs --tail=200 seta-server-1 2>&1 || true
+
+              echo "=== server health inspect ==="
+              docker inspect seta-server-1 --format='{{range .State.Health.Log}}{{println "----"}}{{println .End}}{{println "ExitCode:" .ExitCode}}{{println .Output}}{{end}}' 2>&1 || true
+
+              echo "=== server runtime model env ==="
+              docker inspect seta-server-1 --format '{{range .Config.Env}}{{println .}}{{end}}' \
+                | grep -E '^AGENT_MODEL|^AGENT_MODELS' || true
+
+              exit "$STATUS"
+            fi
 
             # 6. Smoke-test: verify the public /health/ready endpoint responds 200.
             #    /api/health requires auth — /health/ready is the unauthenticated probe.
